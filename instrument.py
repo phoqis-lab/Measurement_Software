@@ -1,14 +1,21 @@
-import visa
+import pyvisa
 class Instrument:
     def __init__(self, name):
         self.name = name
         self.instrument = None
         self.saved_output_path = ""
     
-    #Basic Commands
+    #General Commands
     def get_id(self):
-
+        """Get id of instrument"""
         return self.instrument.query('*IDN?')
+    
+
+    def clear(self):
+        """Clear all the waveforms on the screen. If the oscilloscope is in the RUN state, waveform
+will still be displayed."""
+        self.instrument.write(":CLE")
+        
     def reset(self):
         """Reset the oscilloscope to default settings."""
         self.instrument.write("*RST")
@@ -53,26 +60,8 @@ class Instrument:
         self.instrument.write(":tforce")
 
     
-    #Acquisition Commands
-    def set_acquistion_mode(self, mode):
-        """Set acquisition mode. Normal:  Samples the signal at equal time interval to
-rebuild the waveform. Averages:  Averages the waveforms from multiple
-samples to reduce the random noise of the input signal. Peak: Acquires the maximum and
-minimum values of the signal within the sample interval to get the envelope of the
-signal. HRESolution:  ultra-sample technique to average the neighboring points of the sample waveform to reduce the random noise
-on the input signal and generate much smoother waveforms """
-        comm_mode = ":ACQuire:TYPE "+mode
-        self.instrument.write(comm_mode)
+#Acquisition Commands
 
-    def get_acquistion_mode(self, mode):
-        """Get acquisition mode. Normal:  Samples the signal at equal time interval to
-rebuild the waveform. Averages:  Averages the waveforms from multiple
-samples to reduce the random noise of the input signal. Peak: Acquires the maximum and
-minimum values of the signal within the sample interval to get the envelope of the
-signal. HRESolution:  ultra-sample technique to average the neighboring points of the sample waveform to reduce the random noise
-on the input signal and generate much smoother waveforms """
-        comm_mode = ":ACQuire:TYPE?"
-        self.instrument.query(comm_mode)
 
     
 #Calibrate Commands
@@ -80,11 +69,11 @@ on the input signal and generate much smoother waveforms """
         """The oscilloscope starts to execute self-calibration."""
         self.instrument.write(":CALibrate:STARt")
     
-    def stop_calibrate(self):
+    def stop_calibration(self):
         """Exit the self-calibration at any time."""
         self.instrument.write(":CALibrate:QUIT")
 
-#    #Display Commands
+#Display Commands
     def clear_screen(self):
         """Clears display screen"""
         self.instrument.write(":display:clear")
@@ -93,21 +82,7 @@ on the input signal and generate much smoother waveforms """
         """Display adjusts to fit the waveform on the screen"""
         self.instrument.write(":autoscale")
 
-    def set_channel_display(self, channel, display):
-        """Enable or disable the specified channel or query the status of the specified channel."""
-#TODO: Add in check of channel status
-        allowed_chnl_values = [1, 2]
-        allowed_type_values = ["ON","OFF",1, 2]
-        if channel in allowed_chnl_values or display in allowed_type_values:
-            comm = ":CHANnel"+str(channel)+":DISPlay "+display
-            self.instrument.write(comm)
-        else:
-            print("Invalid channel or mode")
-
-    def get_channel_display(self, channel):
-        """Check the specified channel or query the status of the specified channel."""
-        comm_mode = ":CHANnel"+channel+":Display?"
-        self.instrument.query(comm_mode)
+    
 
     #Time base
     def set_timebase_scale(self, scale):
