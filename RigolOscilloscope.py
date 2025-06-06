@@ -13,14 +13,14 @@ class RigolOscilloscope(instrumentOLD.Instrument):
     def __init__():
         #DA1054z library
         #Would need to check IP address of scope
-        scope = DS1054Z('192.168.0.23')
-        print("Connected to: ", scope.idn)
+        instrument = DS1054Z('192.168.0.23')
+        print("Connected to: ", instrument.idn)
 
-        print("Currently displayed channels: ", str(scope.displayed_channels))
+        print("Currently displayed channels: ", str(instrument.displayed_channels))
     
-    def __init__():
+    """def __init__():
         with Rigol_DS1000Z() as oscope:
             # reset to defaults and print the IEEE 488.2 instrument identifier
             ieee = oscope.ieee(rst=True)
-            print(ieee.idn)
+            print(ieee.idn)"""
     

@@ -1,4 +1,4 @@
-import instrumentOLD
+import instrument
 from ds1054z import DS1054Z
 from rigol_ds1000z import Rigol_DS1000Z
 from rigol_ds1000z import process_display, process_waveform
@@ -6,7 +6,7 @@ from rigol_ds1000z import process_display, process_waveform
 from time import sleep
 from time import sleep
 import pyvisa
-class RigolOscilloscope(instrumentOLD.Instrument):
+class RigolOscilloscope(instrument.Instrument):
     x = 0 
 
     def __init__(self, name):
