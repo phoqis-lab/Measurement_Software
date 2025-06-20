@@ -13,6 +13,7 @@ class RigolOscilloscope(instrument.Instrument):
         self.name = name
         self.instrument = None
         self.saved_output_path = ""
+
     #Mandatory Commands
     def clear_event_registers(self):
         """
@@ -147,6 +148,40 @@ class RigolOscilloscope(instrument.Instrument):
         """
         self.instrument.write("*WAI")
 
+    #Measurement
+    """def configure(self, func, param):
+        TODO add description
+            Func Options: 
+            Param Options:
+        self.instrument.write(f"CONFIG:{func}:")
+    def get_current_configuration(self,func,param):
+        x = 0"""
+
+    #CALCULATE
+
+
+
+    #Calibration
+    #Control
+    #Diagnostic
+    #Display
+    #Format
+    #Hcopy
+    #Input
+    #Instrument
+    #Memory
+    #Mmemory
+    #Output
+    #Program
+    #Route
+    #Sense
+    #Source
+    #Status
+    #System'#Test
+    #Trace
+    #Trigger
+    #Unit
+    #Vxi
 
     #Displays
     def autoscale(self):
@@ -2385,18 +2420,18 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         # The PDF states "1 to the maximum number of frames can be recorded currently" [cite: 1]
         # We can't query max frames here to validate, so we'll just check for >= 1.
         if isinstance(frame, int) and frame >= 1:
-            self.instrument.write(f":FUNCtion:WRECord:FEND {frame}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WRECord:FEND {frame}") 
         else:
             print(f"Invalid frame value ({frame}). Frame must be an integer >= 1.")
 
     def get_waveform_record_end_frame(self):
         """
-        Query the end frame of waveform recording. [cite: 1]
+        Query the end frame of waveform recording.
 
         Returns:
-        int: The current end frame in integer. [cite: 1]
+        int: The current end frame in integer.
         """
-        response = self.instrument.query(":FUNCtion:WRECord:FEND?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WRECord:FEND?")
         return int(response.strip())
 
     def get_waveform_record_max_frames(self):
