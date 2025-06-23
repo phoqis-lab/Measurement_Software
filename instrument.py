@@ -157,13 +157,7 @@ class RigolOscilloscope(instrument.Instrument):
     def get_current_configuration(self,func,param):
         x = 0"""
 
-    #CALCULATE
-
-
-
-    #Calibration
-    #Control
-    #Diagnostic
+   
     #Display
     #Format
     #Hcopy
