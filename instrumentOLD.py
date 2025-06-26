@@ -1,5 +1,7 @@
 import pyvisa
-class Instrument:
+
+
+class Instrument():
     def __init__(self, name):
         self.name = name
         self.instrument = None

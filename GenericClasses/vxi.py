@@ -316,7 +316,7 @@ class VXI:
             raise ValueError(f"Unexpected response for VXI NUMBer (not integer): '{response}'")
 
     
-    def get_vxi_register_read(self, register_id: Union[int, str]) -> int:
+    def get_vxi_register_read(self, register_id):
         """
         Returns the contents of the specified 16-bit register at the selected logical address.
         :param register_id: The byte address (even number from 0 to 62) or register name (string).
@@ -351,7 +351,7 @@ class VXI:
         except ValueError:
             raise ValueError(f"Unexpected response for VXI REGister READ? (not integer): '{response}'")
 
-    def get_vxi_register_read_verbose(self, register_id: Union[int, str]) -> str:
+    def get_vxi_register_read_verbose(self, register_id):
         """
         Returns a quoted string indicating the register contents for the selected device in a human-readable format.
         :param register_id: The byte address (even number from 0 to 62) or register name (string).
@@ -382,7 +382,7 @@ class VXI:
         return response
 
     
-    def set_vxi_register_write(self, register_id: Union[int, str], data: int):
+    def set_vxi_register_write(self, register_id, data):
         """
         Writes data to the specified register on the selected logical address.
         :param register_id: The byte address (even number from 0 to 62) or register name (string).
@@ -715,7 +715,7 @@ class VXI:
         self.instrument.write("VXI:WSPR:COMM:TRIG")
 
     
-    def get_vxi_wsprotocol_message_receive(self, count_or_terminator: Union[int, str] = None) -> str:
+    def get_vxi_wsprotocol_message_receive(self, count_or_terminator):
         """
         Receives a message from the selected logical address using both word serial and byte transfer protocols.
         The command always terminates on the End bit being set.

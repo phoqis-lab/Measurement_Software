@@ -6,7 +6,35 @@ from rigol_ds1000z import process_display, process_waveform
 from time import sleep
 from time import sleep
 import pyvisa
-class RigolOscilloscope(instrument.Instrument):
+
+from GenericClasses import calculate
+from GenericClasses import calibration
+from GenericClasses import control
+from GenericClasses import data
+from GenericClasses import display
+from GenericClasses import format
+from GenericClasses import hcopy
+from GenericClasses import input
+from GenericClasses import instrumentcommands
+from GenericClasses import measure
+from GenericClasses import memory
+from GenericClasses import mmemory
+from GenericClasses import output
+from GenericClasses import program
+from GenericClasses import route
+from GenericClasses import sense
+from GenericClasses import source
+from GenericClasses import status
+from GenericClasses import system
+from GenericClasses import trace
+from GenericClasses import trigger
+from GenericClasses import unit
+from GenericClasses import vxi
+
+class Instrument (calculate.Calculate, calibration.Calibration, control.Control, data.Data, display.Display,
+                  format.Format, hcopy.HCopy, input.Input, instrumentcommands.InstrumentCommands, measure.Measure, memory.Memory,
+                  mmemory.Mmemory, output.Output, program.Program, route.Route, sense.Sense, source.Source, status.Status,
+                  system.System, trace.Trace, trigger.Trigger, unit.Unit, vxi.VXI):
     x = 0 
 
     def __init__(self, name):
