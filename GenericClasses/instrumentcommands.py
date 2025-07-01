@@ -24,6 +24,10 @@ class InstrumentCommands():
         normalized_state = auto_state.upper()
         if normalized_state in {"1", "ON"}:
             scpi_value = "ON"
+
+
+
+            
         elif normalized_state in {"0", "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
