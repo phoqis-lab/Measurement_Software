@@ -31,11 +31,10 @@ from GenericClasses import trigger
 from GenericClasses import unit
 from GenericClasses import vxi
 
-class Instrument (calculate.Calculate, calibration.Calibration, control.Control, data.Data, display.Display,
+class Instrument(calculate.Calculate, calibration.Calibration, control.Control, data.Data, display.Display,
                   format.Format, hcopy.HCopy, input.Input, instrumentcommands.InstrumentCommands, measure.Measure, memory.Memory,
                   mmemory.Mmemory, output.Output, program.Program, route.Route, sense.Sense, source.Source, status.Status,
-                  system.System, trace.Trace, trigger.Trigger, unit.Unit, vxi.VXI):
-    x = 0 
+                  system.System, trace.Trace, trigger.Trigger, unit.Unit, vxi.VXI): 
 
     def __init__(self, name):
         self.name = name

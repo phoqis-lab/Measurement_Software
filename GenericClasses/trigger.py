@@ -21,28 +21,28 @@ class Trigger:
         """
         self.instrument.write("ABORt")
 
-    def arm(self):
-        """
-        Initializes the ARM subsystem.
-        This command is an event and has no query form.
-        """
-        self.instrument.write("ARM")
+    """def arm(self):
+        
+        #Initializes the ARM subsystem.
+        #This command is an event and has no query form.
+        
+        self.instrument.write("ARM")"""
 
-    def initiate(self):
-        """
+    """def initiate(self):
+        
         Initiates all trigger sequences as a group, except those defined otherwise.
         This command is an event and has no query form.
-        """
-        self.instrument.write("INITiate")
+        
+        self.instrument.write("INITiate")"""
 
-    def trigger(self):
-        """
+    """def trigger(self):
+        
         Purpose of the TRIGger subsystem is to qualify a single event before enabling
         the triggered sequence operation, such as enabling a sweep, starting a measurement,
         or changing the state of the device.
         This command is an event and has no query form.
-        """
-        self.instrument.write("TRIGger")
+        
+        self.instrument.write("TRIGger")"""
 
     
     def set_arm_sequence_define(self, sequence_name: str, sequence_number: int = None):
