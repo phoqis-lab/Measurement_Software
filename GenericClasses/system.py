@@ -176,7 +176,7 @@ class System:
         else:
             self.instrument.write(f"SYST:COMM:GPIB:RDEV:ADDR {primary_address}")
 
-    def get_system_communicate_gpib_rdevice_address(self) -> tuple[int, int | None]:
+    def get_system_communicate_gpib_rdevice_address(self) -> tuple[int, int]:
         """
         Returns the bus address of the peripheral device connected to a GPIB port.
         :return: A tuple containing (primary_address, secondary_address or None).
@@ -218,7 +218,7 @@ class System:
         else:
             self.instrument.write(f"SYST:COMM:GPIB:SELF:ADDR {primary_address}")
 
-    def get_system_communicate_gpib_self_address(self) -> tuple[int, int | None]:
+    def get_system_communicate_gpib_self_address(self) -> tuple[int, int]:
         """
         Returns the GPIB address of the instrument itself.
         :return: A tuple containing (primary_address, secondary_address or None).
@@ -1150,7 +1150,7 @@ class System:
         else:
             self.instrument.write(f"SYST:TZON {hour_offset}")
 
-    def get_system_tzone(self) -> tuple[int, int | None]:
+    def get_system_tzone(self) -> tuple[int, int]:
         """
         Returns the time zone offset from UTC.
         :return: A tuple (hour_offset, minute_offset or None).
@@ -1178,7 +1178,7 @@ class System:
 
 
     
-    def get_system_error_next(self) -> tuple[int, str, str | None, str | None]:
+    def get_system_error_next(self) -> tuple[int, str, str, str]:
         """
         Queries the next error from the error queue.
         Returns the full queue item consisting of an integer error number, a string

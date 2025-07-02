@@ -1,4 +1,5 @@
 from instrument import Instrument
+from RigolOscilloscope import RigolOscilloscope
 
-inst = Instrument()
-ro = 
+inst = Instrument("Test")
+ro = RigolOscilloscope("Test")

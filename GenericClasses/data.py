@@ -190,7 +190,7 @@ class Data:
         """
         self.instrument.write("DATA:DEL:ALL")
 
-    def set_data_feed(self, data_name: str, data_handle: str | None):
+    def set_data_feed(self, data_name, data_handle):
         """
         Sets which data flow is fed into the specified DATA memory.
         :param data_name: The name of the DATA memory.
@@ -313,7 +313,7 @@ class Data:
         except ValueError:
             raise ValueError(f"Unexpected response for data POINts (not integer): '{response}'")
 
-    def data_points_auto(self, data_name: str, auto_state: str | bool):
+    def data_points_auto(self, data_name: str, auto_state):
         """
         Turns data autosizing ON/OFF. When enabled, the data area will automatically resize
         as necessary to accommodate new data.

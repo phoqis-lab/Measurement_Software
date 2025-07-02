@@ -24,9 +24,9 @@ realize optimum waveform display"""
 
     def clear(self):
         """Clear all the waveforms on the screen. If the oscilloscope is in the RUN state, waveform
-will still be displayed.
-        self.instrument.write(":CLE")"""
-        instrument.clear_display_window_graphics()
+will still be displayed."""
+        self.instrument.write(":CLE")
+        #instrument.clear_display_window_graphics()
 
  #Acquisition Commands
     def set_acquistion_mode(self, mode):
@@ -2246,31 +2246,31 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
     # Function Commands (Waveform Recording)
     def set_waveform_record_end_frame(self, frame):
         """
-        Set the end frame of waveform recording. [cite: 1]
+        Set the end frame of waveform recording. 
 
         Parameters:
-        frame (int): The end frame number, from 1 to the maximum number of frames that can be recorded. [cite: 1]
+        frame (int): The end frame number, from 1 to the maximum number of frames that can be recorded. 
         """
-        # The PDF states "1 to the maximum number of frames can be recorded currently" [cite: 1]
+        # The PDF states "1 to the maximum number of frames can be recorded currently" 
         # We can't query max frames here to validate, so we'll just check for >= 1.
         if isinstance(frame, int) and frame >= 1:
-            self.instrument.write(f":FUNCtion:WRECord:FEND {frame}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WRECord:FEND {frame}") 
         else:
             print(f"Invalid frame value ({frame}). Frame must be an integer >= 1.")
 
     def get_waveform_record_end_frame(self):
         """
-        Query the end frame of waveform recording. [cite: 1]
+        Query the end frame of waveform recording. 
 
         Returns:
-        int: The current end frame in integer. [cite: 1]
+        int: The current end frame in integer. 
         """
-        response = self.instrument.query(":FUNCtion:WRECord:FEND?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WRECord:FEND?") 
         return int(response.strip())
 
     def get_waveform_record_max_frames(self):
         """
-        Query the maximum number of frames that can be recorded currently. [cite: 1]
+        Query the maximum number of frames that can be recorded currently. 
 
         Returns:
         int: The maximum number of frames.
@@ -2280,27 +2280,27 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
 
     def set_waveform_record_interval(self, interval):
         """
-        Set the time interval between adjacent frames during waveform recording. [cite: 1]
+        Set the time interval between adjacent frames during waveform recording. 
 
         Parameters:
-        interval (float): The time interval in seconds. Range: 1e-6 to 1000 seconds. [cite: 1]
-                          You can also use "MIN" for the minimum interval. [cite: 1]
+        interval (float): The time interval in seconds. Range: 1e-6 to 1000 seconds. 
+                          You can also use "MIN" for the minimum interval. 
         """
         if isinstance(interval, str) and interval.upper() == "MIN":
-            self.instrument.write(":FUNCtion:WRECord:FINTerval MIN") [cite: 1]
+            self.instrument.write(":FUNCtion:WRECord:FINTerval MIN") 
         elif isinstance(interval, (float, int)) and 1e-6 <= float(interval) <= 1000:
-            self.instrument.write(f":FUNCtion:WRECord:FINTerval {float(interval)}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WRECord:FINTerval {float(interval)}") 
         else:
             print(f"Invalid interval value ({interval}). Must be 'MIN' or a float between 1e-6 and 1000.")
 
     def get_waveform_record_interval(self):
         """
-        Query the time interval between adjacent frames during waveform recording. [cite: 1]
+        Query the time interval between adjacent frames during waveform recording. 
 
         Returns:
-        float or str: The interval in seconds, or "MIN". [cite: 1]
+        float or str: The interval in seconds, or "MIN". 
         """
-        response = self.instrument.query(":FUNCtion:WRECord:FINTerval?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WRECord:FINTerval?") 
         response_str = response.strip().upper()
         try:
             return float(response_str)
@@ -2309,148 +2309,148 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
 
     def set_waveform_record_prompt_state(self, state):
         """
-        Turn on or off the prompt for waveform recording. [cite: 1]
-        When turned on, a prompt box will pop up when the internal storage is full. [cite: 1]
+        Turn on or off the prompt for waveform recording. 
+        When turned on, a prompt box will pop up when the internal storage is full. 
 
         Parameters:
-        state (bool): True to turn on (1|ON), False to turn off (0|OFF). [cite: 1]
+        state (bool): True to turn on (1|ON), False to turn off (0|OFF). 
         """
-        self.instrument.write(f":FUNCtion:WRECord:PROMpt {'ON' if state else 'OFF'}") [cite: 1]
+        self.instrument.write(f":FUNCtion:WRECord:PROMpt {'ON' if state else 'OFF'}") 
 
     def get_waveform_record_prompt_state(self):
         """
-        Query the status of the prompt for waveform recording. [cite: 1]
+        Query the status of the prompt for waveform recording. 
 
         Returns:
-        bool: True if prompt is ON, False if OFF. [cite: 1]
+        bool: True if prompt is ON, False if OFF. 
         """
-        response = self.instrument.query(":FUNCtion:WRECord:PROMpt?") [cite: 1]
-        return bool(int(response.strip())) # Returns 1 for ON, 0 for OFF [cite: 1]
+        response = self.instrument.query(":FUNCtion:WRECord:PROMpt?") 
+        return bool(int(response.strip())) # Returns 1 for ON, 0 for OFF 
 
     def set_waveform_record_operation(self, operate_mode):
         """
-        Set the operation type of waveform recording. [cite: 1]
+        Set the operation type of waveform recording. 
 
         Parameters:
-        operate_mode (str): The operation type, one of {"REC", "STOP", "SAVE"}. [cite: 1]
+        operate_mode (str): The operation type, one of {"REC", "STOP", "SAVE"}. 
         """
-        valid_modes = {"REC", "STOP", "SAVE"} [cite: 1]
-        operate_mode = operate_mode.upper() [cite: 1]
+        valid_modes = {"REC", "STOP", "SAVE"} 
+        operate_mode = operate_mode.upper() 
 
         if operate_mode in valid_modes:
-            self.instrument.write(f":FUNCtion:WRECord:OPERate {operate_mode}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WRECord:OPERate {operate_mode}") 
         else:
             print(f"Invalid operation mode ({operate_mode}). Choose from {valid_modes}.")
 
     def get_waveform_record_operation(self):
         """
-        Query the status of waveform recording. [cite: 1]
+        Query the status of waveform recording. 
 
         Returns:
-        str: The status, one of {"REC", "STOP", "SAVE"}. [cite: 1]
+        str: The status, one of {"REC", "STOP", "SAVE"}. 
         """
-        response = self.instrument.query(":FUNCtion:WRECord:OPERate?") [cite: 1]
-        return response.strip().upper() [cite: 1]
+        response = self.instrument.query(":FUNCtion:WRECord:OPERate?") 
+        return response.strip().upper() 
 
     def set_waveform_record_enable(self, state):
         """
-        Turn on or off the waveform recording function. [cite: 1]
+        Turn on or off the waveform recording function. 
 
         Parameters:
-        state (bool): True to enable (ON), False to disable (OFF). [cite: 1]
+        state (bool): True to enable (ON), False to disable (OFF). 
         """
-        self.instrument.write(f":FUNCtion:WRECord:ENABle {'ON' if state else 'OFF'}") [cite: 1]
+        self.instrument.write(f":FUNCtion:WRECord:ENABle {'ON' if state else 'OFF'}") 
 
     def get_waveform_record_enable(self):
         """
-        Query the status of the waveform recording function. [cite: 1]
+        Query the status of the waveform recording function. 
 
         Returns:
-        bool: True if enabled, False if disabled. [cite: 1]
+        bool: True if enabled, False if disabled. 
         """
-        response = self.instrument.query(":FUNCtion:WRECord:ENABle?") [cite: 1]
-        return bool(int(response.strip())) # Returns 1 for ON, 0 for OFF [cite: 1]
+        response = self.instrument.query(":FUNCtion:WRECord:ENABle?") 
+        return bool(int(response.strip())) # Returns 1 for ON, 0 for OFF 
 
     # Function Commands (Waveform Playback)
     def set_waveform_replay_start_frame(self, frame):
         """
-        Set the start frame of waveform playback. [cite: 1]
+        Set the start frame of waveform playback. 
 
         Parameters:
-        frame (int): The start frame number, from 1 to the maximum number of frames recorded. [cite: 1]
+        frame (int): The start frame number, from 1 to the maximum number of frames recorded. 
         """
-        # Similar to end frame, we'll just check for >= 1. [cite: 1]
+        # Similar to end frame, we'll just check for >= 1. 
         if isinstance(frame, int) and frame >= 1:
-            self.instrument.write(f":FUNCtion:WREPlay:FSTart {frame}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:FSTart {frame}") 
         else:
             print(f"Invalid frame value ({frame}). Frame must be an integer >= 1.")
 
     def get_waveform_replay_start_frame(self):
         """
-        Query the start frame of waveform playback. [cite: 1]
+        Query the start frame of waveform playback. 
 
         Returns:
-        int: The current start frame in integer. [cite: 1]
+        int: The current start frame in integer. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:FSTart?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:FSTart?") 
         return int(response.strip())
 
     def set_waveform_replay_end_frame(self, frame):
         """
-        Set the end frame of waveform playback. [cite: 1]
+        Set the end frame of waveform playback. 
 
         Parameters:
-        frame (int): The end frame number, from 1 to the maximum number of frames recorded. [cite: 1]
+        frame (int): The end frame number, from 1 to the maximum number of frames recorded. 
         """
-        # Similar to start frame, we'll just check for >= 1. [cite: 1]
+        # Similar to start frame, we'll just check for >= 1. 
         if isinstance(frame, int) and frame >= 1:
-            self.instrument.write(f":FUNCtion:WREPlay:FEND {frame}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:FEND {frame}") 
         else:
             print(f"Invalid frame value ({frame}). Frame must be an integer >= 1.")
 
     def get_waveform_replay_end_frame(self):
         """
-        Query the end frame of waveform playback. [cite: 1]
+        Query the end frame of waveform playback. 
 
         Returns:
-        int: The current end frame in integer. [cite: 1]
+        int: The current end frame in integer. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:FEND?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:FEND?") 
         return int(response.strip())
 
     def get_waveform_replay_max_frames(self):
         """
-        Query the maximum number of frames that can be replayed currently. [cite: 1]
+        Query the maximum number of frames that can be replayed currently. 
 
         Returns:
-        int: The maximum number of frames. [cite: 1]
+        int: The maximum number of frames. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:FMAX?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:FMAX?") 
         return int(response.strip())
 
     def set_waveform_replay_interval(self, interval):
         """
-        Set the time interval between adjacent frames during waveform playback. [cite: 1]
+        Set the time interval between adjacent frames during waveform playback. 
 
         Parameters:
-        interval (float): The time interval in seconds. Range: 1e-6 to 1000 seconds. [cite: 1]
-                          You can also use "MIN" for the minimum interval. [cite: 1]
+        interval (float): The time interval in seconds. Range: 1e-6 to 1000 seconds. 
+                          You can also use "MIN" for the minimum interval. 
         """
         if isinstance(interval, str) and interval.upper() == "MIN":
-            self.instrument.write(":FUNCtion:WREPlay:FINTerval MIN") [cite: 1]
+            self.instrument.write(":FUNCtion:WREPlay:FINTerval MIN") 
         elif isinstance(interval, (float, int)) and 1e-6 <= float(interval) <= 1000:
-            self.instrument.write(f":FUNCtion:WREPlay:FINTerval {float(interval)}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:FINTerval {float(interval)}") 
         else:
             print(f"Invalid interval value ({interval}). Must be 'MIN' or a float between 1e-6 and 1000.")
 
     def get_waveform_replay_interval(self):
         """
-        Query the time interval between adjacent frames during waveform playback. [cite: 1]
+        Query the time interval between adjacent frames during waveform playback. 
 
         Returns:
-        float or str: The interval in seconds, or "MIN". [cite: 1]
+        float or str: The interval in seconds, or "MIN". 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:FINTerval?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:FINTerval?") 
         response_str = response.strip().upper()
         try:
             return float(response_str)
@@ -2459,100 +2459,100 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
 
     def set_waveform_replay_mode(self, mode):
         """
-        Set the playback mode of the waveform. [cite: 1]
+        Set the playback mode of the waveform. 
 
         Parameters:
-        mode (str): The playback mode, one of {"NORMal", "LOOP"}. [cite: 1]
+        mode (str): The playback mode, one of {"NORMal", "LOOP"}. 
         """
-        valid_modes = {"NORMal", "LOOP"} [cite: 1]
-        mode = mode.upper() [cite: 1]
+        valid_modes = {"NORMal", "LOOP"} 
+        mode = mode.upper() 
 
         if mode in valid_modes:
-            self.instrument.write(f":FUNCtion:WREPlay:MODE {mode}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:MODE {mode}") 
         else:
             print(f"Invalid mode ({mode}). Choose from {valid_modes}.")
 
     def get_waveform_replay_mode(self):
         """
-        Query the playback mode of the waveform. [cite: 1]
+        Query the playback mode of the waveform. 
 
         Returns:
-        str: The playback mode, one of {"NORM", "LOOP"}. [cite: 1]
+        str: The playback mode, one of {"NORM", "LOOP"}. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:MODE?") [cite: 1]
-        return response.strip().upper() [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:MODE?") 
+        return response.strip().upper() 
 
     def set_waveform_replay_direction(self, direction):
         """
-        Set the playback direction of the waveform. [cite: 1]
+        Set the playback direction of the waveform. 
 
         Parameters:
-        direction (str): The playback direction, one of {"FORWard", "BACKward"}. [cite: 1]
+        direction (str): The playback direction, one of {"FORWard", "BACKward"}. 
         """
-        valid_directions = {"FORWard", "BACKward"} [cite: 1]
-        direction = direction.upper() [cite: 1]
+        valid_directions = {"FORWard", "BACKward"} 
+        direction = direction.upper() 
 
         if direction in valid_directions:
-            self.instrument.write(f":FUNCtion:WREPlay:DIRection {direction}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:DIRection {direction}") 
         else:
             print(f"Invalid direction ({direction}). Choose from {valid_directions}.")
 
     def get_waveform_replay_direction(self):
         """
-        Query the playback direction of the waveform. [cite: 1]
+        Query the playback direction of the waveform. 
 
         Returns:
-        str: The playback direction, one of {"FORW", "BACK"}. [cite: 1]
+        str: The playback direction, one of {"FORW", "BACK"}. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:DIRection?") [cite: 1]
-        return response.strip().upper() [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:DIRection?") 
+        return response.strip().upper() 
 
     def set_waveform_replay_operate(self, operate_type):
         """
-        Set the operation type of waveform playback. [cite: 1]
+        Set the operation type of waveform playback. 
 
         Parameters:
-        operate_type (str): The operation type, one of {"PLAY", "PAUSE", "STOP"}. [cite: 1]
+        operate_type (str): The operation type, one of {"PLAY", "PAUSE", "STOP"}. 
         """
-        valid_types = {"PLAY", "PAUSE", "STOP"} [cite: 1]
-        operate_type = operate_type.upper() [cite: 1]
+        valid_types = {"PLAY", "PAUSE", "STOP"} 
+        operate_type = operate_type.upper() 
 
         if operate_type in valid_types:
-            self.instrument.write(f":FUNCtion:WREPlay:OPERate {operate_type}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:OPERate {operate_type}") 
         else:
             print(f"Invalid operation type ({operate_type}). Choose from {valid_types}.")
 
     def get_waveform_replay_operate(self):
         """
-        Query the status of the waveform playback. [cite: 1]
+        Query the status of the waveform playback. 
 
         Returns:
-        str: The status, one of {"PLAY", "PAUS", "STOP"}. [cite: 1]
+        str: The status, one of {"PLAY", "PAUS", "STOP"}. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:OPERate?") [cite: 1]
-        return response.strip().upper() [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:OPERate?") 
+        return response.strip().upper() 
 
     def set_waveform_replay_current_frame(self, current_frame):
         """
-        Set the current frame in waveform playback. [cite: 1]
+        Set the current frame in waveform playback. 
 
         Parameters:
-        current_frame (int): The current frame number, from 1 to the maximum number of frames recorded. [cite: 1]
+        current_frame (int): The current frame number, from 1 to the maximum number of frames recorded. 
         """
-        # We can't query max frames here to validate, so we'll just check for >= 1. [cite: 1]
+        # We can't query max frames here to validate, so we'll just check for >= 1. 
         if isinstance(current_frame, int) and current_frame >= 1:
-            self.instrument.write(f":FUNCtion:WREPlay:FCURrent {current_frame}") [cite: 1]
+            self.instrument.write(f":FUNCtion:WREPlay:FCURrent {current_frame}") 
         else:
             print(f"Invalid current frame ({current_frame}). Frame must be an integer >= 1.")
 
     def get_waveform_replay_current_frame(self):
         """
-        Query the current frame in waveform playback. [cite: 1]
+        Query the current frame in waveform playback. 
 
         Returns:
-        int: The current frame in integer. [cite: 1]
+        int: The current frame in integer. 
         """
-        response = self.instrument.query(":FUNCtion:WREPlay:FCURrent?") [cite: 1]
+        response = self.instrument.query(":FUNCtion:WREPlay:FCURrent?") 
         return int(response.strip())
         # IEEE 488.2 Common Commands
     def clear_event_registers(self):

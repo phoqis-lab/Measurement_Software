@@ -517,7 +517,7 @@ class Sense():
         else:
             raise ValueError("Either 'level_value' or 'level_type' must be provided.")
 
-    def get_sense_condition_level(self) -> float | str:
+    def get_sense_condition_level(self):
         """Returns the level or type that causes the transition between an ON and OFF condition.
         Returns: A float if a numeric level, or a string ('TTL'|'ECL') if a type."""
         response = self.instrument.query("SENSE:COND:LEV?").strip()

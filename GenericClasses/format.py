@@ -53,7 +53,7 @@ class Format():
         else:
             self.instrument.write(f"FORM:DATA {scpi_value},{length}")
 
-    def get_format_data(self) -> tuple[str, float | None]:
+    def get_format_data(self) -> tuple[str, float]:
         """Returns the selected data format type and its length.
         Returns: A tuple containing (data_type: str, length: float or None)."""
         response = self.instrument.query("FORM:DATA?").strip()

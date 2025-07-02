@@ -197,7 +197,7 @@ class Trace:
         """
         self.instrument.write("TRACE:DEL:ALL")
 
-    def set_trace_feed(self, trace_name: str, data_handle: str | None):
+    def set_trace_feed(self, trace_name: str, data_handle: str):
         """
         Sets which data flow is fed into the specified TRACE DATA memory.
         :param trace_name: The name of the TRACE DATA memory.
@@ -320,7 +320,7 @@ class Trace:
         except ValueError:
             raise ValueError(f"Unexpected response for trace POINts (not integer): '{response}'")
 
-    def trace_points_auto(self, trace_name: str, auto_state: str | bool):
+    def trace_points_auto(self, trace_name: str, auto_state):
         """
         Turns trace autosizing ON/OFF. When enabled, the trace will automatically resize
         as necessary to accommodate new data.
