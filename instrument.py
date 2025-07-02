@@ -1,5 +1,5 @@
 import instrument
-from ds1054z import DS1054Z
+
 from rigol_ds1000z import Rigol_DS1000Z
 from rigol_ds1000z import process_display, process_waveform
 from rigol_ds1000z import process_display, process_waveform
@@ -30,6 +30,7 @@ from GenericClasses import trace
 from GenericClasses import trigger
 from GenericClasses import unit
 from GenericClasses import vxi
+
 
 class Instrument(calculate.Calculate, calibration.Calibration, control.Control, data.Data, display.Display,
                   format.Format, hcopy.HCopy, instrumentcommands.InstrumentCommands,  memory.Memory,
