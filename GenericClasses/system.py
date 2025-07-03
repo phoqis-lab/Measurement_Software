@@ -47,7 +47,18 @@ class System:
             return False
         else:
             raise ValueError(f"Unexpected response for system alternate state: '{response}'")
-
+    def set_system_beeper_enable(self, value):
+        """
+        Enables or disables system beeper
+        :param value: 1|ON or 0|OFF
+        """
+        self.instrument.write(f"SYST:BEEP: {value}")
+    def get_system_beeper_enable(self):
+        """
+        Enables or disables system beeper
+        :param value: 1|ON or 0|OFF
+        """
+        return self.instrument.query(f"SYST:BEEP?")
     def set_system_beeper_frequency(self, value: float):
         """
         Programs the frequency of audible tones in Hz. It also sets the default frequency for the [:IMMediate] command.
@@ -782,7 +793,7 @@ class System:
         response = self.instrument.query("SYST:ERR:CODE:ALL?").strip()
         return response
 
-    def get_system_error_next(self) -> str:
+    def get_system_error(self) -> str:
         """
         Queries the next error from the error queue, returning its code and message.
         Notes: Query only.

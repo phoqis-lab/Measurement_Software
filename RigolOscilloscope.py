@@ -1,5 +1,5 @@
 import instrument
-from ds1054z import DS1054Z
+
 from rigol_ds1000z import Rigol_DS1000Z
 from rigol_ds1000z import process_display, process_waveform
 from rigol_ds1000z import process_display, process_waveform
@@ -1860,9 +1860,10 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
                 print(f"Invalid format: {fmt}. Using default.")
                 command_parts = [] # Reset to use default if format is invalid
 
-        command = ":DISPlay:DATA?"
+        command = ":DATA?"
         if command_parts:
             command += " " + ",".join(command_parts)
+
 
         # Use query_binary_values to read the image data
         # The 'B' datatype is for 8-bit unsigned integers (bytes)
@@ -2554,138 +2555,9 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         """
         response = self.instrument.query(":FUNCtion:WREPlay:FCURrent?") 
         return int(response.strip())
-        # IEEE 488.2 Common Commands
-    def clear_event_registers(self):
-        """
-        Clear all the event registers and clear the error queue (*CLS).
-        """
-        self.instrument.write("*CLS")
+    
 
-    def set_standard_event_status_enable(self, value):
-        """
-        Set the enable register for the standard event status register set (*ESE).
 
-        Parameters:
-        value (int): An integer value where bit 1 and bit 6 are not used (always 0).
-                     The range corresponds to binary numbers X0XXXX0X.
-        """
-        # Basic validation for the value based on the description
-        if isinstance(value, int) and 0 <= value <= 255: # Max 255 for an 8-bit register
-            # Further validation for bits 1 and 6 being 0 could be added:
-            # if (value & 0b01000010) == 0: # Check if bit 1 (0b00000010) or bit 6 (0b01000000) are set
-            self.instrument.write(f"*ESE {value}")
-        else:
-            print(f"Invalid value ({value}). Must be an integer between 0 and 255 (with bits 1 and 6 effectively 0).")
-
-    def get_standard_event_status_enable(self):
-        """
-        Query the enable register for the standard event status register set (*ESE?).
-
-        Returns:
-        int: An integer which equals the sum of the weights of all the bits that have
-             already been set in the register.
-        """
-        response = self.instrument.query("*ESE?")
-        return int(response.strip())
-
-    def query_standard_event_status_register(self):
-        """
-        Query and clear the event register for the standard event status register (*ESR?).
-
-        Returns:
-        int: An integer which equals the sum of the weights of all the bits in the register.
-             The value of the register is set to 0 after this command is executed.
-        """
-        response = self.instrument.query("*ESR?")
-        return int(response.strip())
-
-    def query_identification(self):
-        """
-        Query the ID string of the instrument (*IDN?).
-
-        Returns:
-        str: The ID string in the format "RIGOL TECHNOLOGIES,<model>,<serial number>,<software version>".
-        """
-        response = self.instrument.query("*IDN?")
-        return response.strip()
-
-    def set_operation_complete(self):
-        """
-        Set the Operation Complete bit (bit 0) in the standard event status register to 1
-        after the current operation is finished (*OPC).
-        """
-        self.instrument.write("*OPC")
-
-    def query_operation_complete(self):
-        """
-        Query whether the current operation is finished (*OPC?).
-
-        Returns:
-        bool: True (1) if the current operation is finished; False (0) otherwise.
-        """
-        response = self.instrument.query("*OPC?")
-        return bool(int(response.strip()))
-
-    def reset_instrument(self):
-        """
-        Restore the instrument to the default state (*RST).
-        """
-        self.instrument.write("*RST")
-
-    def set_service_request_enable(self, value):
-        """
-        Set the enable register for the status byte register set (*SRE).
-
-        Parameters:
-        value (int): An integer value from 0 to 255. Bit 0 and bit 1 of the status byte register
-                     are not used and are always treated as 0.
-        """
-        # Basic validation for the value
-        if isinstance(value, int) and 0 <= value <= 255:
-            # Further validation for bits 0 and 1 being 0 could be added:
-            # if (value & 0b00000011) == 0: # Check if bit 0 (0b00000001) or bit 1 (0b00000010) are set
-            self.instrument.write(f"*SRE {value}")
-        else:
-            print(f"Invalid value ({value}). Must be an integer between 0 and 255 (with bits 0 and 1 effectively 0).")
-
-    def get_service_request_enable(self):
-        """
-        Query the enable register for the status byte register set (*SRE?).
-
-        Returns:
-        int: An integer which equals the sum of the weights of all the bits that have
-             already been set in the register.
-        """
-        response = self.instrument.query("*SRE?")
-        return int(response.strip())
-
-    def query_status_byte(self):
-        """
-        Query the event register for the status byte register (*STB?).
-        The value of the status byte register is set to 0 after this command is executed.
-
-        Returns:
-        int: An integer which equals the sum of the weights of all the bits in the register.
-        """
-        response = self.instrument.query("*STB?")
-        return int(response.strip())
-
-    def perform_self_test(self):
-        """
-        Perform a self-test and then return the self-test results (*TST?).
-
-        Returns:
-        int: A decimal integer representing the self-test results.
-        """
-        response = self.instrument.query("*TST?")
-        return int(response.strip())
-
-    def wait_for_operation_finish(self):
-        """
-        Wait for the current operation to finish (*WAI).
-        The subsequent command can only be carried out after the current command has been executed.
-        """
-        self.instrument.write("*WAI")
 
     # LAN Commands
     def set_lan_dhcp_mode(self, state):
@@ -2826,13 +2698,15 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
     def set_lan_ip_address(self, ip_address):
         """
         Set the IP address of the instrument.
+        #todo check this
 
         Parameters:
         ip_address (str): The IP address in "nnn.nnn.nnn.nnn" format.
                           The first section (nnn) can be 0-223 (except 127).
                           Other sections (nnn) can be 0-255.
         """
-        ip_pattern = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+        ip_pattern = r
+        "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
         if re.match(ip_pattern, ip_address):
             # Further specific validation for the first octet (0-223, except 127)
             first_octet = int(ip_address.split('.')[0])
@@ -4665,9 +4539,9 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Enable or disable the beeper.
 
         Parameters:
-        state (bool): True to enable (ON), False to disable (OFF).
+        state (bool): True to enable (1|ON), False to disable (0|OFF).
         """
-        self.instrument.write(f":SYSTem:BEEPer {'ON' if state else 'OFF'}")
+        super().set_system_beeper_enable(state)
 
     def get_system_beeper_enable(self):
         """
@@ -4676,7 +4550,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Returns:
         bool: True if beeper is ON, False if OFF.
         """
-        response = self.instrument.query(":SYSTem:BEEPer?")
+        response = super().set_system_beeper_enable()
         return bool(int(response.strip()))
 
     def query_system_error(self):
@@ -4687,7 +4561,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         tuple: A tuple containing (message_number: int, message_content: str).
                Example: (-113, "Undefined header; command cannot be found").
         """
-        response = self.instrument.query(":SYSTem:ERRor:NEXT?")
+        response = super().get_system_error
         # Response format: -113,"Undefined header; command cannot be found"
         match = re.match(r"(-?\d+),\"(.*)\"", response.strip())
         if match:
