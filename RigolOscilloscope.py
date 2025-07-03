@@ -10,11 +10,7 @@ class RigolOscilloscope(instrument.Instrument):
 
     def __init__(self, name):
         
-        with Rigol_DS1000Z() as oscope:
-            # reset to defaults and print the IEEE 488.2 instrument identifier
-            ieee = oscope.ieee(rst=True)
-            print(ieee.idn)
-        self.instrument = ieee
+        self.instrument = name
     #General
     def autoscale(self):
         """Enable the waveform auto setting function. The oscilloscope will automatically adjust the

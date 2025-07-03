@@ -5,8 +5,11 @@ from rigol_ds1000z import process_display, process_waveform
 from rigol_ds1000z import process_display, process_waveform
 import pyvisa
 inst = Instrument("Test")
-with Rigol_DS1000Z() as oscope:
-        # reset to defaults and print the IEEE 488.2 instrument identifier
-        ieee = oscope.ieee(rst=True)
-        print(ieee.idn)
-#ro = RigolOscilloscope("Test")
+rm = pyvisa.ResourceManager()
+insturment_list = [] #types the name of the instruments you want to query 
+print(rm.list_resources())
+
+#Add auto connection
+r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
+ro = RigolOscilloscope(r)
+print(ro.clear())
