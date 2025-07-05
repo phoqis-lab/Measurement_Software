@@ -52,7 +52,7 @@ class System:
         Enables or disables system beeper
         :param value: 1|ON or 0|OFF
         """
-        self.instrument.write(f"SYST:BEEP: {value}")
+        self.instrument.write(f"SYST:BEEP {value}")
     def get_system_beeper_enable(self):
         """
         Enables or disables system beeper

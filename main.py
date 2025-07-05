@@ -13,3 +13,9 @@ print(rm.list_resources())
 r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
 ro = RigolOscilloscope(r)
 print(ro.clear())
+print(ro.get_system_beeper_enable())
+ro.set_system_beeper_enable(0)
+print(ro.get_system_beeper_enable())
+
+
+

@@ -4,13 +4,13 @@ class Trigger:
     """
     
     """
-    def __init__(self, instrument_connection):
+    def __init__(self):
         """
         Initializes the InstrumentControl with an instrument connection.
         :param instrument_connection: An object capable of sending/receiving
                                       SCPI commands (e.g., pyvisa resource).
         """
-        self.instrument = instrument_connection
+        self.instrument = None
 
     
     def abort(self):
@@ -135,12 +135,13 @@ class Trigger:
         """
         Selects AC or DC coupling for the SOURced signal. Only has effect if the source
         for the event detector is an analog electrical signal (e.g., INTernal, LINE, EXTernal).
-        :param coupling_type: "AC" or "DC".
+        :param coupling_type: "AC", "DC", "LFReject" and  "HFReject".
+        TODO: Define LFReject and HFRd
         :param sequence_number: Optional. The numeric suffix for SEQuence.
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        valid_types = {"AC", "DC"}
+        valid_types = {"AC", "DC", "LFR", "HFR", "LFReject", "HFReject"}
         type_upper = coupling_type.upper()
         if type_upper not in valid_types:
             raise ValueError(f"Invalid coupling type: '{coupling_type}'. Must be 'AC' or 'DC'.")
@@ -940,6 +941,7 @@ class Trigger:
             return int(response)
         except ValueError:
             raise ValueError(f"Unexpected response for ARM video FORMat LPFRame (not integer): '{response}'")
+    
 
     def set_arm_sequence_layer_video_line_number(self, value: int, sequence_number: int = None, layer_number: int = None):
         """
@@ -1232,25 +1234,31 @@ class Trigger:
         except ValueError:
             raise ValueError(f"Unexpected response for TRIGger sequence COUNt (not integer): '{response}'")
 
-    def set_trigger_sequence_coupling(self, coupling_type: str):
+    def set_trigger_sequence_coupling(self, coupling_type: str, sequence_number: int = None):
         """
         Selects AC or DC coupling for the SOURced signal. Only has effect if the source
         for the event detector is an analog electrical signal.
         :param coupling_type: "AC" or "DC".
         Notes: At *RST, this value is device-dependent.
         """
-        valid_types = {"AC", "DC"}
+        valid_types = {"AC", "DC", "LFR", "HFR", "LFReject", "HFReject"}
         type_upper = coupling_type.upper()
+        path = "TRIG:"
+        if sequence_number is not None:
+            path += f":SEQ{sequence_number}"
         if type_upper not in valid_types:
             raise ValueError(f"Invalid coupling type: '{coupling_type}'. Must be 'AC' or 'DC'.")
-        self.instrument.write(f"TRIG:SEQ:COUP {type_upper}")
+        self.instrument.write(f"{path}:COUP {type_upper}")
 
-    def get_trigger_sequence_coupling(self) -> str:
+    def get_trigger_sequence_coupling(self, sequence_number:int = None) -> str:
         """
         Queries the coupling type for the TRIGger sequence.
         :return: The coupling type ("AC" or "DC").
         """
-        response = self.instrument.query("TRIG:SEQ:COUP?").strip().upper()
+        path = "TRIG:"
+        if sequence_number is not None:
+            path += f":SEQ{sequence_number}"
+        response = self.instrument.query(f"{path}:COUP?").strip().upper()
         return response
 
     def set_trigger_sequence_define(self, sequence_name: str, sequence_number: int = None):
@@ -1303,7 +1311,7 @@ class Trigger:
             response = self.instrument.query("TRIG:SEQ:DEF:MGR?").strip()
         return response == "1"
 
-    def set_trigger_sequence_delay(self, value: float):
+    def set_trigger_sequence_delay(self, value: float, seq:bool = None):
         """
         Sets the time duration between the recognition of an event(s) and the downward exit of the specified layer.
         :param value: The delay time in seconds (numeric value, zero or positive).
@@ -1311,14 +1319,20 @@ class Trigger:
         """
         if value < 0:
             raise ValueError("DELay must be zero or a positive value.")
-        self.instrument.write(f"TRIG:SEQ:DEL {value}")
+        path = "TRIG:"
+        if seq is not None:
+            path += f":SEQ"
+        self.instrument.write(f"{path}:DEL {value}")
 
-    def get_trigger_sequence_delay(self) -> float:
+    def get_trigger_sequence_delay(self, seq:bool=None) -> float:
         """
         Queries the delay time for the TRIGger sequence.
         :return: The delay time in seconds.
         """
-        response = self.instrument.query("TRIG:SEQ:DEL?").strip()
+        path = "TRIG:"
+        if seq is not None:
+            path += f":SEQ"
+        response = self.instrument.query(f"{path}:DEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1447,22 +1461,27 @@ class Trigger:
         return response == "1"
 
     
-    def set_trigger_sequence_holdoff(self, value: float):
+    def set_trigger_sequence_holdoff(self, value: float, seq: int = None):
         """
         Controls the time during which the event detector is inhibited from acting on any new trigger.
         :param value: The holdoff value (numeric value, zero to one).
         Notes: At *RST, the value of the parameter is zero.
         """
-        if not (0 <= value <= 1):
-            raise ValueError("HOLDoff value must be between 0 and 1.")
-        self.instrument.write(f"TRIG:SEQ:HOLD {value}")
+        path = "TRIG:"
+        if seq is not None:
+            path = path + "SEQ:"
 
-    def get_trigger_sequence_holdoff(self) -> float:
+        self.instrument.write(f"{path}:HOLD {value}")
+
+    def get_trigger_sequence_holdoff(self, seq: int = None) -> float:
         """
         Queries the holdoff value for the TRIGger sequence.
         :return: The holdoff value.
         """
-        response = self.instrument.query(f"TRIG:SEQ:HOLD?").strip()
+        path = "TRIG:"
+        if seq is not None:
+            path = path + "SEQ:"
+        response = self.instrument.query(f"{path}:HOLD?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1796,13 +1815,41 @@ class Trigger:
         except ValueError:
             raise ValueError(f"Unexpected response for TRIGger video FORMat LPFRame (not integer): '{response}'")
 
-    
-    def set_trigger_sequence_video_line_number(self, value: int):
+    def set_trigger_video_line(self, line_number, seq: int = None):
+        """
+        Set the line number when the sync type in video trigger is LINE.
+
+        Parameters:
+        line_number (int): The line number. Range depends on video standard (e.g., 1 to 525 for NTSC).
+        TODO: Insert different standards potential values, maybe add a check.
+        """
+        if isinstance(line_number, int) and line_number >= 1: # Minimum line number is 1
+            self.instrument.write(f":TRIGger:VIDeo:LINE {line_number}")
+        else:
+            print(f"Invalid video line number ({line_number}). Must be an integer >= 1.")
+
+    def get_trigger_video_line(self, seq: int = None):
+        """
+        Query the line number when the sync type in video trigger is LINE.
+
+        Returns:
+        int: The line number.
+        TODO: Add option for boolean or int of sequence
+        """
+        path = ":TRIG"
+        if seq is not None:
+            path += f":SEQ{seq}"
+        response = self.instrument.query(f"{path}:VIDeo:LINE?")
+        return int(response.strip())
+    def set_trigger_sequence_video_line_number(self, value: int, seq:int=None):
         """
         Sets the line number to trigger on if LINE:SELect is set to NUMBer.
         :param value: The line number (numeric value).
         Notes: At *RST, the value of this parameter is device dependent. Setting has no effect on SELect parameter.
         """
+        path = ":TRIG"
+        if seq is not None:
+            path += f":SEQ{seq}"
         self.instrument.write(f"TRIG:SEQ:VID:LINE:NUMB {value}")
 
     def get_trigger_sequence_video_line_number(self) -> int:

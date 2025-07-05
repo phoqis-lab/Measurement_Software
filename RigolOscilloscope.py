@@ -4224,7 +4224,8 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         response = self.instrument.query(f":MEASure:ITEM? {','.join(command_parts)}")
         return float(response.strip())
 
-    # Reference Commands
+    # Reference Commands - For controlling 
+    # llhand set a reference waveform to compare the measured waveform against
     def set_reference_display(self, state):
         """
         Enable or disable the REF function.
@@ -4546,7 +4547,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Returns:
         bool: True if beeper is ON, False if OFF.
         """
-        response = super().set_system_beeper_enable()
+        response = super().get_system_beeper_enable()
         return bool(int(response.strip()))
 
     def query_system_error(self):
@@ -4585,14 +4586,15 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
                                         "GERMan", "POLish", "KORean", "JAPAnese",
                                         "FRENch", "RUSSian"}.
         """
-        valid_languages = {"SCHinese", "TCHinese", "ENGLish", "PORTuguese",
+        ''' valid_languages = {"SCHinese", "TCHinese", "ENGLish", "PORTuguese",
                            "GERMan", "POLish", "KORean", "JAPAnese",
                            "FRENch", "RUSSian"}
         lang = lang.upper()
         if lang in valid_languages:
             self.instrument.write(f":SYSTem:LANGuage {lang}")
         else:
-            print(f"Invalid language ({lang}). Choose from {valid_languages}.")
+            print(f"Invalid language ({lang}). Choose from {valid_languages}.")'''
+        super().set_system_language(lang)
 
     def get_system_language(self):
         """
@@ -4602,8 +4604,8 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         str: The language, one of {"SCH", "TCH", "ENGL", "PORT", "GERM", "POL",
                                    "KOR", "JAPA", "FREN", "RUSS"}.
         """
-        response = self.instrument.query(":SYSTem:LANGuage?")
-        return response.strip().upper()
+        
+        return super().get_system_language()
 
     def set_system_keyboard_lock(self, state):
         """
@@ -4895,12 +4897,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Parameters:
         coupling_type (str): The coupling type, one of {"AC", "DC", "LFReject", "HFReject"}.
         """
-        valid_types = {"AC", "DC", "LFReject", "HFReject"}
-        coupling_type = coupling_type.upper()
-        if coupling_type in valid_types:
-            self.instrument.write(f":TRIGger:COUPling {coupling_type}")
-        else:
-            print(f"Invalid coupling type ({coupling_type}). Choose from {valid_types}.")
+        super().set_trigger_sequence_coupling(coupling_type, None)
 
     def get_trigger_coupling(self):
         """
@@ -4909,8 +4906,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Returns:
         str: The coupling type, one of {"AC", "DC", "LFR", "HFR"}.
         """
-        response = self.instrument.query(":TRIGger:COUPling?")
-        return response.strip().upper()
+        return super().get_trigger_sequence_coupling(None)
 
     def get_trigger_status(self):
         """
@@ -4954,7 +4950,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         value (float): The holdoff time in seconds, from 16ns to 10s.
         """
         if isinstance(value, (float, int)) and 16e-9 <= value <= 10.0:
-            self.instrument.write(f":TRIGger:HOLDoff {float(value)}")
+            super().set_trigger_sequence_holdoff(value, None)
         else:
             print(f"Invalid holdoff time ({value}). Must be a float between 16ns and 10s.")
 
@@ -4965,8 +4961,8 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Returns:
         float: The trigger holdoff time in scientific notation (seconds).
         """
-        response = self.instrument.query(":TRIGger:HOLDoff?")
-        return float(response.strip())
+        response = super().get_trigger_sequence_holdoff()
+        return response
 
     def set_trigger_noise_reject(self, state):
         """
@@ -5478,11 +5474,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Parameters:
         line_number (int): The line number. Range depends on video standard (e.g., 1 to 525 for NTSC).
         """
-        if isinstance(line_number, int) and line_number >= 1: # Minimum line number is 1
-            self.instrument.write(f":TRIGger:VIDeo:LINE {line_number}")
-        else:
-            print(f"Invalid video line number ({line_number}). Must be an integer >= 1.")
-
+        super().set_trigger_video_line(line_number, None)
     def get_trigger_video_line(self):
         """
         Query the line number when the sync type in video trigger is LINE.
@@ -5490,8 +5482,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         Returns:
         int: The line number.
         """
-        response = self.instrument.query(":TRIGger:VIDeo:LINE?")
-        return int(response.strip())
+        return super().get_trigger_video_line(None)
 
     def set_trigger_video_standard(self, standard):
         """
