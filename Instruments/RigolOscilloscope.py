@@ -19,7 +19,7 @@ class RigolOscilloscope(instrument.Instrument):
 vertical scale, horizontal timebase, and trigger mode according to the input signal to
 realize optimum waveform display"""
         self.instrument.write(":AUT")
-
+    
     def clear(self):
         """Clear all the waveforms on the screen. If the oscilloscope is in the RUN state, waveform
 will still be displayed."""
