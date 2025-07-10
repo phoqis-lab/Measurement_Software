@@ -3,7 +3,7 @@ from Instruments import SignalHoundSpectrumAnalyzer
 
 class TestSpectrumAnalyzer(unittest.TestCase):
     
-    def __init__(self):
+    def setup(self):
         #TODO insert connection
         self.instrument = SignalHoundSpectrumAnalyzer.SpectrumAnalyzer(None)
     # --- Display Tests ---

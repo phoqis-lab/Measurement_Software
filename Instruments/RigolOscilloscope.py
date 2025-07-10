@@ -5,14 +5,17 @@ from rigol_ds1000z import process_display, process_waveform
 from rigol_ds1000z import process_display, process_waveform
 from time import sleep
 from time import sleep
+from Instruments.SCPICommandTree import mandatory
 import pyvisa
-class Oscilloscope():
+class Oscilloscope(mandatory.Mandatory):
 
     def __init__(self, instru):
         
         self.name = "Oscilloscope"
         self.instrument = instru
-        self.generalInstrument = instrument.Instrument(self.name, self.instrument)
+        
+    #Mandatory Commands
+
     #General
     def autoscale(self):
         """Enable the waveform auto setting function. The oscilloscope will automatically adjust the

@@ -10,10 +10,6 @@ insturment_list = [] #types the name of the instruments you want to query
 print(rm.list_resources())
 
 #Add auto connection
-#r = rm.open_resource('ASRL/dev/cu.wlan-debug::INSTR')
-#ro = RigolOscilloscope.Oscilloscope(r)
-
-
-
-
+r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
+ro = RigolOscilloscope.Oscilloscope(r)
 

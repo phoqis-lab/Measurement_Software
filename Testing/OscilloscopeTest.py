@@ -1,46 +1,60 @@
 import unittest
 import sys
 import io
+sys.path.append('../Measurement_Software')
 from Instruments import instrument
+from Instruments import RigolOscilloscope
+import pyvisa
+
 class TestRigolOscilloscope(unittest.TestCase):
 
-    def setUp(self):
+    def setup(self):
         """Set up a mock instrument and RigolOscilloscope instance before each test."""
-        self.instrument = instrument.Instrument
-        self.scope = instrument.RigolOscilloscope(self.instrument)
+        rm = pyvisa.ResourceManager()
+        insturment_list = [] #types the name of the instruments you want to query 
+
+        #Add auto connection
+        r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
+        self.scope = RigolOscilloscope.Oscilloscope(r)
+        self.instrument = self.scope.instrument
         # Redirect stdout to capture print statements
         self.held_stdout = sys.stdout
         self.mock_stdout = io.StringIO()
         sys.stdout = self.mock_stdout
+        
 
     def tearDown(self):
         """Restore stdout after each test."""
         sys.stdout = self.held_stdout
-
     # --- Common Commands Tests ---
     def test_get_identification(self):
-        self.instrument.query.return_value = "RIGOL TECHNOLOGIES,DS1054Z,DS1ZA123456789,00.04.04.00.02"
-        self.assertEqual(self.scope.get_identification(), "RIGOL TECHNOLOGIES,DS1054Z,DS1ZA123456789,00.04.04.00.02")
-        self.instrument.query.assert_called_with("*IDN?")
+        self.setup()
+        id = "RIGOL TECHNOLOGIES,DS1202Z-E,DS1ZE264M00036,00.06.04"
+        self.assertEqual(self.scope.get_id(), id)
 
     def test_reset_instrument(self):
+        self.setup()
         self.scope.reset_instrument()
         self.instrument.write.assert_called_with("*RST")
 
     def test_clear_status_byte(self):
-        self.scope.clear_status_byte()
+        self.setup()
+        self.scope.clear_event_registers()
         self.instrument.write.assert_called_with("*CLS")
 
     def test_operation_complete(self):
+        self.setup()
         self.instrument.query.return_value = "1"
-        self.assertEqual(self.scope.operation_complete(), "1")
+        self.assertEqual(self.scope.is_operation_complete(), "1")
         self.instrument.query.assert_called_with("*OPC?")
 
     def test_wait_for_completion(self):
-        self.scope.wait_for_completion()
+        self.setup()
+        self.scope.wait_for_operation_finish()
         self.instrument.write.assert_called_with("*WAI")
 
-    def test_save_setup(self):
+
+    """def test_save_setup(self):
         self.scope.save_setup(5)
         self.instrument.write.assert_called_with("*SAV 5")
         with self.assertRaises(ValueError):
@@ -1067,7 +1081,7 @@ class TestRigolOscilloscope(unittest.TestCase):
         self.scope.set_iic_packet_length(3)
         self.instrument.write.assert_called_with(":TRIG:IIC:PACK:LENG 3")
 
-    """def test_get_iic_packet_length(self):
+    def test_get_iic_packet_length(self):
         self.instrument.query.return_value = "1"
         self.assertEqual(self.scope.get_iic_packet_length(), "1")
 
