@@ -15,7 +15,7 @@ class HCopy:
         Aborts the current hard copy operation.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ABOR")
+        self.instrument.write(":HCOP:ABOR")
 
     def get_hcopy_data(self) -> str:
         """
@@ -24,18 +24,18 @@ class HCopy:
         encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The hard copy data as a string.
         """
-        response = self.instrument.query("HCOP:DATA?").strip()
+        response = self.instrument.query(":HCOP:DATA?").strip()
         # The document states the response has a leading #0 and a trailing NL^END.
         # This implementation simply returns the raw string, assuming the user will handle parsing.
         return response
 
     def set_hcopy_destination(self, data_handle: str):
         """
-        An event which sets all :FEED connections that were set to "HCOPy" to "".
-        The :FEED connection pointed to by <data_handle> is set to "HCOPY".
+        An event which sets all :FEED connections that were set to ":HCOPy" to "".
+        The :FEED connection pointed to by <data_handle> is set to ":HCOPY".
         :param data_handle: The data handle (string).
         """
-        self.instrument.write(f"HCOP:DEST '{data_handle}'")
+        self.instrument.write(f":HCOP:DEST '{data_handle}'")
 
 
 
@@ -49,14 +49,14 @@ class HCopy:
         """
         if not (0 <= hue <= 1) or not (0 <= saturation <= 1) or not (0 <= luminance <= 1):
             raise ValueError("Hue, Saturation, and Luminance must be between 0 and 1.")
-        self.instrument.write(f"HCOP:DEV:CMAP:COL:HSL {hue},{saturation},{luminance}")
+        self.instrument.write(f":HCOP:DEV:CMAP:COL:HSL {hue},{saturation},{luminance}")
 
     def get_hcopy_device_cmap_color_hsl(self) -> tuple[float, float, float]:
         """
         Queries the instrument's color map based on the Hue/Saturation/Luminance levels color model.
         :return: A tuple (hue, saturation, luminance).
         """
-        response = self.instrument.query("HCOP:DEV:CMAP:COL:HSL?").strip()
+        response = self.instrument.query(":HCOP:DEV:CMAP:COL:HSL?").strip()
         try:
             parts = [float(p) for p in response.split(',')]
             if len(parts) == 3:
@@ -76,14 +76,14 @@ class HCopy:
         """
         if not (0 <= red <= 1) or not (0 <= green <= 1) or not (0 <= blue <= 1):
             raise ValueError("Red, Green, and Blue values must be between 0 and 1.")
-        self.instrument.write(f"HCOP:DEV:CMAP:COL:RGB {red},{green},{blue}")
+        self.instrument.write(f":HCOP:DEV:CMAP:COL:RGB {red},{green},{blue}")
 
     def get_hcopy_device_cmap_color_rgb(self) -> tuple[float, float, float]:
         """
         Queries the instrument's color map based on the Red/Green/Blue color model.
         :return: A tuple (red, green, blue).
         """
-        response = self.instrument.query("HCOP:DEV:CMAP:COL:RGB?").strip()
+        response = self.instrument.query(":HCOP:DEV:CMAP:COL:RGB?").strip()
         try:
             parts = [float(p) for p in response.split(',')]
             if len(parts) == 3:
@@ -98,7 +98,7 @@ class HCopy:
         Sets the color map to the instrument's default values for all colors.
         Notes: COLor[1] for "black," COLor2 for "white" or monochrome display color.
         """
-        self.instrument.write("HCOP:DEV:CMAP:DEF")
+        self.instrument.write(":HCOP:DEV:CMAP:DEF")
 
     def set_hcopy_device_color(self, enable: bool):
         """
@@ -107,14 +107,14 @@ class HCopy:
         Notes: At *RST, the value is OFF.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:DEV:COL {scpi_value}")
+        self.instrument.write(f":HCOP:DEV:COL {scpi_value}")
 
     def get_hcopy_device_color(self) -> bool:
         """
         Queries whether color information should be sent.
         :return: True if color information is sent, False otherwise.
         """
-        response = self.instrument.query("HCOP:DEV:COL?").strip()
+        response = self.instrument.query(":HCOP:DEV:COL?").strip()
         return response == "1"
 
 
@@ -138,16 +138,16 @@ class HCopy:
         else: scpi_lang = language_type # Fallback
 
         if version is not None:
-            self.instrument.write(f"HCOP:DEV:LANG {scpi_lang}{version}")
+            self.instrument.write(f":HCOP:DEV:LANG {scpi_lang}{version}")
         else:
-            self.instrument.write(f"HCOP:DEV:LANG {scpi_lang}")
+            self.instrument.write(f":HCOP:DEV:LANG {scpi_lang}")
 
     def get_hcopy_device_language(self) -> str:
         """
         Queries the control language or data format being used.
         :return: The language string (e.g., "PCL", "HPGL", "POSTscript").
         """
-        response = self.instrument.query("HCOP:DEV:LANG?").strip().upper()
+        response = self.instrument.query(":HCOP:DEV:LANG?").strip().upper()
         if response.startswith("POST"): return "POSTscript"
         return response # Returns "PCL" or "HPGL"
 
@@ -166,14 +166,14 @@ class HCopy:
         elif mode_upper.startswith("GRAP"): scpi_mode = "GRAP"
         else: scpi_mode = mode_type # Fallback
 
-        self.instrument.write(f"HCOP:DEV:MODE {scpi_mode}")
+        self.instrument.write(f":HCOP:DEV:MODE {scpi_mode}")
 
     def get_hcopy_device_mode(self) -> str:
         """
         Queries how the data is to be represented in the hard copy.
         :return: The mode type ("TABLE" or "GRAPH").
         """
-        response = self.instrument.query("HCOP:DEV:MODE?").strip().upper()
+        response = self.instrument.query(":HCOP:DEV:MODE?").strip().upper()
         if response.startswith("TABL"): return "TABLE"
         if response.startswith("GRAP"): return "GRAPH"
         return response
@@ -187,18 +187,18 @@ class HCopy:
         :param value: The resolution value (numeric value).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:DEV:RES {value}")
+        self.instrument.write(f":HCOP:DEV:RES {value}")
 
     def get_hcopy_device_resolution(self) -> float:
         """
         Queries the resolution of the result on the hard copy device.
         :return: The resolution value.
         """
-        response = self.instrument.query("HCOP:DEV:RES?").strip()
+        response = self.instrument.query(":HCOP:DEV:RES?").strip()
         try:
             return float(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY DEVice RESolution (not numeric): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY DEVice RESolution (not numeric): '{response}'")
 
     def set_hcopy_device_resolution_unit(self, unit: str):
         """
@@ -206,14 +206,14 @@ class HCopy:
         :param unit: The suffix program data for the unit.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:DEV:RES:UNIT {unit}")
+        self.instrument.write(f":HCOP:DEV:RES:UNIT {unit}")
 
     def get_hcopy_device_resolution_unit(self) -> str:
         """
         Queries the units of the RESolution setting.
         :return: The unit string.
         """
-        response = self.instrument.query("HCOP:DEV:RES:UNIT?").strip()
+        response = self.instrument.query(":HCOP:DEV:RES:UNIT?").strip()
         return response
 
     def set_hcopy_device_speed(self, value: float):
@@ -223,18 +223,18 @@ class HCopy:
         :param value: The speed value (numeric value).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:DEV:SPE {value}")
+        self.instrument.write(f":HCOP:DEV:SPE {value}")
 
     def get_hcopy_device_speed(self) -> float:
         """
         Queries the speed at which vectors are drawn.
         :return: The speed value.
         """
-        response = self.instrument.query("HCOP:DEV:SPE?").strip()
+        response = self.instrument.query(":HCOP:DEV:SPE?").strip()
         try:
             return float(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY DEVice SPEed (not numeric): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY DEVice SPEed (not numeric): '{response}'")
 
     def set_hcopy_device_speed_unit(self, unit: str):
         """
@@ -242,14 +242,14 @@ class HCopy:
         :param unit: The suffix program data for the unit.
         Notes: At *RST, the value of this parameter is cm/sec.
         """
-        self.instrument.write(f"HCOP:DEV:SPE:UNIT {unit}")
+        self.instrument.write(f":HCOP:DEV:SPE:UNIT {unit}")
 
     def get_hcopy_device_speed_unit(self) -> str:
         """
         Queries the units of the SPEed setting.
         :return: The unit string.
         """
-        response = self.instrument.query("HCOP:DEV:SPE:UNIT?").strip()
+        response = self.instrument.query(":HCOP:DEV:SPE:UNIT?").strip()
         return response
 
     def set_hcopy_feed(self, data_handle: str):
@@ -258,14 +258,14 @@ class HCopy:
         :param data_handle: The data handle (string).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:FEED '{data_handle}'")
+        self.instrument.write(f":HCOP:FEED '{data_handle}'")
 
     def get_hcopy_feed(self) -> str:
         """
         Queries the data flow to be fed into the Hard COPy block.
         :return: The data handle string.
         """
-        response = self.instrument.query("HCOP:FEED?").strip().strip("'")
+        response = self.instrument.query(":HCOP:FEED?").strip().strip("'")
         return response
 
     def hcopy_immediate(self):
@@ -274,7 +274,7 @@ class HCopy:
         All of the items under the ITEM node which are turned ON (STATE ON) are plotted or printed.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:IMM")
+        self.instrument.write(":HCOP:IMM")
 
  
 
@@ -284,7 +284,7 @@ class HCopy:
         <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:ALL:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:ALL:DATA?").strip()
         return response
 
     def hcopy_item_all_immediate(self):
@@ -292,7 +292,7 @@ class HCopy:
         Immediately plots or prints all ITEMS, regardless of their individual states.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:ALL:IMM")
+        self.instrument.write(":HCOP:ITEM:ALL:IMM")
 
     def set_hcopy_item_annotation_color(self, color_value: int):
         """
@@ -300,18 +300,18 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:ANNOT:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:ANNOT:COL {color_value}")
 
     def get_hcopy_item_annotation_color(self) -> int:
         """
         Queries the color used for plotting or printing the display annotation.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:ANNOT:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:ANNOT:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM ANNotation COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM ANNotation COLor (not integer): '{response}'")
 
     def get_hcopy_item_annotation_data(self) -> str:
         """
@@ -319,7 +319,7 @@ class HCopy:
         RESPONSE DATA> element.
         :return: The annotation data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:ANNOT:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:ANNOT:DATA?").strip()
         return response
 
     def hcopy_item_annotation_immediate(self):
@@ -327,24 +327,24 @@ class HCopy:
         Immediately plots or prints the display annotation.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:ANNOT:IMM")
+        self.instrument.write(":HCOP:ITEM:ANNOT:IMM")
 
     def set_hcopy_item_annotation_state(self, enable: bool):
         """
         Sets or queries whether ANNotation should be plotted or printed when the
-        HCOPY:IMMediate command or HCOPY:DATA? query is sent.
+        :HCOPY:IMMediate command or :HCOPY:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:ANNOT:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:ANNOT:STATE {scpi_value}")
 
     def get_hcopy_item_annotation_state(self) -> bool:
         """
         Queries whether ANNotation should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:ANNOT:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:ANNOT:STATE?").strip()
         return response == "1"
 
 
@@ -355,7 +355,7 @@ class HCopy:
         encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The cut data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:CUT:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:CUT:DATA?").strip()
         return response
 
     def hcopy_item_cut_immediate(self):
@@ -363,24 +363,24 @@ class HCopy:
         Immediately cuts the page.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:CUT:IMM")
+        self.instrument.write(":HCOP:ITEM:CUT:IMM")
 
     def set_hcopy_item_cut_state(self, enable: bool):
         """
         Sets or queries whether a page cut should be performed as part of the
-        HCOPy:IMMediate command or HCOPY:DATA? query.
+        :HCOPy:IMMediate command or :HCOPY:DATA? query.
         :param enable: True to enable page cut, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:CUT:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:CUT:STATE {scpi_value}")
 
     def get_hcopy_item_cut_state(self) -> bool:
         """
         Queries whether a page cut should be performed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:CUT:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:CUT:STATE?").strip()
         return response == "1"
 
 
@@ -390,7 +390,7 @@ class HCopy:
         encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The form feed data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:FFED:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:FFED:DATA?").strip()
         return response
 
     def hcopy_item_ffeed_immediate(self):
@@ -398,24 +398,24 @@ class HCopy:
         Immediately form-feeds the page.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:FFED:IMM")
+        self.instrument.write(":HCOP:ITEM:FFED:IMM")
 
     def set_hcopy_item_ffeed_state(self, enable: bool):
         """
         Sets or queries whether a form feed should be performed as part of the
-        HCOPY:IMMediate command or HCOPY:DATA? query.
+        :HCOPY:IMMediate command or :HCOPY:DATA? query.
         :param enable: True to enable form feed, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:FFED:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:FFED:STATE {scpi_value}")
 
     def get_hcopy_item_ffeed_state(self) -> bool:
         """
         Queries whether a form feed should be performed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:FFED:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:FFED:STATE?").strip()
         return response == "1"
 
 
@@ -426,18 +426,18 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:LAB:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:LAB:COL {color_value}")
 
     def get_hcopy_item_label_color(self) -> int:
         """
         Queries the color used for plotting or printing the label.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:LAB:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:LAB:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM LABel COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM LABel COLor (not integer): '{response}'")
 
  
 
@@ -446,7 +446,7 @@ class HCopy:
         Returns the label encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The label data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:LAB:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:LAB:DATA?").strip()
         return response
 
     def hcopy_item_label_immediate(self):
@@ -454,24 +454,24 @@ class HCopy:
         Immediately plots or prints the label.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:LAB:IMM")
+        self.instrument.write(":HCOP:ITEM:LAB:IMM")
 
     def set_hcopy_item_label_state(self, enable: bool):
         """
         Sets or queries whether the label should be plotted or printed when the
-        HCOPY:IMMediate command or HCOPY:DATA? query is sent.
+        :HCOPY:IMMediate command or :HCOPY:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:LAB:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:LAB:STATE {scpi_value}")
 
     def get_hcopy_item_label_state(self) -> bool:
         """
         Queries whether the label should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:LAB:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:LAB:STATE?").strip()
         return response == "1"
 
     def set_hcopy_item_label_text(self, text_string: str):
@@ -483,14 +483,14 @@ class HCopy:
         # SCPI string program data typically needs to be enclosed in quotes.
         # Handle escaping internal quotes if necessary (by doubling them).
         escaped_text = text_string.replace("'", "''")
-        self.instrument.write(f"HCOP:ITEM:LAB:TEXT '{escaped_text}'")
+        self.instrument.write(f":HCOP:ITEM:LAB:TEXT '{escaped_text}'")
 
     def get_hcopy_item_label_text(self) -> str:
         """
         Queries the contents of the user label.
         :return: The label text string.
         """
-        response = self.instrument.query("HCOP:ITEM:LAB:TEXT?").strip().strip("'")
+        response = self.instrument.query(":HCOP:ITEM:LAB:TEXT?").strip().strip("'")
         # Un-escape internal quotes if any were doubled during setting
         return response.replace("''", "'")
 
@@ -502,25 +502,25 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:MENU:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:MENU:COL {color_value}")
 
     def get_hcopy_item_menu_color(self) -> int:
         """
         Queries the color used for plotting or printing the menu.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:MENU:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:MENU:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM MENU COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM MENU COLor (not integer): '{response}'")
 
     def get_hcopy_item_menu_data(self) -> str:
         """
         Returns the menu encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The menu data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:MENU:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:MENU:DATA?").strip()
         return response
 
     def hcopy_item_menu_immediate(self):
@@ -528,24 +528,24 @@ class HCopy:
         Immediately plots or prints the menu.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:MENU:IMM")
+        self.instrument.write(":HCOP:ITEM:MENU:IMM")
 
     def set_hcopy_item_menu_state(self, enable: bool):
         """
         Sets or queries whether the menu should be plotted or printed when the
-        HCOPY:IMMediate command or HCOPY:DATA? query is sent.
+        :HCOPY:IMMediate command or :HCOPY:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:MENU:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:MENU:STATE {scpi_value}")
 
     def get_hcopy_item_menu_state(self) -> bool:
         """
         Queries whether the menu should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:MENU:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:MENU:STATE?").strip()
         return response == "1"
 
 
@@ -556,18 +556,18 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:TDST:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:TDST:COL {color_value}")
 
     def get_hcopy_item_tdstamp_color(self) -> int:
         """
         Queries the color used for plotting or printing the time and date stamp.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:TDST:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:TDST:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM TDSTamp COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM TDSTamp COLor (not integer): '{response}'")
 
     def get_hcopy_item_tdstamp_data(self) -> str:
         """
@@ -575,7 +575,7 @@ class HCopy:
         RESPONSE DATA> element.
         :return: The timestamp data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:TDST:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:TDST:DATA?").strip()
         return response
 
     def hcopy_item_tdstamp_immediate(self):
@@ -583,24 +583,24 @@ class HCopy:
         Immediately plots or prints the time and date stamp.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:TDST:IMM")
+        self.instrument.write(":HCOP:ITEM:TDST:IMM")
 
     def set_hcopy_item_tdstamp_state(self, enable: bool):
         """
         Sets or queries whether the time and date stamp should be plotted or printed when the
-        HCOPy:IMMediate command or HCOPy:DATA? query is sent.
+        :HCOPy:IMMediate command or :HCOPy:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:TDST:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:TDST:STATE {scpi_value}")
 
     def get_hcopy_item_tdstamp_state(self) -> bool:
         """
         Queries whether the time and date stamp should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:TDST:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:TDST:STATE?").strip()
         return response == "1"
 
     def get_hcopy_item_window_data(self) -> str:
@@ -608,7 +608,7 @@ class HCopy:
         Returns the window encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The window data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:DATA?").strip()
         return response
 
     def hcopy_item_window_immediate(self):
@@ -616,24 +616,24 @@ class HCopy:
         Immediately plots or prints the window.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:WIND:IMM")
+        self.instrument.write(":HCOP:ITEM:WIND:IMM")
 
     def set_hcopy_item_window_state(self, enable: bool):
         """
         Sets or queries whether the window should be plotted or printed when the
-        HCOPy:IMMediate command or HCOPy:DATA? query is sent.
+        :HCOPy:IMMediate command or :HCOPy:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:WIND:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:STATE {scpi_value}")
 
     def get_hcopy_item_window_state(self) -> bool:
         """
         Queries whether the window should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:STATE?").strip()
         return response == "1"
 
 
@@ -643,18 +643,18 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:WIND:TEXT:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:TEXT:COL {color_value}")
 
     def get_hcopy_item_window_text_color(self) -> int:
         """
         Queries the color used for plotting or printing TEXT.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TEXT:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TEXT:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM WINDow TEXT COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM WINDow TEXT COLor (not integer): '{response}'")
 
     def get_hcopy_item_window_text_data(self) -> str:
         """
@@ -662,7 +662,7 @@ class HCopy:
         <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The text data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TEXT:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TEXT:DATA?").strip()
         return response
 
     def hcopy_item_window_text_immediate(self):
@@ -670,24 +670,24 @@ class HCopy:
         Immediately plots or prints the text blocks or textual labels.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:WIND:TEXT:IMM")
+        self.instrument.write(":HCOP:ITEM:WIND:TEXT:IMM")
 
     def set_hcopy_item_window_text_state(self, enable: bool):
         """
         Sets or queries whether the text blocks or textual labels should be plotted or printed when the
-        HCOPy:IMMediate command or HCOPy:DATA? query is sent.
+        :HCOPy:IMMediate command or :HCOPy:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:WIND:TEXT:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:TEXT:STATE {scpi_value}")
 
     def get_hcopy_item_window_text_state(self) -> bool:
         """
         Queries whether the text blocks or textual labels should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TEXT:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TEXT:STATE?").strip()
         return response == "1"
 
 
@@ -697,25 +697,25 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:WIND:TRAC:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:TRAC:COL {color_value}")
 
     def get_hcopy_item_window_trace_color(self) -> int:
         """
         Queries the color used for plotting or printing the trace.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM WINDow TRACe COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM WINDow TRACe COLor (not integer): '{response}'")
 
     def get_hcopy_item_window_trace_data(self) -> str:
         """
         Returns the trace encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The trace data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:DATA?").strip()
         return response
 
 
@@ -725,25 +725,25 @@ class HCopy:
         :param color_value: The numeric value representing the color.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:ITEM:WIND:TRAC:GRAT:COL {color_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:TRAC:GRAT:COL {color_value}")
 
     def get_hcopy_item_window_trace_graticule_color(self) -> int:
         """
         Queries the color used for plotting or printing the graticule.
         :return: The numeric color value.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:GRAT:COL?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:GRAT:COL?").strip()
         try:
             return int(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY ITEM WINDow TRACe GRATicule COLor (not integer): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY ITEM WINDow TRACe GRATicule COLor (not integer): '{response}'")
 
     def get_hcopy_item_window_trace_graticule_data(self) -> str:
         """
         Returns the graticule encapsulated in an <INDEFINITE LENGTH ARBITRARY RESPONSE DATA> element.
         :return: The graticule data as a string.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:GRAT:DATA?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:GRAT:DATA?").strip()
         return response
 
     def hcopy_item_window_trace_graticule_immediate(self):
@@ -751,24 +751,24 @@ class HCopy:
         Immediately plots or prints the graticule.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:WIND:TRAC:GRAT:IMM")
+        self.instrument.write(":HCOP:ITEM:WIND:TRAC:GRAT:IMM")
 
     def set_hcopy_item_window_trace_graticule_state(self, enable: bool):
         """
         Sets or queries whether the graticule should be plotted or printed when the
-        HCOPy:IMMediate command or HCOPy:DATA? query is sent.
+        :HCOPy:IMMediate command or :HCOPy:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:WIND:TRAC:GRAT:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:TRAC:GRAT:STATE {scpi_value}")
 
     def get_hcopy_item_window_trace_graticule_state(self) -> bool:
         """
         Queries whether the graticule should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:GRAT:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:GRAT:STATE?").strip()
         return response == "1"
 
     def hcopy_item_window_trace_immediate(self):
@@ -776,7 +776,7 @@ class HCopy:
         Immediately plots or prints the trace.
         This command is an event (no query form).
         """
-        self.instrument.write("HCOP:ITEM:WIND:TRAC:IMM")
+        self.instrument.write(":HCOP:ITEM:WIND:TRAC:IMM")
 
     def set_hcopy_item_window_trace_linetype(self, line_type: str, style_n: int = None):
         """
@@ -798,16 +798,16 @@ class HCopy:
         else: scpi_type = line_type
 
         if scpi_type == "STYL" and style_n is not None:
-            self.instrument.write(f"HCOP:ITEM:WIND:TRAC:LTYP STYL{style_n}")
+            self.instrument.write(f":HCOP:ITEM:WIND:TRAC:LTYP STYL{style_n}")
         else:
-            self.instrument.write(f"HCOP:ITEM:WIND:TRAC:LTYP {scpi_type}")
+            self.instrument.write(f":HCOP:ITEM:WIND:TRAC:LTYP {scpi_type}")
 
     def get_hcopy_item_window_trace_linetype(self) -> str:
         """
         Queries the line type used for plotting or printing the trace.
         :return: The line type ("SOLid", "DOTTed", "DASHed", or "STYLe<n>").
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:LTYP?").strip().upper()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:LTYP?").strip().upper()
         if response.startswith("SOL"): return "SOLid"
         if response.startswith("DOTT"): return "DOTTed"
         if response.startswith("DASH"): return "DASHed"
@@ -817,19 +817,19 @@ class HCopy:
     def set_hcopy_item_window_trace_state(self, enable: bool):
         """
         Sets or queries whether the trace should be plotted or printed when the
-        HCOPy:IMMediate command or HCOPy:DATA? query is sent.
+        :HCOPy:IMMediate command or :HCOPy:DATA? query is sent.
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:ITEM:WIND:TRAC:STATE {scpi_value}")
+        self.instrument.write(f":HCOP:ITEM:WIND:TRAC:STATE {scpi_value}")
 
     def get_hcopy_item_window_trace_state(self) -> bool:
         """
         Queries whether the trace should be plotted or printed.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:ITEM:WIND:TRAC:STATE?").strip()
+        response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:STATE?").strip()
         return response == "1"
 
 
@@ -841,14 +841,14 @@ class HCopy:
         Notes: At *RST, the value of this parameter is ON.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"HCOP:PAGE:DIM:AUTO {scpi_value}")
+        self.instrument.write(f":HCOP:PAGE:DIM:AUTO {scpi_value}")
 
     def get_hcopy_page_dimensions_auto(self) -> bool:
         """
         Queries whether auto page dimensions are enabled.
         :return: True if enabled, False otherwise.
         """
-        response = self.instrument.query("HCOP:PAGE:DIM:AUTO?").strip()
+        response = self.instrument.query(":HCOP:PAGE:DIM:AUTO?").strip()
         return response == "1"
 
     def set_hcopy_page_dimensions_lleft(self, x_position: float, y_position: float):
@@ -859,14 +859,14 @@ class HCopy:
         :param y_position: The y-coordinate (numeric value).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:PAGE:DIM:LLEF {x_position},{y_position}")
+        self.instrument.write(f":HCOP:PAGE:DIM:LLEF {x_position},{y_position}")
 
     def get_hcopy_page_dimensions_lleft(self) -> tuple[float, float]:
         """
         Queries the x,y position of the lower left corner of the page.
         :return: A tuple (x_position, y_position).
         """
-        response = self.instrument.query("HCOP:PAGE:DIM:LLEF?").strip()
+        response = self.instrument.query(":HCOP:PAGE:DIM:LLEF?").strip()
         try:
             parts = [float(p) for p in response.split(',')]
             if len(parts) == 2:
@@ -885,7 +885,7 @@ class HCopy:
         """
         if not (1 <= quadrant_number <= 4):
             raise ValueError("Quadrant number must be between 1 and 4.")
-        self.instrument.write(f"HCOP:PAGE:DIM:QUAD {quadrant_number}")
+        self.instrument.write(f":HCOP:PAGE:DIM:QUAD {quadrant_number}")
 
     def set_hcopy_page_dimensions_uright(self, x_position: float, y_position: float):
         """
@@ -895,14 +895,14 @@ class HCopy:
         :param y_position: The y-coordinate (numeric value).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:PAGE:DIM:URIG {x_position},{y_position}")
+        self.instrument.write(f":HCOP:PAGE:DIM:URIG {x_position},{y_position}")
 
     def get_hcopy_page_dimensions_uright(self) -> tuple[float, float]:
         """
         Queries the x,y position of upper right corner of the page.
         :return: A tuple (x_position, y_position).
         """
-        response = self.instrument.query("HCOP:PAGE:DIM:URIG?").strip()
+        response = self.instrument.query(":HCOP:PAGE:DIM:URIG?").strip()
         try:
             parts = [float(p) for p in response.split(',')]
             if len(parts) == 2:
@@ -918,18 +918,18 @@ class HCopy:
         :param value: The length value (numeric value).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:PAGE:LENG {value}")
+        self.instrument.write(f":HCOP:PAGE:LENG {value}")
 
     def get_hcopy_page_length(self) -> float:
         """
         Queries the length of the page.
         :return: The length value.
         """
-        response = self.instrument.query("HCOP:PAGE:LENG?").strip()
+        response = self.instrument.query(":HCOP:PAGE:LENG?").strip()
         try:
             return float(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY PAGE LENGth (not numeric): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY PAGE LENGth (not numeric): '{response}'")
 
     def set_hcopy_page_orientation(self, orientation_type: str):
         """
@@ -947,14 +947,14 @@ class HCopy:
         elif type_upper.startswith("PORT"): scpi_type = "PORT"
         else: scpi_type = orientation_type
 
-        self.instrument.write(f"HCOP:PAGE:ORI {scpi_type}")
+        self.instrument.write(f":HCOP:PAGE:ORI {scpi_type}")
 
     def get_hcopy_page_orientation(self) -> str:
         """
         Queries the orientation of the plot or print.
         :return: The orientation type ("LANDscape" or "PORTrait").
         """
-        response = self.instrument.query("HCOP:PAGE:ORI?").strip().upper()
+        response = self.instrument.query(":HCOP:PAGE:ORI?").strip().upper()
         if response.startswith("LAND"): return "LANDscape"
         if response.startswith("PORT"): return "PORTrait"
         return response
@@ -966,18 +966,18 @@ class HCopy:
         :param value: The scaling factor (numeric value).
         Notes: At *RST, the value of this setting is one.
         """
-        self.instrument.write(f"HCOP:PAGE:SCAL {value}")
+        self.instrument.write(f":HCOP:PAGE:SCAL {value}")
 
     def get_hcopy_page_scale(self) -> float:
         """
         Queries the scaling factor.
         :return: The scaling factor.
         """
-        response = self.instrument.query("HCOP:PAGE:SCAL?").strip()
+        response = self.instrument.query(":HCOP:PAGE:SCAL?").strip()
         try:
             return float(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY PAGE SCALe (not numeric): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY PAGE SCALe (not numeric): '{response}'")
 
 
 
@@ -1000,14 +1000,14 @@ class HCopy:
         if size_upper == "CUSTOM": scpi_value = "CUST"
         else: scpi_value = size_upper
 
-        self.instrument.write(f"HCOP:PAGE:SIZE {scpi_value}")
+        self.instrument.write(f":HCOP:PAGE:SIZE {scpi_value}")
 
     def get_hcopy_page_size(self) -> str:
         """
         Queries the size of the paper.
         :return: The paper size string.
         """
-        response = self.instrument.query("HCOP:PAGE:SIZE?").strip().upper()
+        response = self.instrument.query(":HCOP:PAGE:SIZE?").strip().upper()
         if response == "CUST": return "CUSTom"
         return response
 
@@ -1017,14 +1017,14 @@ class HCopy:
         :param unit: The suffix program data for the unit.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:PAGE:UNIT {unit}")
+        self.instrument.write(f":HCOP:PAGE:UNIT {unit}")
 
     def get_hcopy_page_unit(self) -> str:
         """
         Queries the units for LENGth and WIDTh under DIMensions.
         :return: The unit string.
         """
-        response = self.instrument.query("HCOP:PAGE:UNIT?").strip()
+        response = self.instrument.query(":HCOP:PAGE:UNIT?").strip()
         return response
 
     def set_hcopy_page_width(self, value: float):
@@ -1033,18 +1033,18 @@ class HCopy:
         :param value: The width value (numeric value).
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        self.instrument.write(f"HCOP:PAGE:WIDT {value}")
+        self.instrument.write(f":HCOP:PAGE:WIDT {value}")
 
     def get_hcopy_page_width(self) -> float:
         """
         Queries the width of the page.
         :return: The width value.
         """
-        response = self.instrument.query("HCOP:PAGE:WIDT?").strip()
+        response = self.instrument.query(":HCOP:PAGE:WIDT?").strip()
         try:
             return float(response)
         except ValueError:
-            raise ValueError(f"Unexpected response for HCOPY PAGE WIDTh (not numeric): '{response}'")
+            raise ValueError(f"Unexpected response for :HCOPY PAGE WIDTh (not numeric): '{response}'")
 
    
 
@@ -1054,7 +1054,7 @@ class HCopy:
         RESPONSE DATA> element.
         :return: The screen dump data as a string.
         """
-        response = self.instrument.query("HCOP:SDUM:DATA?").strip()
+        response = self.instrument.query(":HCOP:SDUM:DATA?").strip()
         return response
 
     def hcopy_sdump_immediate(self):
@@ -1062,4 +1062,4 @@ class HCopy:
         Causes the whole DISPlay to be plotted or printed.
         This event (no query form).
         """
-        self.instrument.write("HCOP:SDUM:IMM")
+        self.instrument.write(":HCOP:SDUM:IMM")

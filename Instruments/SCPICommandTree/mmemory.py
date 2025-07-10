@@ -8,7 +8,7 @@ class Mmemory():
         msus: (Optional) The mass storage unit selector string.
         Returns: A tuple containing (bytes_used: int, bytes_available: int, file_entries: list[dict]).
                  Each dictionary in file_entries contains 'file_name', 'file_type', and 'file_size'."""
-        query_cmd = "MMEM:CAT?"
+        query_cmd = ":MMEM:CAT?"
         if msus:
             query_cmd += f" '{msus}'"
 
@@ -39,14 +39,14 @@ class Mmemory():
         Parameters:
         directory_name: (Optional) The directory name as a string. If omitted, sets to *RST value."""
         if directory_name is None:
-            self.instrument.write("MMEM:CDIR")
+            self.instrument.write(":MMEM:CDIR")
         else:
-            self.instrument.write(f"MMEM:CDIR '{directory_name}'")
+            self.instrument.write(f":MMEM:CDIR '{directory_name}'")
 
     def close_mmemory_file(self):
         """Closes the selected file specified in NAME.
         Notes: This is an event command; no query. An error is generated if the file was not open."""
-        self.instrument.write("MMEM:CLOS")
+        self.instrument.write(":MMEM:CLOS")
 
     def copy_mmemory_file(self, src_file: str, dest_file: str, src_msus: str = None, dest_msus: str = None):
         """Copies an existing file to a new file.
@@ -56,9 +56,9 @@ class Mmemory():
         src_msus: (Optional) The mass storage unit selector for the source file.
         dest_msus: (Optional) The mass storage unit selector for the destination file."""
         if src_msus and dest_msus:
-            self.instrument.write(f"MMEM:COPY '{src_file}','{src_msus}','{dest_file}','{dest_msus}'")
+            self.instrument.write(f":MMEM:COPY '{src_file}','{src_msus}','{dest_file}','{dest_msus}'")
         else:
-            self.instrument.write(f"MMEM:COPY '{src_file}','{dest_file}'")
+            self.instrument.write(f":MMEM:COPY '{src_file}','{dest_file}'")
 
     def set_mmemory_data(self, file_name: str, data: bytes):
         """Loads data into the specified file.
@@ -68,14 +68,14 @@ class Mmemory():
         num_bytes = len(data)
         num_digits = len(str(num_bytes))
         # Assuming data is convertible to Latin-1 for byte representation in SCPI
-        self.instrument.write(f"MMEM:DATA '{file_name}',#{num_digits}{num_bytes}" + data.decode('latin-1'))
+        self.instrument.write(f":MMEM:DATA '{file_name}',#{num_digits}{num_bytes}" + data.decode('latin-1'))
 
     def get_mmemory_data(self, file_name: str) -> bytes:
         """Returns the data from the specified file.
         Parameters:
         file_name: The name of the file.
         Returns: The associated data in bytes (488.2 block format)."""
-        response = self.instrument.query(f"MMEM:DATA? '{file_name}'").strip()
+        response = self.instrument.query(f":MMEM:DATA? '{file_name}'").strip()
         if not response.startswith('#'):
             raise ValueError(f"Unexpected response format for memory data: '{response}'")
 
@@ -93,20 +93,20 @@ class Mmemory():
         file_name: The name of the file to be removed.
         msus: (Optional) The mass storage unit selector."""
         if msus:
-            self.instrument.write(f"MMEM:DEL '{file_name}','{msus}'")
+            self.instrument.write(f":MMEM:DEL '{file_name}','{msus}'")
         else:
-            self.instrument.write(f"MMEM:DEL '{file_name}'")
+            self.instrument.write(f":MMEM:DEL '{file_name}'")
 
     
     def set_mmemory_feed(self, data_handle: str):
         """Sets the <data_handle> to be used to feed data into the file specified by NAME.
         Parameters:
         data_handle: The data handle string."""
-        self.instrument.write(f"MMEM:FEED '{data_handle}'")
+        self.instrument.write(f":MMEM:FEED '{data_handle}'")
 
     def get_mmemory_feed(self) -> str:
         """Returns the <data_handle> currently used to feed data into the file."""
-        response = self.instrument.query("MMEM:FEED?").strip().strip("'\"")
+        response = self.instrument.query(":MMEM:FEED?").strip().strip("'\"")
         return response
 
     def initialize_mmemory(self, msus: str = None, media_type: str = None, numeric_value: float = None):
@@ -115,7 +115,7 @@ class Mmemory():
         msus: (Optional) The mass storage unit selector. If omitted, the default is used.
         media_type: (Optional) The type of media to be formatted (LIF|DOS|HFS).
         numeric_value: (Optional) Used to specify format, interleave, sector sizes, etc."""
-        command = "MMEM:INIT"
+        command = ":MMEM:INIT"
         params = []
         if msus:
             params.append(f"'{msus}'")
@@ -142,7 +142,7 @@ class Mmemory():
         label: An internal identifier for the instrument trace or macro.
         file_name: The name of the file (quoted string).
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:LOAD:DINT '{label}','{file_name}'"
+        command = f":MMEM:LOAD:DINT '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -153,7 +153,7 @@ class Mmemory():
         label: An internal identifier for the instrument trace or macro.
         file_name: The name of the file (quoted string).
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:STOR:DINT '{label}','{file_name}'"
+        command = f":MMEM:STOR:DINT '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -164,7 +164,7 @@ class Mmemory():
         label: An internal identifier for the trace or array.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:LOAD:DINT:TRAC '{label}','{file_name}'"
+        command = f":MMEM:LOAD:DINT:TRAC '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -175,7 +175,7 @@ class Mmemory():
         label: An internal identifier for the trace or array.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:STOR:DINT:TRAC '{label}','{file_name}'"
+        command = f":MMEM:STOR:DINT:TRAC '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -186,7 +186,7 @@ class Mmemory():
         label: An internal identifier for the macro.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:LOAD:MACR '{label}','{file_name}'"
+        command = f":MMEM:LOAD:MACR '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -197,7 +197,7 @@ class Mmemory():
         label: An internal identifier for the macro.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:STOR:MACR '{label}','{file_name}'"
+        command = f":MMEM:STOR:MACR '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -208,7 +208,7 @@ class Mmemory():
         state_number: The state number (corresponds to *SAV and *RCL).
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:LOAD:STAT {state_number},'{file_name}'"
+        command = f":MMEM:LOAD:STAT {state_number},'{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -219,7 +219,7 @@ class Mmemory():
         state_number: The state number (corresponds to *SAV and *RCL).
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:STOR:STAT {state_number},'{file_name}'"
+        command = f":MMEM:STOR:STAT {state_number},'{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -230,7 +230,7 @@ class Mmemory():
         label: An internal identifier for the table.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:LOAD:TABL '{label}','{file_name}'"
+        command = f":MMEM:LOAD:TABL '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -241,7 +241,7 @@ class Mmemory():
         label: An internal identifier for the table.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:STOR:TABL '{label}','{file_name}'"
+        command = f":MMEM:STOR:TABL '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -252,7 +252,7 @@ class Mmemory():
         label: An internal identifier for the trace or array.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:LOAD:TRAC '{label}','{file_name}'"
+        command = f":MMEM:LOAD:TRAC '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -263,7 +263,7 @@ class Mmemory():
         label: An internal identifier for the trace or array.
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
-        command = f"MMEM:STOR:TRAC '{label}','{file_name}'"
+        command = f":MMEM:STOR:TRAC '{label}','{file_name}'"
         if msus:
             command += f",'{msus}'"
         self.instrument.write(command)
@@ -274,13 +274,13 @@ class Mmemory():
         Parameters:
         msus: (Optional) The mass storage unit selector. If omitted, the device-dependent default is used."""
         if msus:
-            self.instrument.write(f"MMEM:MSIS '{msus}'")
+            self.instrument.write(f":MMEM:MSIS '{msus}'")
         else:
-            self.instrument.write("MMEM:MSIS")
+            self.instrument.write(":MMEM:MSIS")
 
     def get_mmemory_msis(self) -> str:
         """Returns the currently selected default mass storage device."""
-        response = self.instrument.query("MMEM:MSIS?").strip().strip("'\"")
+        response = self.instrument.query(":MMEM:MSIS?").strip().strip("'\"")
         return response
 
     def move_mmemory_file(self, src_file: str, dest_file: str, src_msus: str = None, dest_msus: str = None):
@@ -291,9 +291,9 @@ class Mmemory():
         src_msus: (Optional) The mass storage unit selector for the source file.
         dest_msus: (Optional) The mass storage unit selector for the destination file."""
         if src_msus and dest_msus:
-            self.instrument.write(f"MMEM:MOVE '{src_file}','{src_msus}','{dest_file}','{dest_msus}'")
+            self.instrument.write(f":MMEM:MOVE '{src_file}','{src_msus}','{dest_file}','{dest_msus}'")
         else:
-            self.instrument.write(f"MMEM:MOVE '{src_file}','{dest_file}'")
+            self.instrument.write(f":MMEM:MOVE '{src_file}','{dest_file}'")
 
     def set_mmemory_name(self, file_name: str, msus: str = None):
         """Sets the name of the file specification used by the CLOSE and OPEN commands.
@@ -301,25 +301,25 @@ class Mmemory():
         file_name: The name of the file.
         msus: (Optional) The mass storage unit selector."""
         if msus:
-            self.instrument.write(f"MMEM:NAME '{file_name}','{msus}'")
+            self.instrument.write(f":MMEM:NAME '{file_name}','{msus}'")
         else:
-            self.instrument.write(f"MMEM:NAME '{file_name}'")
+            self.instrument.write(f":MMEM:NAME '{file_name}'")
 
     def get_mmemory_name(self) -> str:
         """Returns the name of the file specification used by the CLOSE and OPEN commands."""
-        response = self.instrument.query("MMEM:NAME?").strip().strip("'\"")
+        response = self.instrument.query(":MMEM:NAME?").strip().strip("'\"")
         return response
 
     def open_mmemory_file(self):
         """Opens the selected file specified in NAME.
         Notes: This is an event command; no query. If the file is non-existent, it is created."""
-        self.instrument.write("MMEM:OPEN")
+        self.instrument.write(":MMEM:OPEN")
 
     def pack_mmemory_device(self, msus: str = None):
         """Causes the mass storage device to be packed, recovering unused memory.
         Parameters:
         msus: (Optional) The mass storage unit selector. If not specified, the default is used."""
         if msus:
-            self.instrument.write(f"MMEM:PACK '{msus}'")
+            self.instrument.write(f":MMEM:PACK '{msus}'")
         else:
-            self.instrument.write("MMEM:PACK")
+            self.instrument.write(":MMEM:PACK")

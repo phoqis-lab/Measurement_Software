@@ -1,8 +1,10 @@
+import unittest
+from Instruments import instrument
 class TestRigolOscilloscope(unittest.TestCase):
 
     def setUp(self):
         """Set up a mock instrument and RigolOscilloscope instance before each test."""
-        self.mock_instrument = MagicMock(spec=InstrumentControl)
+        self.mock_instrument = instrument.Instrument
         self.scope = RigolOscilloscope(self.mock_instrument)
         # Redirect stdout to capture print statements
         self.held_stdout = sys.stdout

@@ -15,11 +15,11 @@ class Format():
         elif order_upper == "SWAPPED": scpi_value = "SWAP"
         else: scpi_value = order_upper # Use the provided abbreviation if valid
 
-        self.instrument.write(f"FORM:BORD {scpi_value}")
+        self.instrument.write(f":FORM:BORD {scpi_value}")
 
     def get_format_border(self) -> str:
         """Returns whether binary data is transferred in normal or swapped byte order."""
-        response = self.instrument.query("FORM:BORD?").strip().upper()
+        response = self.instrument.query(":FORM:BORD?").strip().upper()
         if response.startswith("NORM"):
             return "NORMAL"
         elif response.startswith("SWAP"):
@@ -49,14 +49,14 @@ class Format():
         else: scpi_value = data_type_upper # Use the provided abbreviation if valid
 
         if length is None:
-            self.instrument.write(f"FORM:DATA {scpi_value}")
+            self.instrument.write(f":FORM:DATA {scpi_value}")
         else:
-            self.instrument.write(f"FORM:DATA {scpi_value},{length}")
+            self.instrument.write(f":FORM:DATA {scpi_value},{length}")
 
     def get_format_data(self) -> tuple[str, float]:
         """Returns the selected data format type and its length.
         Returns: A tuple containing (data_type: str, length: float or None)."""
-        response = self.instrument.query("FORM:DATA?").strip()
+        response = self.instrument.query(":FORM:DATA?").strip()
         parts = response.split(',')
         data_type = parts[0].strip().upper()
 
@@ -85,11 +85,11 @@ class Format():
         Parameters:
         enable: True to encapsulate returned data in the DIF structure, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"FORM:DINT {scpi_value}")
+        self.instrument.write(f":FORM:DINT {scpi_value}")
 
     def get_format_dinterchange(self) -> bool:
         """Returns True if measurement data is formatted as a <dif_expression>, False if not."""
-        response = self.instrument.query("FORM:DINT?").strip()
+        response = self.instrument.query(":FORM:DINT?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -114,11 +114,11 @@ class Format():
         elif data_type_upper == "OCTAL": scpi_value = "OCT"
         else: scpi_value = data_type_upper # Use the provided abbreviation if valid
 
-        self.instrument.write(f"FORM:SREG {scpi_value}")
+        self.instrument.write(f":FORM:SREG {scpi_value}")
 
     def get_format_sregister(self) -> str:
         """Returns the data type of the response to queries for status registers."""
-        response = self.instrument.query("FORM:SREG?").strip().upper()
+        response = self.instrument.query(":FORM:SREG?").strip().upper()
         if response.startswith("ASC"):
             return "ASCII"
         elif response.startswith("BIN"):

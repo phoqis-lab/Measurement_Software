@@ -7,7 +7,7 @@ class Route():
         """Closes specific individual channels.
         Parameters:
         channel_list: A string representing the channel list (e.g., '(@101,102)', '(@1:3)')."""
-        self.instrument.write(f"ROUT:CLOS {channel_list}")
+        self.instrument.write(f":ROUT:CLOS {channel_list}")
 
     def get_route_close_state(self, channel_list: str = None) -> list[int]:
         """Queries the condition of individual switches.
@@ -17,11 +17,11 @@ class Route():
         Returns: A list of integers (1 for closed, 0 for open) for each channel in the list,
                  or a list of all closed channels if channel_list is omitted."""
         if channel_list:
-            response = self.instrument.query(f"ROUT:CLOS? {channel_list}").strip()
+            response = self.instrument.query(f":ROUT:CLOS? {channel_list}").strip()
             # Assuming response is comma-separated 0s and 1s
             return [int(x) for x in response.split(',')]
         else:
-            response = self.instrument.query("ROUT:CLOS:STATE?").strip()
+            response = self.instrument.query(":ROUT:CLOS:STATE?").strip()
             # The response for STATE? is an IEEE 488.2 definite length block
             # For simplicity, assuming a simple comma-separated channel list string for now.
             # Real implementation might need to parse the block header first.
@@ -47,7 +47,7 @@ class Route():
     def get_route_module_catalog(self) -> list[str]:
         """Returns a list of all currently defined module names.
         Returns: A list of module names as strings."""
-        response = self.instrument.query("ROUT:MOD:CAT?").strip()
+        response = self.instrument.query(":ROUT:MOD:CAT?").strip()
         if not response:
             return []
         # Response is comma-separated strings (e.g., '"MyModule1","MyModule2"')
@@ -59,52 +59,52 @@ class Route():
         Parameters:
         module_name: The user-defined name for the module.
         module_address: The hardware-dependent address (e.g., VME address)."""
-        self.instrument.write(f"ROUT:MOD:DEF '{module_name}','{module_address}'")
+        self.instrument.write(f":ROUT:MOD:DEF '{module_name}','{module_address}'")
 
     def get_route_module_define(self, module_name: str) -> str:
         """Returns the module address bound to the specified module name.
         Parameters:
         module_name: The name of the module to query.
         Returns: The module address as a string."""
-        response = self.instrument.query(f"ROUT:MOD:DEF? '{module_name}'").strip()
+        response = self.instrument.query(f":ROUT:MOD:DEF? '{module_name}'").strip()
         return response
 
     def delete_route_module_all(self):
         """Deletes all module name bindings.
         Notes: This is an event command; no query."""
-        self.instrument.write("ROUT:MOD:DEL:ALL")
+        self.instrument.write(":ROUT:MOD:DEL:ALL")
 
 
     def delete_route_module_name(self, module_name: str):
         """Removes a module name binding.
         Parameters:
         module_name: The name of the module to remove."""
-        self.instrument.write(f"ROUT:MOD:DEL:NAME '{module_name}'")
+        self.instrument.write(f":ROUT:MOD:DEL:NAME '{module_name}'")
 
     def open_route_channel(self, channel_list: str):
         """Opens specific channels.
         Parameters:
         channel_list: A string representing the channel list (e.g., '(@101,102)', '(@1:3)')."""
-        self.instrument.write(f"ROUT:OPEN {channel_list}")
+        self.instrument.write(f":ROUT:OPEN {channel_list}")
 
     def get_route_open_state(self, channel_list: str) -> list[int]:
         """Queries the condition of individual switches.
         Parameters:
         channel_list: A string representing the channel list to query.
         Returns: A list of integers (1 for open, 0 for closed) for each channel in the list."""
-        response = self.instrument.query(f"ROUT:OPEN? {channel_list}").strip()
+        response = self.instrument.query(f":ROUT:OPEN? {channel_list}").strip()
         # Assuming response is comma-separated 0s and 1s
         return [int(x) for x in response.split(',')]
 
     def open_route_all_channels(self):
         """Opens all channels in the instrument.
         Notes: This is an event command; no query."""
-        self.instrument.write("ROUT:OPEN:ALL")
+        self.instrument.write(":ROUT:OPEN:ALL")
 
     def get_route_path_catalog(self) -> list[str]:
         """Returns a list of all currently defined path names.
         Returns: A list of path names as strings."""
-        response = self.instrument.query("ROUT:PATH:CAT?").strip()
+        response = self.instrument.query(":ROUT:PATH:CAT?").strip()
         if not response:
             return []
         # Response is comma-separated strings (e.g., '"MyPath1","MyPath2"')
@@ -116,14 +116,14 @@ class Route():
         Parameters:
         path_name: The user-defined name for the path.
         channel_list: A string representing the channel list associated with the path."""
-        self.instrument.write(f"ROUT:PATH:DEF '{path_name}',{channel_list}")
+        self.instrument.write(f":ROUT:PATH:DEF '{path_name}',{channel_list}")
 
     def get_route_path_define(self, path_name: str) -> str:
         """Returns the channel list bound to the specified path name.
         Parameters:
         path_name: The name of the path to query.
         Returns: The channel list as a string (e.g., '(@101,102,103)')."""
-        response = self.instrument.query(f"ROUT:PATH:DEF? '{path_name}'").strip()
+        response = self.instrument.query(f":ROUT:PATH:DEF? '{path_name}'").strip()
         # The response is described as a block containing the <channel_list>.
         # Assuming direct return of the channel list string for simplicity.
         # Real implementation might need to parse the block header first.
@@ -138,18 +138,18 @@ class Route():
     def delete_route_path_all(self):
         """Deletes all path name bindings.
         Notes: This is an event command; no query."""
-        self.instrument.write("ROUT:PATH:DEL:ALL")
+        self.instrument.write(":ROUT:PATH:DEL:ALL")
 
     def delete_route_path_name(self, path_name: str):
         """Removes a path name binding.
         Parameters:
         path_name: The name of the path to remove."""
-        self.instrument.write(f"ROUT:PATH:DEL:NAME '{path_name}'")
+        self.instrument.write(f":ROUT:PATH:DEL:NAME '{path_name}'")
 
     def get_route_sample_catalog(self) -> list[str]:
         """Returns a comma-separated list of strings containing available sample points.
         Returns: A list of sample point names as strings."""
-        response = self.instrument.query("ROUT:SAMP:CAT?").strip()
+        response = self.instrument.query(":ROUT:SAMP:CAT?").strip()
         if not response:
             return []
         # Response is comma-separated strings (e.g., '"BAG","DILute"')
@@ -174,12 +174,12 @@ class Route():
         elif sample_point_upper == "VERIFY": scpi_value = "VER"
         else: scpi_value = sample_point_upper
 
-        self.instrument.write(f"ROUT:SAMP:OPEN {scpi_value}")
+        self.instrument.write(f":ROUT:SAMP:OPEN {scpi_value}")
 
     def get_route_sample_open(self) -> str:
         """Queries the currently selected sample point.
         Returns: The currently selected sample point as a string (e.g., 'BAG', 'NONE')."""
-        response = self.instrument.query("ROUT:SAMP:OPEN?").strip().strip("'\"")
+        response = self.instrument.query(":ROUT:SAMP:OPEN?").strip().strip("'\"")
         # Normalize to full name if an abbreviation was returned
         if response.upper() == "DIL": return "DILUTE"
         if response.upper() == "CEFF": return "CEFFICIENCY"
@@ -191,12 +191,12 @@ class Route():
         """Specifies a list of channels for the instrument to sequence through.
         Parameters:
         channel_list: A string representing the channel list (e.g., '(@1,3:5,9)')."""
-        self.instrument.write(f"ROUT:SCAN {channel_list}")
+        self.instrument.write(f":ROUT:SCAN {channel_list}")
 
     def get_route_scan_list(self) -> str:
         """Returns the scan list.
         Returns: The scan list as a string (e.g., '(@1,3,4,5,9)')."""
-        response = self.instrument.query("ROUT:SCAN?").strip()
+        response = self.instrument.query(":ROUT:SCAN?").strip()
         # The response is described as an IEEE 488.2 definite length block.
         # Assuming direct return of the channel list string for simplicity.
         # Real implementation might need to parse the block header first.
@@ -221,11 +221,11 @@ class Route():
         elif type_upper == "REAR": scpi_value = "REAR"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"ROUT:TERM {scpi_value}")
+        self.instrument.write(f":ROUT:TERM {scpi_value}")
 
     def get_route_terminals(self) -> str:
         """Returns the current terminal connection setting ('FRONT', 'REAR', 'BOTH', or 'NONE')."""
-        response = self.instrument.query("ROUT:TERM?").strip().upper()
+        response = self.instrument.query(":ROUT:TERM?").strip().upper()
         if response.startswith("FRON"):
             return "FRONT"
         elif response.startswith("REAR"):

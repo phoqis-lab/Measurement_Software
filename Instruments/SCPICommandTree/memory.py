@@ -6,7 +6,7 @@ class Memory():
         """Returns information on the current contents and state of the instrument's memory.
         Returns: A tuple containing (bytes_used: int, bytes_available: int, directory_list: list[dict]).
                  Each dictionary in directory_list contains 'name', 'type', and 'size'."""
-        response = self.instrument.query("MEM:CAT?").strip()
+        response = self.instrument.query(":MEM:CAT?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog: '{response}'")
@@ -29,7 +29,7 @@ class Memory():
 
     def get_memory_catalog_all(self) -> tuple[int, int, list[dict]]:
         """Returns a directory list and memory sizes related to all allocatable items in instrument memory."""
-        response = self.instrument.query("MEM:CAT:ALL?").strip()
+        response = self.instrument.query(":MEM:CAT:ALL?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog all: '{response}'")
@@ -51,7 +51,7 @@ class Memory():
 
     def get_memory_catalog_ascii(self) -> tuple[int, int, list[dict]]:
         """Returns the directory list related only to ASCii items in instrument memory."""
-        response = self.instrument.query("MEM:CAT:ASC?").strip()
+        response = self.instrument.query(":MEM:CAT:ASC?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog ASCII: '{response}'")
@@ -73,7 +73,7 @@ class Memory():
 
     def get_memory_catalog_binary(self) -> tuple[int, int, list[dict]]:
         """Returns the directory list related only to BINary items in instrument memory."""
-        response = self.instrument.query("MEM:CAT:BIN?").strip()
+        response = self.instrument.query(":MEM:CAT:BIN?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog BINary: '{response}'")
@@ -95,7 +95,7 @@ class Memory():
 
     def get_memory_catalog_macro(self) -> tuple[int, int, list[dict]]:
         """Returns the directory list related only to MACRO items in instrument memory."""
-        response = self.instrument.query("MEM:CAT:MACR?").strip()
+        response = self.instrument.query(":MEM:CAT:MACR?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog MACRO: '{response}'")
@@ -117,7 +117,7 @@ class Memory():
 
     def get_memory_catalog_state(self) -> tuple[int, int, list[dict]]:
         """Returns the directory list related only to STATE items in instrument memory."""
-        response = self.instrument.query("MEM:CAT:STAT?").strip()
+        response = self.instrument.query(":MEM:CAT:STAT?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog STATE: '{response}'")
@@ -140,7 +140,7 @@ class Memory():
 
     def get_memory_catalog_table(self) -> tuple[int, int, list[dict]]:
         """Returns the directory list related only to TABLE items in instrument memory."""
-        response = self.instrument.query("MEM:CAT:TABL?").strip()
+        response = self.instrument.query(":MEM:CAT:TABL?").strip()
         parts = response.split(',')
         if len(parts) < 2:
             raise ValueError(f"Unexpected response format for memory catalog TABLE: '{response}'")
@@ -163,25 +163,25 @@ class Memory():
     def clear_memory_name(self, name: str):
         """Removes all data from the instrument memory associated with <name>.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"MEM:CLE:NAME '{name}'")
+        self.instrument.write(f":MEM:CLE:NAME '{name}'")
 
     def clear_memory_table(self):
         """Removes the data values from all element lists in the SELected TABLe.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"MEM:CLE:TABL")
+        self.instrument.write(f":MEM:CLE:TABL")
 
     def copy_memory_name(self, source_name: str, destination_name: str):
         """Copies the data contents from a source memory item to a destination memory item.
         Parameters:
         source_name: The name of the source memory item.
         destination_name: The name of the destination memory item."""
-        self.instrument.write(f"MEM:COPY:NAME '{source_name}','{destination_name}'")
+        self.instrument.write(f":MEM:COPY:NAME '{source_name}','{destination_name}'")
 
     def copy_memory_table(self, table_name: str):
         """Copies the data values of all element lists from the SELected TABLe to the specified memory table.
         Parameters:
         table_name: The name of the destination memory table."""
-        self.instrument.write(f"MEM:COPY:TABL '{table_name}'")
+        self.instrument.write(f":MEM:COPY:TABL '{table_name}'")
 
     def set_memory_data(self, name: str, data: bytes):
         """Loads data into the specified memory location.
@@ -190,14 +190,14 @@ class Memory():
         data: The data to load (bytes in 488.2 block format)."""
         num_bytes = len(data)
         num_digits = len(str(num_bytes))
-        self.instrument.write(f"MEM:DATA '{name}',#{num_digits}{num_bytes}" + data.decode('latin-1'))
+        self.instrument.write(f":MEM:DATA '{name}',#{num_digits}{num_bytes}" + data.decode('latin-1'))
 
     def get_memory_data(self, name: str) -> bytes:
         """Returns the data from the specified memory location.
         Parameters:
         name: The name of the memory location.
         Returns: The associated data in bytes (488.2 block format)."""
-        response = self.instrument.query(f"MEM:DATA? '{name}'").strip()
+        response = self.instrument.query(f":MEM:DATA? '{name}'").strip()
         if not response.startswith('#'):
             raise ValueError(f"Unexpected response format for memory data: '{response}'")
 
@@ -211,13 +211,13 @@ class Memory():
     def delete_memory_all(self):
         """Removes all memory names, key definitions, and data, returning memory to "available."
         Notes: This is an event command; no query."""
-        self.instrument.write(f"MEM:DEL:ALL")
+        self.instrument.write(f":MEM:DEL:ALL")
 
     def delete_memory_name(self, name: str):
         """Deletes the definition associated with <name>.
         Parameters:
         name: The name of the definition to delete."""
-        self.instrument.write(f"MEM:DEL:NAME '{name}'")
+        self.instrument.write(f":MEM:DEL:NAME '{name}'")
 
 
     def exchange_memory_name(self, name1: str, name2: str):
@@ -225,17 +225,17 @@ class Memory():
         Parameters:
         name1: The name of the first memory item.
         name2: The name of the second memory item."""
-        self.instrument.write(f"MEM:EXCH:NAME '{name1}','{name2}'")
+        self.instrument.write(f":MEM:EXCH:NAME '{name1}','{name2}'")
 
     def exchange_memory_table(self, table_name: str):
         """Swaps the data contents between the SELected TABLe and the specified memory table.
         Parameters:
         table_name: The name of the memory table to exchange with."""
-        self.instrument.write(f"MEM:EXCH:TABL '{table_name}'")
+        self.instrument.write(f":MEM:EXCH:TABL '{table_name}'")
 
     def get_memory_free(self) -> tuple[int, int]:
         """Returns information on the user memory space (bytes available, bytes in use)."""
-        response = self.instrument.query("MEM:FREE?").strip()
+        response = self.instrument.query(":MEM:FREE?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free: '{response}'")
@@ -248,7 +248,7 @@ class Memory():
 
     def get_memory_free_all(self) -> tuple[int, int]:
         """Returns memory sizes related to all items in instrument memory."""
-        response = self.instrument.query("MEM:FREE:ALL?").strip()
+        response = self.instrument.query(":MEM:FREE:ALL?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free all: '{response}'")
@@ -261,7 +261,7 @@ class Memory():
 
     def get_memory_free_ascii(self) -> tuple[int, int]:
         """Returns memory usage and availability for ASCii data types."""
-        response = self.instrument.query("MEM:FREE:ASC?").strip()
+        response = self.instrument.query(":MEM:FREE:ASC?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free ASCII: '{response}'")
@@ -274,7 +274,7 @@ class Memory():
 
     def get_memory_free_binary(self) -> tuple[int, int]:
         """Returns memory usage and availability for BINary data types."""
-        response = self.instrument.query("MEM:FREE:BIN?").strip()
+        response = self.instrument.query(":MEM:FREE:BIN?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free BINary: '{response}'")
@@ -287,7 +287,7 @@ class Memory():
 
     def get_memory_free_macro(self) -> tuple[int, int]:
         """Returns memory usage and availability for MACRO data types."""
-        response = self.instrument.query("MEM:FREE:MACR?").strip()
+        response = self.instrument.query(":MEM:FREE:MACR?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free MACRO: '{response}'")
@@ -301,7 +301,7 @@ class Memory():
     
     def get_memory_free_state(self) -> tuple[int, int]:
         """Returns memory usage and availability for STATE data types."""
-        response = self.instrument.query("MEM:FREE:STAT?").strip()
+        response = self.instrument.query(":MEM:FREE:STAT?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free STATE: '{response}'")
@@ -314,7 +314,7 @@ class Memory():
 
     def get_memory_free_table(self) -> tuple[int, int]:
         """Returns memory usage and availability for TABLE data types."""
-        response = self.instrument.query("MEM:FREE:TABL?").strip()
+        response = self.instrument.query(":MEM:FREE:TABL?").strip()
         parts = response.split(',')
         if len(parts) != 2:
             raise ValueError(f"Unexpected response format for memory free TABLE: '{response}'")
@@ -327,16 +327,16 @@ class Memory():
 
     def get_memory_nstates(self) -> int:
         """Returns the number of *SAV/*RCL states available in the instrument."""
-        response = self.instrument.query("MEM:NSTAT?").strip()
+        response = self.instrument.query(":MEM:NSTAT?").strip()
         try:
             return int(response)
         except ValueError:
             raise ValueError(f"Unexpected response for number of states (not integer): '{response}'")
 
     def get_memory_state_catalog(self) -> list[str]:
-        """Requests a list of defined names in the MEMory:STATe subsystem.
+        """Requests a list of defined names in the :MEMory:STATe subsystem.
         Returns: A list of defined names as strings."""
-        response = self.instrument.query("MEM:STAT:CAT?").strip()
+        response = self.instrument.query(":MEM:STAT:CAT?").strip()
         if not response:
             return []
         # Response is comma-separated quoted strings. Split by comma and strip quotes/whitespace.
@@ -347,14 +347,14 @@ class Memory():
         Parameters:
         name: The name (character data format).
         register_number: The register number (numeric value)."""
-        self.instrument.write(f"MEM:STAT:DEF '{name}',{register_number}")
+        self.instrument.write(f":MEM:STAT:DEF '{name}',{register_number}")
 
     def get_memory_state_define(self, name: str) -> int:
         """Returns the *SAV/*RCL register number associated with a defined name.
         Parameters:
         name: The name to query.
         Returns: The associated register number."""
-        response = self.instrument.query(f"MEM:STAT:DEF? '{name}'").strip()
+        response = self.instrument.query(f":MEM:STAT:DEF? '{name}'").strip()
         try:
             return int(response)
         except ValueError:
@@ -365,7 +365,7 @@ class Memory():
         Parameters:
         name: The name to query.
         Returns: A string indicating the subsystem (e.g., "ROUT:MOD:") or a null string if not defined."""
-        response = self.instrument.query(f"MEM:TYPE? '{name}'").strip().strip("'\"")
+        response = self.instrument.query(f":MEM:TYPE? '{name}'").strip().strip("'\"")
         return response
 
     def set_memory_table_bnumber(self, bnumbers: list[int]):
@@ -375,11 +375,11 @@ class Memory():
         if not all(isinstance(n, int) and n > 0 for n in bnumbers):
             raise ValueError("All BNUMber values must be positive integers.")
         data_str = ",".join(map(str, bnumbers))
-        self.instrument.write(f"MEM:TABL:BNUM {data_str}")
+        self.instrument.write(f":MEM:TABL:BNUM {data_str}")
 
     def get_memory_table_bnumber_points(self) -> int:
         """Returns the number of points in the BNUMber column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:BNUM:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:BNUM:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -392,11 +392,11 @@ class Memory():
         Parameters:
         concentrations: A list of numeric values representing concentrations in ppm."""
         data_str = ",".join(map(str, concentrations))
-        self.instrument.write(f"MEM:TABL:CCUR {data_str}")
+        self.instrument.write(f":MEM:TABL:CCUR {data_str}")
 
     def get_memory_table_ccurve_points(self) -> int:
         """Returns the number of points in the CCURve column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:CCUR:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:CCUR:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -409,11 +409,11 @@ class Memory():
         Parameters:
         concentrations: A list of numeric values representing gas concentrations in ppm."""
         data_str = ",".join(map(str, concentrations))
-        self.instrument.write(f"MEM:TABL:CONC {data_str}")
+        self.instrument.write(f":MEM:TABL:CONC {data_str}")
 
     def get_memory_table_concentration_points(self) -> int:
         """Returns the number of points in the CONCentration column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:CONC:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:CONC:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -427,11 +427,11 @@ class Memory():
         Parameters:
         booleans: A list of boolean values."""
         data_str = ",".join(["1" if b else "0" for b in booleans])
-        self.instrument.write(f"MEM:TABL:COND:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:COND:MAGN {data_str}")
 
     def get_memory_table_condition_magnitude_points(self) -> int:
         """Returns the number of points in the CONDition[:MAGNitude] list of the SELected TABLE."""
-        response = self.instrument.query("MEM:TABL:COND:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:COND:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -444,11 +444,11 @@ class Memory():
         Parameters:
         cpoints: A list of numeric values representing cut points."""
         data_str = ",".join(map(str, cpoints))
-        self.instrument.write(f"MEM:TABL:CPO {data_str}")
+        self.instrument.write(f":MEM:TABL:CPO {data_str}")
 
     def get_memory_table_cpoint_points(self) -> int:
         """Returns the number of points in the CPOint column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:CPO:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:CPO:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -461,11 +461,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing current magnitudes (default units are current units)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:CURR:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:CURR:MAGN {data_str}")
 
     def get_memory_table_current_magnitude_points(self) -> int:
         """Returns the number of points in the CURRent[:MAGNitude] list of the SELected TABLE."""
-        response = self.instrument.query("MEM:TABL:CURR:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:CURR:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -478,12 +478,12 @@ class Memory():
         Parameters:
         phases: A list of numeric values representing current phases (default units are angle units)."""
         data_str = ",".join(map(str, phases))
-        self.instrument.write(f"MEM:TABL:CURR:PHAS {data_str}")
+        self.instrument.write(f":MEM:TABL:CURR:PHAS {data_str}")
 
     
     def get_memory_table_current_phase_points(self) -> int:
         """Returns the number of points in the CURRent:PHASe list of the SELected TABLE."""
-        response = self.instrument.query("MEM:TABL:CURR:PHAS:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:CURR:PHAS:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -496,11 +496,11 @@ class Memory():
         Parameters:
         values: A list of numeric values."""
         data_str = ",".join(map(str, values))
-        self.instrument.write(f"MEM:TABL:DFAC {data_str}")
+        self.instrument.write(f":MEM:TABL:DFAC {data_str}")
 
     def get_memory_table_dfactory_points(self) -> int:
         """Returns the number of points in the DFACtory column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:DFAC:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:DFAC:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -513,11 +513,11 @@ class Memory():
         Parameters:
         values: A list of numeric values."""
         data_str = ",".join(map(str, values))
-        self.instrument.write(f"MEM:TABL:DLAST {data_str}")
+        self.instrument.write(f":MEM:TABL:DLAST {data_str}")
 
     def get_memory_table_dlast_points(self) -> int:
         """Returns the number of points in the DLASt column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:DLAST:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:DLAST:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -531,11 +531,11 @@ class Memory():
         Parameters:
         values: A list of numeric values."""
         data_str = ",".join(map(str, values))
-        self.instrument.write(f"MEM:TABL:DLIN {data_str}")
+        self.instrument.write(f":MEM:TABL:DLIN {data_str}")
 
     def get_memory_table_dlinearize_points(self) -> int:
         """Returns the number of points in the DLINearize column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:DLIN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:DLIN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -548,11 +548,11 @@ class Memory():
         Parameters:
         values: A list of numeric values."""
         data_str = ",".join(map(str, values))
-        self.instrument.write(f"MEM:TABL:EXP {data_str}")
+        self.instrument.write(f":MEM:TABL:EXP {data_str}")
 
     def get_memory_table_expected_points(self) -> int:
         """Returns the number of points in the EXPected column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:EXP:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:EXP:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -567,13 +567,13 @@ class Memory():
         structure_string: A comma-separated list of elements defining the table structure.
         size: (Optional) The maximum number of points in each of the lists (numeric value)."""
         if size is None:
-            self.instrument.write(f"MEM:TABL:DEF '{structure_string}'")
+            self.instrument.write(f":MEM:TABL:DEF '{structure_string}'")
         else:
-            self.instrument.write(f"MEM:TABL:DEF '{structure_string}',{size}")
+            self.instrument.write(f":MEM:TABL:DEF '{structure_string}',{size}")
 
     def get_memory_table_define(self) -> tuple[str, int]:
         """Returns the structure string and size (in points) of memory allocated for the table."""
-        response = self.instrument.query("MEM:TABL:DEF?").strip()
+        response = self.instrument.query(":MEM:TABL:DEF?").strip()
         parts = response.split(',')
         if len(parts) < 1:
             raise ValueError(f"Unexpected response format for table define: '{response}'")
@@ -592,11 +592,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing force magnitudes (default units are newtons)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:FORC:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:FORC:MAGN {data_str}")
 
     def get_memory_table_force_magnitude_points(self) -> int:
         """Returns the number of points in the FORCe[:MAGNitude] list of the selected TABLE."""
-        response = self.instrument.query("MEM:TABL:FORC:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:FORC:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -610,11 +610,11 @@ class Memory():
         Parameters:
         frequencies: A list of numeric values representing frequencies."""
         data_str = ",".join(map(str, frequencies))
-        self.instrument.write(f"MEM:TABL:FREQ {data_str}")
+        self.instrument.write(f":MEM:TABL:FREQ {data_str}")
 
     def get_memory_table_frequency_points(self) -> int:
         """Returns the number of points in the FREQuency list of the SELected TABLE."""
-        response = self.instrument.query("MEM:TABL:FREQ:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:FREQ:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -629,11 +629,11 @@ class Memory():
         # Enclose each label in double quotes for SCPI character data
         quoted_labels = [f'"{label}"' for label in labels]
         data_str = ",".join(quoted_labels)
-        self.instrument.write(f"MEM:TABL:LAB {data_str}")
+        self.instrument.write(f":MEM:TABL:LAB {data_str}")
 
     def get_memory_table_label_points(self) -> int:
         """Returns the number of points in the LABel column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:LAB:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:LAB:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -646,11 +646,11 @@ class Memory():
         Parameters:
         limits: A list of numeric values representing lower limits."""
         data_str = ",".join(map(str, limits))
-        self.instrument.write(f"MEM:TABL:LLIM {data_str}")
+        self.instrument.write(f":MEM:TABL:LLIM {data_str}")
 
     def get_memory_table_llimit_points(self) -> int:
         """Returns the number of points in the LLIMit column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:LLIM:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:LLIM:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -665,12 +665,12 @@ class Memory():
         # Enclose each log entry in double quotes for SCPI character data
         quoted_logs = [f'"{log}"' for log in logs]
         data_str = ",".join(quoted_logs)
-        self.instrument.write(f"MEM:TABL:LOG {data_str}")
+        self.instrument.write(f":MEM:TABL:LOG {data_str}")
 
     
     def get_memory_table_log_points(self) -> int:
         """Returns the number of points in the LOG column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:LOG:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:LOG:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -683,11 +683,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing loss magnitudes (default unit is DB)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:LOSS:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:LOSS:MAGN {data_str}")
 
     def get_memory_table_loss_magnitude_points(self) -> int:
         """Returns the number of points in the LOSS[:MAGNitude] list of the SELected TABLe."""
-        response = self.instrument.query("MEM:TABL:LOSS:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:LOSS:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -700,11 +700,11 @@ class Memory():
         Parameters:
         phases: A list of numeric values representing loss phases (default units are angle units)."""
         data_str = ",".join(map(str, phases))
-        self.instrument.write(f"MEM:TABL:LOSS:PHAS {data_str}")
+        self.instrument.write(f":MEM:TABL:LOSS:PHAS {data_str}")
 
     def get_memory_table_loss_phase_points(self) -> int:
         """Returns the number of points in the LOSS:PHASe list of the SELected TABLe."""
-        response = self.instrument.query("MEM:TABL:LOSS:PHAS:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:LOSS:PHAS:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -717,11 +717,11 @@ class Memory():
         Parameters:
         concentrations: A list of numeric values representing concentrations in ppm."""
         data_str = ",".join(map(str, concentrations))
-        self.instrument.write(f"MEM:TABL:NCUR {data_str}")
+        self.instrument.write(f":MEM:TABL:NCUR {data_str}")
 
     def get_memory_table_ncurve_points(self) -> int:
         """Returns the number of points in the NCURve column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:NCUR:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:NCUR:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -735,11 +735,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing power magnitudes (default units are power units)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:POW:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:POW:MAGN {data_str}")
 
     def get_memory_table_power_magnitude_points(self) -> int:
         """Returns the number of points in the POWer[:MAGNitude] list of the SELected TABLe."""
-        response = self.instrument.query("MEM:TABL:POW:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:POW:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -752,11 +752,11 @@ class Memory():
         Parameters:
         raw_values: A list of numeric values."""
         data_str = ",".join(map(str, raw_values))
-        self.instrument.write(f"MEM:TABL:RAW {data_str}")
+        self.instrument.write(f":MEM:TABL:RAW {data_str}")
 
     def get_memory_table_raw_points(self) -> int:
         """Returns the number of points in the RAW column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:RAW:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:RAW:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -769,11 +769,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing resistance magnitudes."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:RES:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:RES:MAGN {data_str}")
 
     def get_memory_table_resistance_magnitude_points(self) -> int:
         """Returns the number of points in the RESistance[:MAGNitude] list of the SELected TABLe."""
-        response = self.instrument.query("MEM:TABL:RES:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:RES:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -786,11 +786,11 @@ class Memory():
         """Sets or queries the name of the TABLE selected.
         Parameters:
         name: The name of the TABLE (character data)."""
-        self.instrument.write(f"MEM:TABL:SEL '{name}'")
+        self.instrument.write(f":MEM:TABL:SEL '{name}'")
 
     def get_selected_memory_table(self) -> str:
         """Returns the name of the currently selected TABLE."""
-        response = self.instrument.query("MEM:TABL:SEL?").strip().strip("'\"")
+        response = self.instrument.query(":MEM:TABL:SEL?").strip().strip("'\"")
         return response
 
     def set_memory_table_speed_magnitude(self, magnitudes: list[float]):
@@ -798,11 +798,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing speed magnitudes (default units are meters per second)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:SPE:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:SPE:MAGN {data_str}")
 
     def get_memory_table_speed_magnitude_points(self) -> int:
         """Returns the number of points in the SPEed[:MAGNitude] list of the selected TABLE."""
-        response = self.instrument.query("MEM:TABL:SPE:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:SPE:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -815,11 +815,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing time magnitudes (default units are seconds)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:TIME:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:TIME:MAGN {data_str}")
 
     def get_memory_table_time_magnitude_points(self) -> int:
         """Returns the number of points in the TIME[:MAGNitude] list of the selected TABLE."""
-        response = self.instrument.query("MEM:TABL:TIME:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:TIME:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -832,12 +832,12 @@ class Memory():
         Parameters:
         tolerances: A list of numeric values representing tolerance percentages (%FS)."""
         data_str = ",".join(map(str, tolerances))
-        self.instrument.write(f"MEM:TABL:TOL {data_str}")
+        self.instrument.write(f":MEM:TABL:TOL {data_str}")
 
     
     def get_memory_table_tolerance_points(self) -> int:
         """Returns the number of points in the TOLerance column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:TOL:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:TOL:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -850,11 +850,11 @@ class Memory():
         Parameters:
         limits: A list of numeric values representing upper limits."""
         data_str = ",".join(map(str, limits))
-        self.instrument.write(f"MEM:TABL:ULIM {data_str}")
+        self.instrument.write(f":MEM:TABL:ULIM {data_str}")
 
     def get_memory_table_ulimit_points(self) -> int:
         """Returns the number of points in the ULIMit column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:ULIM:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:ULIM:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -867,11 +867,11 @@ class Memory():
         Parameters:
         magnitudes: A list of numeric values representing voltage magnitudes (default units are voltage units)."""
         data_str = ",".join(map(str, magnitudes))
-        self.instrument.write(f"MEM:TABL:VOLT:MAGN {data_str}")
+        self.instrument.write(f":MEM:TABL:VOLT:MAGN {data_str}")
 
     def get_memory_table_voltage_magnitude_points(self) -> int:
         """Returns the number of points in the VOLTage[:MAGNitude] list of the SELected TABLe."""
-        response = self.instrument.query("MEM:TABL:VOLT:MAGN:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:VOLT:MAGN:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -884,12 +884,12 @@ class Memory():
         Parameters:
         phases: A list of numeric values representing voltage phases (default units are angle units)."""
         data_str = ",".join(map(str, phases))
-        self.instrument.write(f"MEM:TABL:VOLT:PHAS {data_str}")
+        self.instrument.write(f":MEM:TABL:VOLT:PHAS {data_str}")
 
     
     def get_memory_table_voltage_phase_points(self) -> int:
         """Returns the number of points in the VOLTage:PHASe list of the SELected TABLe."""
-        response = self.instrument.query("MEM:TABL:VOLT:PHAS:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:VOLT:PHAS:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -902,11 +902,11 @@ class Memory():
         Parameters:
         wfactors: A list of numeric values representing weighting factors."""
         data_str = ",".join(map(str, wfactors))
-        self.instrument.write(f"MEM:TABL:WFAC {data_str}")
+        self.instrument.write(f":MEM:TABL:WFAC {data_str}")
 
     def get_memory_table_wfactor_points(self) -> int:
         """Returns the number of points in the WFACtor column for the currently selected table."""
-        response = self.instrument.query("MEM:TABL:WFAC:POIN?").strip()
+        response = self.instrument.query(":MEM:TABL:WFAC:POIN?").strip()
         try:
             return int(response)
         except ValueError:

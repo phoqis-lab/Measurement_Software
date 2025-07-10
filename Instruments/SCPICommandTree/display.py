@@ -6,11 +6,11 @@ class Display():
         Parameters:
         enable: True to enable all annotations, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:ANN:ALL {scpi_value}")
+        self.instrument.write(f":DISP:ANN:ALL {scpi_value}")
 
     def get_display_annotation_all(self) -> bool:
         """Returns True if all annotation information is controlled (enabled), False if disabled."""
-        response = self.instrument.query("DISP:ANN:ALL?").strip()
+        response = self.instrument.query(":DISP:ANN:ALL?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -23,11 +23,11 @@ class Display():
         Parameters:
         enable: True to enable amplitude annotation, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:ANN:AMPL {scpi_value}")
+        self.instrument.write(f":DISP:ANN:AMPL {scpi_value}")
 
     def get_display_annotation_amplitude(self) -> bool:
         """Returns True if amplitude annotation information is enabled, False if disabled."""
-        response = self.instrument.query("DISP:ANN:AMPL?").strip()
+        response = self.instrument.query(":DISP:ANN:AMPL?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -40,11 +40,11 @@ class Display():
         Parameters:
         enable: True to enable frequency annotation, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:ANN:FREQ {scpi_value}")
+        self.instrument.write(f":DISP:ANN:FREQ {scpi_value}")
 
     def get_display_annotation_frequency(self) -> bool:
         """Returns True if frequency annotation information is enabled, False if disabled."""
-        response = self.instrument.query("DISP:ANN:FREQ?").strip()
+        response = self.instrument.query(":DISP:ANN:FREQ?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -58,11 +58,11 @@ class Display():
         brightness_value: The intensity value (0 to 1, where 1 is full intensity and 0 is fully blanked)."""
         if not (0 <= brightness_value <= 1):
             raise ValueError("Brightness value must be between 0 and 1.")
-        self.instrument.write(f"DISP:BRIG {brightness_value}")
+        self.instrument.write(f":DISP:BRIG {brightness_value}")
 
     def get_display_brightness(self) -> float:
         """Returns the intensity of the display (0 to 1)."""
-        response = self.instrument.query("DISP:BRIG?").strip()
+        response = self.instrument.query(":DISP:BRIG?").strip()
         try:
             return float(response)
         except ValueError:
@@ -70,7 +70,7 @@ class Display():
 
     def set_display_cmap_default(self):
         """Sets the color map to the instrument's default values for all colors."""
-        self.instrument.write(f"DISP:CMAP:DEF")
+        self.instrument.write(f":DISP:CMAP:DEF")
 
     def set_display_cmap_color_hsl(self, hue: float, saturation: float, luminance: float):
         """Sets the instrument's color map based on the Hue/Saturation/Luminance levels color model.
@@ -80,11 +80,11 @@ class Display():
         luminance: Luminance value (0 to 1)."""
         if not (0 <= hue <= 1 and 0 <= saturation <= 1 and 0 <= luminance <= 1):
             raise ValueError("HSL parameters must be between 0 and 1.")
-        self.instrument.write(f"DISP:CMAP:COL:HSL {hue},{saturation},{luminance}")
+        self.instrument.write(f":DISP:CMAP:COL:HSL {hue},{saturation},{luminance}")
 
     def get_display_cmap_color_hsl(self) -> tuple[float, float, float]:
         """Returns the instrument's color map based on the Hue/Saturation/Luminance levels color model."""
-        response = self.instrument.query("DISP:CMAP:COL:HSL?").strip()
+        response = self.instrument.query(":DISP:CMAP:COL:HSL?").strip()
         try:
             h, s, l = map(float, response.split(','))
             return h, s, l
@@ -99,11 +99,11 @@ class Display():
         blue: Blue intensity (0 to 1)."""
         if not (0 <= red <= 1 and 0 <= green <= 1 and 0 <= blue <= 1):
             raise ValueError("RGB parameters must be between 0 and 1.")
-        self.instrument.write(f"DISP:CMAP:COL:RGB {red},{green},{blue}")
+        self.instrument.write(f":DISP:CMAP:COL:RGB {red},{green},{blue}")
 
     def get_display_cmap_color_rgb(self) -> tuple[float, float, float]:
         """Returns the instrument's color map based on the Red/Green/Blue color model."""
-        response = self.instrument.query("DISP:CMAP:COL:RGB?").strip()
+        response = self.instrument.query(":DISP:CMAP:COL:RGB?").strip()
         try:
             r, g, b = map(float, response.split(','))
             return r, g, b
@@ -117,11 +117,11 @@ class Display():
         contrast_value: Contrast value (0 to 1, where 0 indicates no difference and 1 indicates maximum contrast)."""
         if not (0 <= contrast_value <= 1):
             raise ValueError("Contrast value must be between 0 and 1.")
-        self.instrument.write(f"DISP:CONT {contrast_value}")
+        self.instrument.write(f":DISP:CONT {contrast_value}")
 
     def get_display_contrast(self) -> float:
         """Returns the relative difference in brightness between 'full' intensity and 'no' intensity."""
-        response = self.instrument.query("DISP:CONT?").strip()
+        response = self.instrument.query(":DISP:CONT?").strip()
         try:
             return float(response)
         except ValueError:
@@ -132,11 +132,11 @@ class Display():
         Parameters:
         enable: True to enable the display, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:ENAB {scpi_value}")
+        self.instrument.write(f":DISP:ENAB {scpi_value}")
 
     def get_display_enable(self) -> bool:
         """Returns True if the whole display is visible, False if not."""
-        response = self.instrument.query("DISP:ENAB?").strip()
+        response = self.instrument.query(":DISP:ENAB?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -149,11 +149,11 @@ class Display():
         """Selects a menu by name from an instrument-predefined list of valid menu names.
         Parameters:
         menu_name: The name of the menu to select."""
-        self.instrument.write(f"DISP:MENU:NAME '{menu_name}'") # Use quotes for string parameters as good practice
+        self.instrument.write(f":DISP:MENU:NAME '{menu_name}'") # Use quotes for string parameters as good practice
 
     def get_display_menu_name(self) -> str:
         """Returns the name of the currently selected menu."""
-        response = self.instrument.query("DISP:MENU:NAME?").strip().strip("'\"") # Remove potential quotes
+        response = self.instrument.query(":DISP:MENU:NAME?").strip().strip("'\"") # Remove potential quotes
         return response
 
     def set_display_menu_state(self, enable: bool):
@@ -161,11 +161,11 @@ class Display():
         Parameters:
         enable: True to turn the menu ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:MENU:STATE {scpi_value}")
+        self.instrument.write(f":DISP:MENU:STATE {scpi_value}")
 
     def get_display_menu_state(self) -> bool:
         """Returns True if the current menu page is ON, False if OFF."""
-        response = self.instrument.query("DISP:MENU:STATE?").strip()
+        response = self.instrument.query(":DISP:MENU:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -177,22 +177,22 @@ class Display():
         """Assigns the soft key label to a key.
         Parameters:
         key_string: The soft key label string."""
-        self.instrument.write(f"DISP:MENU:KEY '{key_string}'") # Use quotes for string parameters
+        self.instrument.write(f":DISP:MENU:KEY '{key_string}'") # Use quotes for string parameters
 
     def get_display_menu_key(self) -> str:
         """Returns the soft key label assigned to a key."""
-        response = self.instrument.query("DISP:MENU:KEY?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:MENU:KEY?").strip().strip("'\"")
         return response
 
     def set_display_window_background_color(self, color_value: int):
         """Selects from the CMAP the value to become the background color for the window.
         Parameters:
         color_value: The color number (numeric value) from the CMAP."""
-        self.instrument.write(f"DISP:WIND:BACK:COL {color_value}")
+        self.instrument.write(f":DISP:WIND:BACK:COL {color_value}")
 
     def get_display_window_background_color(self) -> int:
         """Returns the background color number for the window."""
-        response = self.instrument.query("DISP:WIND:BACK:COL?").strip()
+        response = self.instrument.query(":DISP:WIND:BACK:COL?").strip()
         try:
             return int(response)
         except ValueError:
@@ -205,11 +205,11 @@ class Display():
         y_coord: The Y-coordinate (0 to 1)."""
         if not (0 <= x_coord <= 1 and 0 <= y_coord <= 1):
             raise ValueError("Coordinates must be between 0 and 1.")
-        self.instrument.write(f"DISP:WIND:GEOM:LLEF {x_coord},{y_coord}")
+        self.instrument.write(f":DISP:WIND:GEOM:LLEF {x_coord},{y_coord}")
 
     def get_display_window_geometry_lleft(self) -> tuple[float, float]:
         """Returns the location of the lower left corner of the window."""
-        response = self.instrument.query("DISP:WIND:GEOM:LLEF?").strip()
+        response = self.instrument.query(":DISP:WIND:GEOM:LLEF?").strip()
         try:
             x, y = map(float, response.split(','))
             return x, y
@@ -224,11 +224,11 @@ class Display():
         height: The length in the vertical direction (0 to 1, 0 for icon)."""
         if not (0 <= width <= 1 and 0 <= height <= 1):
             raise ValueError("Width and height must be between 0 and 1.")
-        self.instrument.write(f"DISP:WIND:GEOM:SIZE {width},{height}")
+        self.instrument.write(f":DISP:WIND:GEOM:SIZE {width},{height}")
 
     def get_display_window_geometry_size(self) -> tuple[float, float]:
         """Returns the size of the display window."""
-        response = self.instrument.query("DISP:WIND:GEOM:SIZE?").strip()
+        response = self.instrument.query(":DISP:WIND:GEOM:SIZE?").strip()
         try:
             width, height = map(float, response.split(','))
             return width, height
@@ -242,11 +242,11 @@ class Display():
         y_coord: The Y-coordinate (0 to 1)."""
         if not (0 <= x_coord <= 1 and 0 <= y_coord <= 1):
             raise ValueError("Coordinates must be between 0 and 1.")
-        self.instrument.write(f"DISP:WIND:GEOM:URIG {x_coord},{y_coord}")
+        self.instrument.write(f":DISP:WIND:GEOM:URIG {x_coord},{y_coord}")
 
     def get_display_window_geometry_uright(self) -> tuple[float, float]:
         """Returns the location of the upper right corner of the display window."""
-        response = self.instrument.query("DISP:WIND:GEOM:URIG?").strip()
+        response = self.instrument.query(":DISP:WIND:GEOM:URIG?").strip()
         try:
             x, y = map(float, response.split(','))
             return x, y
@@ -256,17 +256,17 @@ class Display():
     def clear_display_window_graphics(self):
         """Erases the graphics from the window.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"DISP:WIND:GRAP:CLE")
+        self.instrument.write(f":DISP:WIND:GRAP:CLE")
 
     def set_display_window_graphics_color(self, color_value: int):
         """Selects the color for the next graphics operation from the CMAP.
         Parameters:
         color_value: The color number (numeric value) from the CMAP."""
-        self.instrument.write(f"DISP:WIND:GRAP:COL {color_value}")
+        self.instrument.write(f":DISP:WIND:GRAP:COL {color_value}")
 
     def get_display_window_graphics_color(self) -> int:
         """Returns the color for the next graphics operation."""
-        response = self.instrument.query("DISP:WIND:GRAP:COL?").strip()
+        response = self.instrument.query(":DISP:WIND:GRAP:COL?").strip()
         try:
             return int(response)
         except ValueError:
@@ -278,13 +278,13 @@ class Display():
         width: The width of the character cell.
         height: (Optional) The height of the character cell (defaults to width if not provided)."""
         if height is None:
-            self.instrument.write(f"DISP:WIND:GRAP:CSIZ {width}")
+            self.instrument.write(f":DISP:WIND:GRAP:CSIZ {width}")
         else:
-            self.instrument.write(f"DISP:WIND:GRAP:CSIZ {width},{height}")
+            self.instrument.write(f":DISP:WIND:GRAP:CSIZ {width},{height}")
 
     def get_display_window_graphics_csize(self) -> tuple[float, float]:
         """Returns the size and aspect ratio of the character cell."""
-        response = self.instrument.query("DISP:WIND:GRAP:CSIZ?").strip()
+        response = self.instrument.query(":DISP:WIND:GRAP:CSIZ?").strip()
         try:
             parts = [float(x) for x in response.split(',')]
             if len(parts) == 1:
@@ -300,7 +300,7 @@ class Display():
     def draw_display_window_graphics_line(self, x_coord: float, y_coord: float):
         """Draws a line from the current 'pen' position to the specified X and Y coordinate.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"DISP:WIND:GRAP:DRAW {x_coord},{y_coord}")
+        self.instrument.write(f":DISP:WIND:GRAP:DRAW {x_coord},{y_coord}")
 
     def send_display_window_graphics_pcl(self, block_data: bytes):
         """Sends graphics and text data to the instrument using Hewlett-Packard '<esc>*' terminal- and printer-style escape sequences.
@@ -308,7 +308,7 @@ class Display():
         block_data: The data block (bytes) to send."""
         num_bytes = len(block_data)
         num_digits = len(str(num_bytes))
-        self.instrument.write(f"DISP:WIND:GRAP:PCL #{num_digits}{num_bytes}" + block_data.decode('latin-1'))
+        self.instrument.write(f":DISP:WIND:GRAP:PCL #{num_digits}{num_bytes}" + block_data.decode('latin-1'))
 
     def send_display_window_graphics_hpgl(self, block_data: bytes):
         """Sends graphics and text data to the instrument using HP-GL (Hewlett-Packard-Graphics Language) plotter language.
@@ -316,38 +316,38 @@ class Display():
         block_data: The data block (bytes) to send."""
         num_bytes = len(block_data)
         num_digits = len(str(num_bytes))
-        self.instrument.write(f"DISP:WIND:GRAP:HPGL #{num_digits}{num_bytes}" + block_data.decode('latin-1'))
+        self.instrument.write(f":DISP:WIND:GRAP:HPGL #{num_digits}{num_bytes}" + block_data.decode('latin-1'))
 
     def draw_display_window_graphics_idraw(self, x_offset: float, y_offset: float):
         """Draws a line from the current pen position to a new position determined by adding X and Y offsets.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"DISP:WIND:GRAP:IDRAW {x_offset},{y_offset}")
+        self.instrument.write(f":DISP:WIND:GRAP:IDRAW {x_offset},{y_offset}")
 
     def move_display_window_graphics_imove(self, x_offset: float, y_offset: float):
         """Updates the current pen position by adding an X offset and a Y offset to the current coordinates. No line is drawn.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"DISP:WIND:GRAP:IMOV {x_offset},{y_offset}")
+        self.instrument.write(f":DISP:WIND:GRAP:IMOV {x_offset},{y_offset}")
 
     def set_display_window_graphics_label(self, text_label: str):
         """Places text on the graphics display at the current pen position.
         Parameters:
         text_label: The text string to place as a label."""
-        self.instrument.write(f"DISP:WIND:GRAP:LAB '{text_label}'")
+        self.instrument.write(f":DISP:WIND:GRAP:LAB '{text_label}'")
 
     def get_display_window_graphics_label(self) -> str:
         """Returns the text label on the graphics display."""
-        response = self.instrument.query("DISP:WIND:GRAP:LAB?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:GRAP:LAB?").strip().strip("'\"")
         return response
 
     def set_display_window_graphics_ldirection(self, angle_radians: float):
         """Defines the angle (in radians) at which labels are drawn.
         Parameters:
         angle_radians: The angle in radians (e.g., 0 for horizontal, PI/2 for bottom-to-top)."""
-        self.instrument.write(f"DISP:WIND:GRAP:LDIR {angle_radians}")
+        self.instrument.write(f":DISP:WIND:GRAP:LDIR {angle_radians}")
 
     def get_display_window_graphics_ldirection(self) -> float:
         """Returns the angle (in radians) at which labels are drawn."""
-        response = self.instrument.query("DISP:WIND:GRAP:LDIR?").strip()
+        response = self.instrument.query(":DISP:WIND:GRAP:LDIR?").strip()
         try:
             return float(response)
         except ValueError:
@@ -359,13 +359,13 @@ class Display():
         line_type: The line type (numeric value, 1 is solid).
         repeat_length: (Optional) The repeat length for the line pattern."""
         if repeat_length is None:
-            self.instrument.write(f"DISP:WIND:GRAP:LTYP {line_type}")
+            self.instrument.write(f":DISP:WIND:GRAP:LTYP {line_type}")
         else:
-            self.instrument.write(f"DISP:WIND:GRAP:LTYP {line_type},{repeat_length}")
+            self.instrument.write(f":DISP:WIND:GRAP:LTYP {line_type},{repeat_length}")
 
     def get_display_window_graphics_linetype(self) -> tuple[int, float]:
         """Returns the line type and repeat length for subsequent lines."""
-        response = self.instrument.query("DISP:WIND:GRAP:LTYP?").strip()
+        response = self.instrument.query(":DISP:WIND:GRAP:LTYP?").strip()
         try:
             parts = [float(x) for x in response.split(',')]
             if len(parts) == 1:
@@ -381,18 +381,18 @@ class Display():
     def move_display_window_graphics_pen(self, x_coord: float, y_coord: float):
         """Updates the pen position without drawing a new line.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"DISP:WIND:GRAP:MOVE {x_coord},{y_coord}")
+        self.instrument.write(f":DISP:WIND:GRAP:MOVE {x_coord},{y_coord}")
 
     def set_display_window_graphics_state(self, enable: bool):
         """Controls whether the graphics is visible or not.
         Parameters:
         enable: True to make graphics visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:GRAP:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:GRAP:STATE {scpi_value}")
 
     def get_display_window_graphics_state(self) -> bool:
         """Returns True if the graphics is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:GRAP:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:GRAP:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -405,11 +405,11 @@ class Display():
         Parameters:
         enable: True to make the window visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:STATE {scpi_value}")
 
     def get_display_window_state(self) -> bool:
         """Returns True if the window is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -422,11 +422,11 @@ class Display():
         Parameters:
         enable: True to enable attribute interpretation, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TEXT:ATTR {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TEXT:ATTR {scpi_value}")
 
     def get_display_window_text_attributes(self) -> bool:
         """Returns True if ANSI Standard Terminal escape sequence interpretation is enabled for text, False if disabled."""
-        response = self.instrument.query("DISP:WIND:TEXT:ATTR?").strip()
+        response = self.instrument.query(":DISP:WIND:TEXT:ATTR?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -437,17 +437,17 @@ class Display():
     def clear_display_window_text(self):
         """Erases the text from the window.
         Notes: This is an event command; no query."""
-        self.instrument.write(f"DISP:WIND:TEXT:CLE")
+        self.instrument.write(f":DISP:WIND:TEXT:CLE")
 
     def set_display_window_text_color(self, color_value: int):
         """Selects the color for the next DATA stream (text display area).
         Parameters:
         color_value: The color number (numeric value) from the CMAP."""
-        self.instrument.write(f"DISP:WIND:TEXT:COL {color_value}")
+        self.instrument.write(f":DISP:WIND:TEXT:COL {color_value}")
 
     def get_display_window_text_color(self) -> int:
         """Returns the color for the next DATA stream (text display area)."""
-        response = self.instrument.query("DISP:WIND:TEXT:COL?").strip()
+        response = self.instrument.query(":DISP:WIND:TEXT:COL?").strip()
         try:
             return int(response)
         except ValueError:
@@ -460,13 +460,13 @@ class Display():
         width: The width of the character cell.
         height: (Optional) The height of the character cell (defaults to width if not provided)."""
         if height is None:
-            self.instrument.write(f"DISP:WIND:TEXT:CSIZ {width}")
+            self.instrument.write(f":DISP:WIND:TEXT:CSIZ {width}")
         else:
-            self.instrument.write(f"DISP:WIND:TEXT:CSIZ {width},{height}")
+            self.instrument.write(f":DISP:WIND:TEXT:CSIZ {width},{height}")
 
     def get_display_window_text_csize(self) -> tuple[float, float]:
         """Returns the size and aspect ratio of the character cell used by DATA."""
-        response = self.instrument.query("DISP:WIND:TEXT:CSIZ?").strip()
+        response = self.instrument.query(":DISP:WIND:TEXT:CSIZ?").strip()
         try:
             parts = [float(x) for x in response.split(',')]
             if len(parts) == 1:
@@ -482,22 +482,22 @@ class Display():
         """Sets what data flow is fed into the TEXT display window.
         Parameters:
         data_handle: The data handle (character string) for the data flow."""
-        self.instrument.write(f"DISP:WIND:TEXT:FEED '{data_handle}'")
+        self.instrument.write(f":DISP:WIND:TEXT:FEED '{data_handle}'")
 
     def get_display_window_text_feed(self) -> str:
         """Returns what data flow is fed into the TEXT display window."""
-        response = self.instrument.query("DISP:WIND:TEXT:FEED?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:TEXT:FEED?").strip().strip("'\"")
         return response
 
     def set_display_window_text_data(self, text_data: str):
         """Writes data to the text display area.
         Parameters:
         text_data: The text data (string) to write."""
-        self.instrument.write(f"DISP:WIND:TEXT:DATA '{text_data}'") # Use quotes for string parameters
+        self.instrument.write(f":DISP:WIND:TEXT:DATA '{text_data}'") # Use quotes for string parameters
 
     def get_display_window_text_data(self) -> str:
         """Returns the data that gets written to the text display area."""
-        response = self.instrument.query("DISP:WIND:TEXT:DATA?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:TEXT:DATA?").strip().strip("'\"")
         return response
 
     def set_display_window_text_locate(self, row: int, column: int):
@@ -505,11 +505,11 @@ class Display():
         Parameters:
         row: The row number (1-indexed, 1 is top row).
         column: The column number (1-indexed, 1 is left-most column)."""
-        self.instrument.write(f"DISP:WIND:TEXT:LOC {row},{column}")
+        self.instrument.write(f":DISP:WIND:TEXT:LOC {row},{column}")
 
     def get_display_window_text_locate(self) -> tuple[int, int]:
         """Returns the display ROW and display COLumn where the next LINE of TEXT DATA will appear."""
-        response = self.instrument.query("DISP:WIND:TEXT:LOC?").strip()
+        response = self.instrument.query(":DISP:WIND:TEXT:LOC?").strip()
         try:
             r, c = map(int, response.split(','))
             return r, c
@@ -522,15 +522,15 @@ class Display():
         page_value: The page number (numeric value), or 'UP'|'DOWN' (implied in docs)."""
         # Document states <numeric value> but implies UP/DOWN. Handling both.
         if isinstance(page_value, (int, float)):
-            self.instrument.write(f"DISP:WIND:TEXT:PAGE {page_value}")
+            self.instrument.write(f":DISP:WIND:TEXT:PAGE {page_value}")
         elif page_value.upper() in {"UP", "DOWN"}:
-            self.instrument.write(f"DISP:WIND:TEXT:PAGE {page_value.upper()}")
+            self.instrument.write(f":DISP:WIND:TEXT:PAGE {page_value.upper()}")
         else:
             raise ValueError(f"Invalid page value: '{page_value}'. Must be numeric, 'UP', or 'DOWN'.")
 
     def get_display_window_text_page(self) -> str:
         """Returns the page currently displayed."""
-        response = self.instrument.query("DISP:WIND:TEXT:PAGE?").strip()
+        response = self.instrument.query(":DISP:WIND:TEXT:PAGE?").strip()
         try:
             return str(int(float(response))) # Try to convert to int string if numeric
         except ValueError:
@@ -541,11 +541,11 @@ class Display():
         Parameters:
         enable: True to make text visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TEXT:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TEXT:STATE {scpi_value}")
 
     def get_display_window_text_state(self) -> bool:
         """Returns True if the TEXT is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:TEXT:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:TEXT:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -558,11 +558,11 @@ class Display():
         """Selects the color for the TRACE from the CMAP.
         Parameters:
         color_value: The color number (numeric value) from the CMAP."""
-        self.instrument.write(f"DISP:WIND:TRAC:COL {color_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:COL {color_value}")
 
     def get_display_window_trace_color(self) -> int:
         """Returns the color for the TRACE."""
-        response = self.instrument.query("DISP:WIND:TRAC:COL?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:COL?").strip()
         try:
             return int(response)
         except ValueError:
@@ -572,11 +572,11 @@ class Display():
         """Sets what data flow is fed into the TRACe display window.
         Parameters:
         data_handle: The data handle (character string) for the data flow."""
-        self.instrument.write(f"DISP:WIND:TRAC:FEED '{data_handle}'")
+        self.instrument.write(f":DISP:WIND:TRAC:FEED '{data_handle}'")
 
     def get_display_window_trace_feed(self) -> str:
         """Returns what data flow is fed into the TRACe display window."""
-        response = self.instrument.query("DISP:WIND:TRAC:FEED?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:TRAC:FEED?").strip().strip("'\"")
         return response
 
     def set_display_window_trace_graticule_axis_state(self, enable: bool):
@@ -584,11 +584,11 @@ class Display():
         Parameters:
         enable: True to make axis visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:GRAT:AXIS:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:GRAT:AXIS:STATE {scpi_value}")
 
     def get_display_window_trace_graticule_axis_state(self) -> bool:
         """Returns True if the AXIS is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:GRAT:AXIS:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:GRAT:AXIS:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -601,11 +601,11 @@ class Display():
         Parameters:
         enable: True to make frame visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:GRAT:FRAM:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:GRAT:FRAM:STATE {scpi_value}")
 
     def get_display_window_trace_graticule_frame_state(self) -> bool:
         """Returns True if the FRAMe is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:GRAT:FRAM:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:GRAT:FRAM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -618,11 +618,11 @@ class Display():
         Parameters:
         enable: True to enable auto-coupling of grid to frame, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:GRAT:GRID:AUTO {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:GRAT:GRID:AUTO {scpi_value}")
 
     def get_display_window_trace_graticule_grid_auto(self) -> bool:
         """Returns True if the GRID is auto-coupled to FRAMe, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:GRAT:GRID:AUTO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:GRAT:GRID:AUTO?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -635,11 +635,11 @@ class Display():
         Parameters:
         enable: True to make grid visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:GRAT:GRID:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:GRAT:GRID:STATE {scpi_value}")
 
     def get_display_window_trace_graticule_grid_state(self) -> bool:
         """Returns True if the GRID is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:GRAT:GRID:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:GRAT:GRID:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -651,11 +651,11 @@ class Display():
         """Sets how long trace data written to the screen will remain visible.
         Parameters:
         persistence_seconds: Persistence time in seconds (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:PERS {persistence_seconds}")
+        self.instrument.write(f":DISP:WIND:TRAC:PERS {persistence_seconds}")
 
     def get_display_window_trace_persistence(self) -> float:
         """Returns how long trace data written to the screen will remain visible (in seconds)."""
-        response = self.instrument.query("DISP:WIND:TRAC:PERS?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:PERS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -666,11 +666,11 @@ class Display():
         Parameters:
         enable: True to enable auto persistence, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:PERS:AUTO {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:PERS:AUTO {scpi_value}")
 
     def get_display_window_trace_persistence_auto(self) -> bool:
         """Returns True if persistence is automatically determined by the device, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:PERS:AUTO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:PERS:AUTO?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -683,11 +683,11 @@ class Display():
         Parameters:
         enable: True to make trace visible, False to hide."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:STATE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:STATE {scpi_value}")
 
     def get_display_window_trace_state(self) -> bool:
         """Returns True if the TRACE and related information is visible, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:STATE?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -700,11 +700,11 @@ class Display():
         """Specifies custom X-axis labeling.
         Parameters:
         label_string: The custom label string."""
-        self.instrument.write(f"DISP:WIND:TRAC:X:LAB '{label_string}'")
+        self.instrument.write(f":DISP:WIND:TRAC:X:LAB '{label_string}'")
 
     def get_display_window_trace_x_label(self) -> str:
         """Returns the custom X-axis labeling."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:LAB?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:TRAC:X:LAB?").strip().strip("'\"")
         return response
 
     def set_display_window_trace_x_scale_auto(self, auto_mode: str):
@@ -720,11 +720,11 @@ class Display():
             scpi_value = "ONCE"
         else:
             raise ValueError(f"Invalid auto mode: '{auto_mode}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"DISP:WIND:TRAC:X:SCAL:AUTO {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:X:SCAL:AUTO {scpi_value}")
 
     def get_display_window_trace_x_scale_auto(self) -> str:
         """Returns the auto-scaling setting for the X-axis ('ON', 'OFF', or 'ONCE')."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:SCAL:AUTO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:AUTO?").strip()
         if response == "1":
             return "ON"
         elif response == "0":
@@ -736,11 +736,11 @@ class Display():
         """Sets the value represented by the center point of the x-axis.
         Parameters:
         center_value: The center value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:X:SCAL:CENT {center_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:X:SCAL:CENT {center_value}")
 
     def get_display_window_trace_x_scale_center(self) -> float:
         """Returns the value represented by the center point of the x-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:SCAL:CENT?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:CENT?").strip()
         try:
             return float(response)
         except ValueError:
@@ -750,11 +750,11 @@ class Display():
         """Sets the value represented by the minimum (left) edge of the x-axis.
         Parameters:
         left_value: The left edge value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:X:SCAL:LEF {left_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:X:SCAL:LEF {left_value}")
 
     def get_display_window_trace_x_scale_left(self) -> float:
         """Returns the value represented by the minimum (left) edge of the x-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:SCAL:LEF?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:LEF?").strip()
         try:
             return float(response)
         except ValueError:
@@ -765,11 +765,11 @@ class Display():
         """Sets the value between two grid graticules (value "per division") for the X-axis.
         Parameters:
         pdivision_value: Value "per division" (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:X:SCAL:PDIV {pdivision_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:X:SCAL:PDIV {pdivision_value}")
 
     def get_display_window_trace_x_scale_pdivision(self) -> float:
         """Returns the value between two grid graticules (value "per division") for the X-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:SCAL:PDIV?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:PDIV?").strip()
         try:
             return float(response)
         except ValueError:
@@ -790,11 +790,11 @@ class Display():
         elif link_upper == "RIGHT": scpi_value = "RIGH"
         else: scpi_value = link_upper # Should not happen with valid_links check
         
-        self.instrument.write(f"DISP:WIND:TRAC:X:SCAL:PDIV:LINK {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:X:SCAL:PDIV:LINK {scpi_value}")
 
     def get_display_window_trace_x_scale_pdivision_link(self) -> str:
         """Returns the parameter that shall not be changed when the PDIVision value is changed for the X-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:SCAL:PDIV:LINK?").strip().upper()
+        response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:PDIV:LINK?").strip().upper()
         if response.startswith("LEF"): return "LEFT"
         elif response.startswith("CENT"): return "CENTER"
         elif response.startswith("RIGH"): return "RIGHT"
@@ -804,11 +804,11 @@ class Display():
         """Sets the value represented by the maximum (right) edge of the x-axis.
         Parameters:
         right_value: The right edge value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:X:SCAL:RIGH {right_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:X:SCAL:RIGH {right_value}")
 
     def get_display_window_trace_x_scale_right(self) -> float:
         """Returns the value represented by the maximum (right) edge of the x-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:X:SCAL:RIGH?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:RIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -818,11 +818,11 @@ class Display():
         """Specifies custom Y-axis labeling.
         Parameters:
         label_string: The custom label string."""
-        self.instrument.write(f"DISP:WIND:TRAC:Y:LAB '{label_string}'")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:LAB '{label_string}'")
 
     def get_display_window_trace_y_label(self) -> str:
         """Returns the custom Y-axis labeling."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:LAB?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:LAB?").strip().strip("'\"")
         return response
 
     def set_display_window_trace_y_rline(self, enable: bool):
@@ -830,11 +830,11 @@ class Display():
         Parameters:
         enable: True to turn RLINE ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:Y:RLINE {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:RLINE {scpi_value}")
 
     def get_display_window_trace_y_rline(self) -> bool:
         """Returns True if the RLINE is ON, False if OFF."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:RLINE?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:RLINE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -856,11 +856,11 @@ class Display():
             scpi_value = "ONCE"
         else:
             raise ValueError(f"Invalid auto mode: '{auto_mode}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:AUTO {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:AUTO {scpi_value}")
 
     def get_display_window_trace_y_scale_auto(self) -> str:
         """Returns the auto-scaling setting for the Y-axis ('ON', 'OFF', or 'ONCE')."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:AUTO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:AUTO?").strip()
         if response == "1":
             return "ON"
         elif response == "0":
@@ -872,11 +872,11 @@ class Display():
         """Sets the value represented by the minimum (bottom) edge of the display for the Y-axis.
         Parameters:
         bottom_value: The minimum edge value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:BOTT {bottom_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:BOTT {bottom_value}")
 
     def get_display_window_trace_y_scale_bottom(self) -> float:
         """Returns the value represented by the minimum (bottom) edge of the display for the Y-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:BOTT?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:BOTT?").strip()
         try:
             return float(response)
         except ValueError:
@@ -886,11 +886,11 @@ class Display():
         """Sets the value between two grid graticules (value "per division") for the Y-axis.
         Parameters:
         pdivision_value: Value "per division" (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:PDIV {pdivision_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:PDIV {pdivision_value}")
 
     def get_display_window_trace_y_scale_pdivision(self) -> float:
         """Returns the value between two grid graticules (value "per division") for the Y-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:PDIV?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:PDIV?").strip()
         try:
             return float(response)
         except ValueError:
@@ -900,11 +900,11 @@ class Display():
         """Sets the value represented at the designated Reference POSition on the y-axis.
         Parameters:
         reference_level: The reference level (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:RLEVel {reference_level}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:RLEVel {reference_level}")
 
     def get_display_window_trace_y_scale_rlevel(self) -> float:
         """Returns the value represented at the designated Reference POSition on the y-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:RLEVel?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:RLEVel?").strip()
         try:
             return float(response)
         except ValueError:
@@ -915,11 +915,11 @@ class Display():
         Parameters:
         enable: True to enable auto reference level, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:RLEVel:AUTO {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:RLEVel:AUTO {scpi_value}")
 
     def get_display_window_trace_y_scale_rlevel_auto(self) -> bool:
         """Returns True if the display automatically chooses a reference level, False if not."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:RLEVel:AUTO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:RLEVel:AUTO?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -934,11 +934,11 @@ class Display():
         reference_position: The reference position (0 to 100 representing percentage)."""
         if not (0 <= reference_position <= 100):
             raise ValueError("Reference position must be between 0 and 100.")
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:RPOS {reference_position}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:RPOS {reference_position}")
 
     def get_display_window_trace_y_scale_rposition(self) -> float:
         """Returns the point on the y-axis used as the reference position as a percentage."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:RPOS?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:RPOS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -948,11 +948,11 @@ class Display():
         """Sets the value represented by the top edge of the display for the Y-axis.
         Parameters:
         top_value: The top edge value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SCAL:TOP {top_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:TOP {top_value}")
 
     def get_display_window_trace_y_scale_top(self) -> float:
         """Returns the value represented by the top edge of the display for the Y-axis."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SCAL:TOP?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:TOP?").strip()
         try:
             return float(response)
         except ValueError:
@@ -971,11 +971,11 @@ class Display():
         elif spacing_type_upper == "LINEAR": scpi_value = "LIN"
         else: scpi_value = spacing_type_upper
         
-        self.instrument.write(f"DISP:WIND:TRAC:Y:SPAC {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:Y:SPAC {scpi_value}")
 
     def get_display_window_trace_y_spacing(self) -> str:
         """Returns the Y-axis scale type ('LOGARITHMIC' or 'LINEAR')."""
-        response = self.instrument.query("DISP:WIND:TRAC:Y:SPAC?").strip().upper()
+        response = self.instrument.query(":DISP:WIND:TRAC:Y:SPAC?").strip().upper()
         if response.startswith("LOG"):
             return "LOGARITHMIC"
         elif response.startswith("LIN"):
@@ -986,11 +986,11 @@ class Display():
         """Specifies custom R-axis (radial) labeling.
         Parameters:
         label_string: The custom label string."""
-        self.instrument.write(f"DISP:WIND:TRAC:R:LAB '{label_string}'")
+        self.instrument.write(f":DISP:WIND:TRAC:R:LAB '{label_string}'")
 
     def get_display_window_trace_r_label(self) -> str:
         """Returns the custom R-axis (radial) labeling."""
-        response = self.instrument.query("DISP:WIND:TRAC:R:LAB?").strip().strip("'\"")
+        response = self.instrument.query(":DISP:WIND:TRAC:R:LAB?").strip().strip("'\"")
         return response
 
     def set_display_window_trace_r_scale_auto(self, auto_mode: str):
@@ -1006,11 +1006,11 @@ class Display():
             scpi_value = "ONCE"
         else:
             raise ValueError(f"Invalid auto mode: '{auto_mode}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"DISP:WIND:TRAC:R:SCAL:AUTO {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:R:SCAL:AUTO {scpi_value}")
 
     def get_display_window_trace_r_scale_auto(self) -> str:
         """Returns the auto-scaling setting for the R-axis ('ON', 'OFF', or 'ONCE')."""
-        response = self.instrument.query("DISP:WIND:TRAC:R:SCAL:AUTO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:R:SCAL:AUTO?").strip()
         if response == "1":
             return "ON"
         elif response == "0":
@@ -1022,11 +1022,11 @@ class Display():
         """Sets the value represented by the minimum (Center POint) of the circular display (R-axis).
         Parameters:
         center_point_value: The center point value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:R:SCAL:CPO {center_point_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:R:SCAL:CPO {center_point_value}")
 
     def get_display_window_trace_r_scale_cpoint(self) -> float:
         """Returns the value represented by the minimum (Center POint) of the circular display (R-axis)."""
-        response = self.instrument.query("DISP:WIND:TRAC:R:SCAL:CPO?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:R:SCAL:CPO?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1037,11 +1037,11 @@ class Display():
         """Sets the value represented by the Outside EDGe of the circular display (R-axis).
         Parameters:
         outside_edge_value: The outside edge value (numeric value)."""
-        self.instrument.write(f"DISP:WIND:TRAC:R:SCAL:OEDG {outside_edge_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:R:SCAL:OEDG {outside_edge_value}")
 
     def get_display_window_trace_r_scale_oedge(self) -> float:
         """Returns the value represented by the Outside EDGe of the circular display (R-axis)."""
-        response = self.instrument.query("DISP:WIND:TRAC:R:SCAL:OEDG?").strip()
+        response = self.instrument.query(":DISP:WIND:TRAC:R:SCAL:OEDG?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1060,11 +1060,11 @@ class Display():
         elif spacing_type_upper == "LINEAR": scpi_value = "LIN"
         else: scpi_value = spacing_type_upper
 
-        self.instrument.write(f"DISP:WIND:TRAC:R:SPAC {scpi_value}")
+        self.instrument.write(f":DISP:WIND:TRAC:R:SPAC {scpi_value}")
 
     def get_display_window_trace_r_spacing(self) -> str:
         """Returns the R-axis scale type ('LOGARITHMIC' or 'LINEAR')."""
-        response = self.instrument.query("DISP:WIND:TRAC:R:SPAC?").strip().upper()
+        response = self.instrument.query(":DISP:WIND:TRAC:R:SPAC?").strip().upper()
         if response.startswith("LOG"):
             return "LOGARITHMIC"
         elif response.startswith("LIN"):

@@ -7,11 +7,11 @@ class InstrumentCommands():
         """Sets the input attenuation.
         Parameters:
         value: The attenuation value (numeric value) in current relative amplitude units."""
-        self.instrument.write(f"INP:ATT {value}")
+        self.instrument.write(f":INP:ATT {value}")
 
     def get_input_attenuation(self) -> float:
         """Returns the input attenuation."""
-        response = self.instrument.query("INP:ATT?").strip()
+        response = self.instrument.query(":INP:ATT?").strip()
         try:
             return float(response)
         except ValueError:
@@ -34,11 +34,11 @@ class InstrumentCommands():
             scpi_value = "ONCE"
         else:
             raise ValueError(f"Invalid auto attenuation state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"INP:ATT:AUTO {scpi_value}")
+        self.instrument.write(f":INP:ATT:AUTO {scpi_value}")
 
     def get_input_attenuation_auto(self) -> str:
         """Returns whether attenuation is automatically controlled ('ON', 'OFF', or 'ONCE')."""
-        response = self.instrument.query("INP:ATT:AUTO?").strip()
+        response = self.instrument.query(":INP:ATT:AUTO?").strip()
         if response == "1":
             return "ON"
         elif response == "0":
@@ -51,11 +51,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to turn the attenuator ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:ATT:STATE {scpi_value}")
+        self.instrument.write(f":INP:ATT:STATE {scpi_value}")
 
     def get_input_attenuation_state(self) -> bool:
         """Returns True if the input attenuator is ON, False if OFF."""
-        response = self.instrument.query("INP:ATT:STATE?").strip()
+        response = self.instrument.query(":INP:ATT:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -68,11 +68,11 @@ class InstrumentCommands():
         """Specifies the AC component of the bias current in Amperes.
         Parameters:
         current: The AC current component in Amperes (numeric value)."""
-        self.instrument.write(f"INP:BIAS:CURR:AC {current}")
+        self.instrument.write(f":INP:BIAS:CURR:AC {current}")
 
     def get_input_bias_current_ac(self) -> float:
         """Returns the AC component of the bias current in Amperes."""
-        response = self.instrument.query("INP:BIAS:CURR:AC?").strip()
+        response = self.instrument.query(":INP:BIAS:CURR:AC?").strip()
         try:
             return float(response)
         except ValueError:
@@ -82,11 +82,11 @@ class InstrumentCommands():
         """Specifies the DC component of the bias current in Amperes.
         Parameters:
         current: The DC current component in Amperes (numeric value)."""
-        self.instrument.write(f"INP:BIAS:CURR:DC {current}")
+        self.instrument.write(f":INP:BIAS:CURR:DC {current}")
 
     def get_input_bias_current_dc(self) -> float:
         """Returns the DC component of the bias current in Amperes."""
-        response = self.instrument.query("INP:BIAS:CURR:DC?").strip()
+        response = self.instrument.query(":INP:BIAS:CURR:DC?").strip()
         try:
             return float(response)
         except ValueError:
@@ -97,11 +97,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable input biasing, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:BIAS:STATE {scpi_value}")
+        self.instrument.write(f":INP:BIAS:STATE {scpi_value}")
 
     def get_input_bias_state(self) -> bool:
         """Returns True if input biasing is enabled, False if not."""
-        response = self.instrument.query("INP:BIAS:STATE?").strip()
+        response = self.instrument.query(":INP:BIAS:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -122,11 +122,11 @@ class InstrumentCommands():
         elif type_upper == "VOLTAGE": scpi_value = "VOLT"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"INP:BIAS:TYPE {scpi_value}")
+        self.instrument.write(f":INP:BIAS:TYPE {scpi_value}")
 
     def get_input_bias_type(self) -> str:
         """Returns the type of bias being generated ('CURRENT' or 'VOLTAGE')."""
-        response = self.instrument.query("INP:BIAS:TYPE?").strip().upper()
+        response = self.instrument.query(":INP:BIAS:TYPE?").strip().upper()
         if response.startswith("CURR"):
             return "CURRENT"
         elif response.startswith("VOLT"):
@@ -137,11 +137,11 @@ class InstrumentCommands():
         """Specifies the AC component of the bias voltage in Volts.
         Parameters:
         voltage: The AC voltage component in Volts (numeric value)."""
-        self.instrument.write(f"INP:BIAS:VOLT:AC {voltage}")
+        self.instrument.write(f":INP:BIAS:VOLT:AC {voltage}")
 
     def get_input_bias_voltage_ac(self) -> float:
         """Returns the AC component of the bias voltage in Volts."""
-        response = self.instrument.query("INP:BIAS:VOLT:AC?").strip()
+        response = self.instrument.query(":INP:BIAS:VOLT:AC?").strip()
         try:
             return float(response)
         except ValueError:
@@ -151,11 +151,11 @@ class InstrumentCommands():
         """Specifies the DC component of the bias voltage in Volts.
         Parameters:
         voltage: The DC voltage component in Volts (numeric value)."""
-        self.instrument.write(f"INP:BIAS:VOLT:DC {voltage}")
+        self.instrument.write(f":INP:BIAS:VOLT:DC {voltage}")
 
     def get_input_bias_voltage_dc(self) -> float:
         """Returns the DC component of the bias voltage in Volts."""
-        response = self.instrument.query("INP:BIAS:VOLT:DC?").strip()
+        response = self.instrument.query(":INP:BIAS:VOLT:DC?").strip()
         try:
             return float(response)
         except ValueError:
@@ -173,11 +173,11 @@ class InstrumentCommands():
         if type_upper == "GROUND": scpi_value = "GRO"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"INP:COUP {scpi_value}")
+        self.instrument.write(f":INP:COUP {scpi_value}")
 
     def get_input_coupling(self) -> str:
         """Returns the coupling type for the input signal ('AC', 'DC', or 'GROUND')."""
-        response = self.instrument.query("INP:COUP?").strip().upper()
+        response = self.instrument.query(":INP:COUP?").strip().upper()
         if response.startswith("GRO"):
             return "GROUND"
         return response
@@ -188,11 +188,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:FILT:AWE:STATE {scpi_value}")
+        self.instrument.write(f":INP:FILT:AWE:STATE {scpi_value}")
 
     def get_input_filter_aweighting_state(self) -> bool:
         """Returns True if the "A" weighting input filter is ON, False if OFF."""
-        response = self.instrument.query("INP:FILT:AWE:STATE?").strip()
+        response = self.instrument.query(":INP:FILT:AWE:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -204,11 +204,11 @@ class InstrumentCommands():
         """Determines the cutoff frequency of the high pass filter in Hertz.
         Parameters:
         frequency: The cutoff frequency in Hertz (numeric value)."""
-        self.instrument.write(f"INP:FILT:HPAS:FREQ {frequency}")
+        self.instrument.write(f":INP:FILT:HPAS:FREQ {frequency}")
 
     def get_input_filter_hpass_frequency(self) -> float:
         """Returns the cutoff frequency of the high pass filter in Hertz."""
-        response = self.instrument.query("INP:FILT:HPAS:FREQ?").strip()
+        response = self.instrument.query(":INP:FILT:HPAS:FREQ?").strip()
         try:
             return float(response)
         except ValueError:
@@ -219,11 +219,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:FILT:HPAS:STATE {scpi_value}")
+        self.instrument.write(f":INP:FILT:HPAS:STATE {scpi_value}")
 
     def get_input_filter_hpass_state(self) -> bool:
         """Returns True if the high pass filter is ON, False if OFF."""
-        response = self.instrument.query("INP:FILT:HPAS:STATE?").strip()
+        response = self.instrument.query(":INP:FILT:HPAS:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -235,11 +235,11 @@ class InstrumentCommands():
         """Determines the cutoff frequency of the low pass filter in Hertz.
         Parameters:
         frequency: The cutoff frequency in Hertz (numeric value)."""
-        self.instrument.write(f"INP:FILT:LPAS:FREQ {frequency}")
+        self.instrument.write(f":INP:FILT:LPAS:FREQ {frequency}")
 
     def get_input_filter_lpass_frequency(self) -> float:
         """Returns the cutoff frequency of the low pass filter in Hertz."""
-        response = self.instrument.query("INP:FILT:LPAS:FREQ?").strip()
+        response = self.instrument.query(":INP:FILT:LPAS:FREQ?").strip()
         try:
             return float(response)
         except ValueError:
@@ -250,11 +250,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:FILT:LPAS:STATE {scpi_value}")
+        self.instrument.write(f":INP:FILT:LPAS:STATE {scpi_value}")
 
     def get_input_filter_lpass_state(self) -> bool:
         """Returns True if the low pass filter is ON, False if OFF."""
-        response = self.instrument.query("INP:FILT:LPAS:STATE?").strip()
+        response = self.instrument.query(":INP:FILT:LPAS:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -267,11 +267,11 @@ class InstrumentCommands():
         """Sets the input gain.
         Parameters:
         value: The gain value (numeric value) in current relative amplitude units."""
-        self.instrument.write(f"INP:GAIN {value}")
+        self.instrument.write(f":INP:GAIN {value}")
 
     def get_input_gain(self) -> float:
         """Returns the input gain."""
-        response = self.instrument.query("INP:GAIN?").strip()
+        response = self.instrument.query(":INP:GAIN?").strip()
         try:
             return float(response)
         except ValueError:
@@ -290,11 +290,11 @@ class InstrumentCommands():
             scpi_value = "ONCE"
         else:
             raise ValueError(f"Invalid auto gain state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"INP:GAIN:AUTO {scpi_value}")
+        self.instrument.write(f":INP:GAIN:AUTO {scpi_value}")
 
     def get_input_gain_auto(self) -> str:
         """Returns whether gain is automatically controlled ('ON', 'OFF', or 'ONCE')."""
-        response = self.instrument.query("INP:GAIN:AUTO?").strip()
+        response = self.instrument.query(":INP:GAIN:AUTO?").strip()
         if response == "1":
             return "ON"
         elif response == "0":
@@ -307,11 +307,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to turn the preamplifier ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:GAIN:STATE {scpi_value}")
+        self.instrument.write(f":INP:GAIN:STATE {scpi_value}")
 
     def get_input_gain_state(self) -> bool:
         """Returns True if the input gain (preamplifier) is ON, False if OFF."""
-        response = self.instrument.query("INP:GAIN:STATE?").strip()
+        response = self.instrument.query(":INP:GAIN:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -331,11 +331,11 @@ class InstrumentCommands():
         if type_upper == "FLOAT": scpi_value = "FLO"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"INP:GUAR {scpi_value}")
+        self.instrument.write(f":INP:GUAR {scpi_value}")
 
     def get_input_guard(self) -> str:
         """Returns how the guard is connected ('LOW' or 'FLOAT')."""
-        response = self.instrument.query("INP:GUAR?").strip().upper()
+        response = self.instrument.query(":INP:GUAR?").strip().upper()
         if response.startswith("FLO"):
             return "FLOAT"
         return response
@@ -344,11 +344,11 @@ class InstrumentCommands():
         """Sets the termination input impedance for the input signal in Ohms.
         Parameters:
         impedance_ohms: Impedance in Ohms (numeric value)."""
-        self.instrument.write(f"INP:IMP {impedance_ohms}")
+        self.instrument.write(f":INP:IMP {impedance_ohms}")
 
     def get_input_impedance(self) -> float:
         """Returns the termination input impedance for the input signal in Ohms."""
-        response = self.instrument.query("INP:IMP?").strip()
+        response = self.instrument.query(":INP:IMP?").strip()
         try:
             return float(response)
         except ValueError:
@@ -367,11 +367,11 @@ class InstrumentCommands():
         elif type_upper == "GROUND": scpi_value = "GRO"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"INP:LOW {scpi_value}")
+        self.instrument.write(f":INP:LOW {scpi_value}")
 
     def get_input_low(self) -> str:
         """Returns how the low signal terminal is connected ('FLOAT' or 'GROUND')."""
-        response = self.instrument.query("INP:LOW?").strip().upper()
+        response = self.instrument.query(":INP:LOW?").strip().upper()
         if response.startswith("FLO"):
             return "FLOAT"
         elif response.startswith("GRO"):
@@ -383,11 +383,11 @@ class InstrumentCommands():
         """Sets the input offset.
         Parameters:
         offset_value: The offset value (numeric value) in current amplitude units."""
-        self.instrument.write(f"INP:OFFS {offset_value}")
+        self.instrument.write(f":INP:OFFS {offset_value}")
 
     def get_input_offset(self) -> float:
         """Returns the input offset."""
-        response = self.instrument.query("INP:OFFS?").strip()
+        response = self.instrument.query(":INP:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -398,11 +398,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to turn offset effect ON, False to turn OFF."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:OFFS:STATE {scpi_value}")
+        self.instrument.write(f":INP:OFFS:STATE {scpi_value}")
 
     def get_input_offset_state(self) -> bool:
         """Returns True if the effect of OFFSet is ON, False if OFF."""
-        response = self.instrument.query("INP:OFFS:STATE?").strip()
+        response = self.instrument.query(":INP:OFFS:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -423,11 +423,11 @@ class InstrumentCommands():
         elif type_upper == "INVERTED": scpi_value = "INV"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"INP:POL {scpi_value}")
+        self.instrument.write(f":INP:POL {scpi_value}")
 
     def get_input_polarity(self) -> str:
         """Returns the input polarity ('NORMAL' or 'INVERTED')."""
-        response = self.instrument.query("INP:POL?").strip().upper()
+        response = self.instrument.query(":INP:POL?").strip().upper()
         if response.startswith("NORM"):
             return "NORMAL"
         elif response.startswith("INV"):
@@ -438,11 +438,11 @@ class InstrumentCommands():
         """Sets the polarization of the input in radians.
         Parameters:
         value_radians: Polarization value in radians (numeric value)."""
-        self.instrument.write(f"INP:POLZ {value_radians}")
+        self.instrument.write(f":INP:POLZ {value_radians}")
 
     def get_input_polarization(self) -> float:
         """Returns the polarization of the input in radians."""
-        response = self.instrument.query("INP:POLZ?").strip()
+        response = self.instrument.query(":INP:POLZ?").strip()
         try:
             return float(response)
         except ValueError:
@@ -451,12 +451,12 @@ class InstrumentCommands():
     def set_input_polarization_horizontal(self):
         """Sets the polarization of the input to zero (horizontal).
         Notes: This is an event command; no query."""
-        self.instrument.write(f"INP:POLZ:HOR")
+        self.instrument.write(f":INP:POLZ:HOR")
 
     def set_input_polarization_vertical(self):
         """Sets the polarization of the input to PI/2 radians (vertical).
         Notes: This is an event command; no query."""
-        self.instrument.write(f"INP:POLZ:VERT")
+        self.instrument.write(f":INP:POLZ:VERT")
 
     
     def set_input_position_x_angle_direction(self, direction: str):
@@ -467,22 +467,22 @@ class InstrumentCommands():
         direction_upper = direction.upper()
         if direction_upper not in valid_directions:
             raise ValueError(f"Invalid direction: '{direction}'. Must be 'UP' or 'DOWN'.")
-        self.instrument.write(f"INP:POS:X:ANG:DIR {direction_upper}")
+        self.instrument.write(f":INP:POS:X:ANG:DIR {direction_upper}")
 
     def get_input_position_x_angle_direction(self) -> str:
         """Returns the direction of the movement for X-axis angle rotation ('UP' or 'DOWN')."""
-        response = self.instrument.query("INP:POS:X:ANG:DIR?").strip().upper()
+        response = self.instrument.query(":INP:POS:X:ANG:DIR?").strip().upper()
         return response
 
     def set_input_position_x_angle_immediate(self, value: float):
         """Indicates that the input is moved to the specified X-axis angle position without waiting for further commands.
         Parameters:
         value: The immediate position value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:ANG:IMM {value}")
+        self.instrument.write(f":INP:POS:X:ANG:IMM {value}")
 
     def get_input_position_x_angle_immediate(self) -> float:
         """Returns the immediate position value for X-axis angle."""
-        response = self.instrument.query("INP:POS:X:ANG:IMM?").strip()
+        response = self.instrument.query(":INP:POS:X:ANG:IMM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -492,11 +492,11 @@ class InstrumentCommands():
         """Sets the maximum for the X-axis angle position limit.
         Parameters:
         value: The maximum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:ANG:LIM:HIGH {value}")
+        self.instrument.write(f":INP:POS:X:ANG:LIM:HIGH {value}")
 
     def get_input_position_x_angle_limit_high(self) -> float:
         """Returns the maximum for the X-axis angle position limit."""
-        response = self.instrument.query("INP:POS:X:ANG:LIM:HIGH?").strip()
+        response = self.instrument.query(":INP:POS:X:ANG:LIM:HIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -506,11 +506,11 @@ class InstrumentCommands():
         """Sets the minimum for the X-axis angle position limit.
         Parameters:
         value: The minimum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:ANG:LIM:LOW {value}")
+        self.instrument.write(f":INP:POS:X:ANG:LIM:LOW {value}")
 
     def get_input_position_x_angle_limit_low(self) -> float:
         """Returns the minimum for the X-axis angle position limit."""
-        response = self.instrument.query("INP:POS:X:ANG:LIM:LOW?").strip()
+        response = self.instrument.query(":INP:POS:X:ANG:LIM:LOW?").strip()
         try:
             return float(response)
         except ValueError:
@@ -521,11 +521,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable the limit, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:POS:X:ANG:LIM:STATE {scpi_value}")
+        self.instrument.write(f":INP:POS:X:ANG:LIM:STATE {scpi_value}")
 
     def get_input_position_x_angle_limit_state(self) -> bool:
         """Returns True if the X-axis angle limit is enabled, False if not."""
-        response = self.instrument.query("INP:POS:X:ANG:LIM:STATE?").strip()
+        response = self.instrument.query(":INP:POS:X:ANG:LIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -537,11 +537,11 @@ class InstrumentCommands():
         """Defines a single value that is subtracted from the physical X-axis angle position.
         Parameters:
         value: The offset value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:ANG:OFFS {value}")
+        self.instrument.write(f":INP:POS:X:ANG:OFFS {value}")
 
     def get_input_position_x_angle_offset(self) -> float:
         """Returns the offset value for the X-axis angle position."""
-        response = self.instrument.query("INP:POS:X:ANG:OFFS?").strip()
+        response = self.instrument.query(":INP:POS:X:ANG:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -552,11 +552,11 @@ class InstrumentCommands():
         """Controls the velocity of the angular rotation around the x-axis.
         Parameters:
         value: The velocity value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:ANG:VEL {value}")
+        self.instrument.write(f":INP:POS:X:ANG:VEL {value}")
 
     def get_input_position_x_angle_velocity(self) -> float:
         """Returns the velocity of the angular rotation around the x-axis."""
-        response = self.instrument.query("INP:POS:X:ANG:VEL?").strip()
+        response = self.instrument.query(":INP:POS:X:ANG:VEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -570,22 +570,22 @@ class InstrumentCommands():
         direction_upper = direction.upper()
         if direction_upper not in valid_directions:
             raise ValueError(f"Invalid direction: '{direction}'. Must be 'UP' or 'DOWN'.")
-        self.instrument.write(f"INP:POS:X:DIST:DIR {direction_upper}")
+        self.instrument.write(f":INP:POS:X:DIST:DIR {direction_upper}")
 
     def get_input_position_x_distance_direction(self) -> str:
         """Returns the direction of the movement for X-axis linear distance ('UP' or 'DOWN')."""
-        response = self.instrument.query("INP:POS:X:DIST:DIR?").strip().upper()
+        response = self.instrument.query(":INP:POS:X:DIST:DIR?").strip().upper()
         return response
 
     def set_input_position_x_distance_immediate(self, value: float):
         """Indicates that the input is moved to the specified X-axis linear distance position without waiting for further commands.
         Parameters:
         value: The immediate position value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:DIST:IMM {value}")
+        self.instrument.write(f":INP:POS:X:DIST:IMM {value}")
 
     def get_input_position_x_distance_immediate(self) -> float:
         """Returns the immediate position value for X-axis linear distance."""
-        response = self.instrument.query("INP:POS:X:DIST:IMM?").strip()
+        response = self.instrument.query(":INP:POS:X:DIST:IMM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -595,11 +595,11 @@ class InstrumentCommands():
         """Sets the maximum for the X-axis linear distance position limit.
         Parameters:
         value: The maximum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:DIST:LIM:HIGH {value}")
+        self.instrument.write(f":INP:POS:X:DIST:LIM:HIGH {value}")
 
     def get_input_position_x_distance_limit_high(self) -> float:
         """Returns the maximum for the X-axis linear distance position limit."""
-        response = self.instrument.query("INP:POS:X:DIST:LIM:HIGH?").strip()
+        response = self.instrument.query(":INP:POS:X:DIST:LIM:HIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -609,11 +609,11 @@ class InstrumentCommands():
         """Sets the minimum for the X-axis linear distance position limit.
         Parameters:
         value: The minimum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:DIST:LIM:LOW {value}")
+        self.instrument.write(f":INP:POS:X:DIST:LIM:LOW {value}")
 
     def get_input_position_x_distance_limit_low(self) -> float:
         """Returns the minimum for the X-axis linear distance position limit."""
-        response = self.instrument.query("INP:POS:X:DIST:LIM:LOW?").strip()
+        response = self.instrument.query(":INP:POS:X:DIST:LIM:LOW?").strip()
         try:
             return float(response)
         except ValueError:
@@ -624,11 +624,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable the limit, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:POS:X:DIST:LIM:STATE {scpi_value}")
+        self.instrument.write(f":INP:POS:X:DIST:LIM:STATE {scpi_value}")
 
     def get_input_position_x_distance_limit_state(self) -> bool:
         """Returns True if the X-axis linear distance limit is enabled, False if not."""
-        response = self.instrument.query("INP:POS:X:DIST:LIM:STATE?").strip()
+        response = self.instrument.query(":INP:POS:X:DIST:LIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -640,11 +640,11 @@ class InstrumentCommands():
         """Defines a single value that is subtracted from the physical X-axis linear distance position.
         Parameters:
         value: The offset value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:DIST:OFFS {value}")
+        self.instrument.write(f":INP:POS:X:DIST:OFFS {value}")
 
     def get_input_position_x_distance_offset(self) -> float:
         """Returns the offset value for the X-axis linear distance position."""
-        response = self.instrument.query("INP:POS:X:DIST:OFFS?").strip()
+        response = self.instrument.query(":INP:POS:X:DIST:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -655,11 +655,11 @@ class InstrumentCommands():
         """Controls the velocity of the displacement on the x-axis.
         Parameters:
         value: The velocity value (numeric value)."""
-        self.instrument.write(f"INP:POS:X:DIST:VEL {value}")
+        self.instrument.write(f":INP:POS:X:DIST:VEL {value}")
 
     def get_input_position_x_distance_velocity(self) -> float:
         """Returns the velocity of the displacement on the x-axis."""
-        response = self.instrument.query("INP:POS:X:DIST:VEL?").strip()
+        response = self.instrument.query(":INP:POS:X:DIST:VEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -673,22 +673,22 @@ class InstrumentCommands():
         direction_upper = direction.upper()
         if direction_upper not in valid_directions:
             raise ValueError(f"Invalid direction: '{direction}'. Must be 'UP' or 'DOWN'.")
-        self.instrument.write(f"INP:POS:Y:ANG:DIR {direction_upper}")
+        self.instrument.write(f":INP:POS:Y:ANG:DIR {direction_upper}")
 
     def get_input_position_y_angle_direction(self) -> str:
         """Returns the direction of the movement for Y-axis angle rotation ('UP' or 'DOWN')."""
-        response = self.instrument.query("INP:POS:Y:ANG:DIR?").strip().upper()
+        response = self.instrument.query(":INP:POS:Y:ANG:DIR?").strip().upper()
         return response
 
     def set_input_position_y_angle_immediate(self, value: float):
         """Indicates that the input is moved to the specified Y-axis angle position without waiting for further commands.
         Parameters:
         value: The immediate position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:ANG:IMM {value}")
+        self.instrument.write(f":INP:POS:Y:ANG:IMM {value}")
 
     def get_input_position_y_angle_immediate(self) -> float:
         """Returns the immediate position value for Y-axis angle."""
-        response = self.instrument.query("INP:POS:Y:ANG:IMM?").strip()
+        response = self.instrument.query(":INP:POS:Y:ANG:IMM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -698,11 +698,11 @@ class InstrumentCommands():
         """Sets the maximum for the Y-axis angle position limit.
         Parameters:
         value: The maximum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:ANG:LIM:HIGH {value}")
+        self.instrument.write(f":INP:POS:Y:ANG:LIM:HIGH {value}")
 
     def get_input_position_y_angle_limit_high(self) -> float:
         """Returns the maximum for the Y-axis angle position limit."""
-        response = self.instrument.query("INP:POS:Y:ANG:LIM:HIGH?").strip()
+        response = self.instrument.query(":INP:POS:Y:ANG:LIM:HIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -712,11 +712,11 @@ class InstrumentCommands():
         """Sets the minimum for the Y-axis angle position limit.
         Parameters:
         value: The minimum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:ANG:LIM:LOW {value}")
+        self.instrument.write(f":INP:POS:Y:ANG:LIM:LOW {value}")
 
     def get_input_position_y_angle_limit_low(self) -> float:
         """Returns the minimum for the Y-axis angle position limit."""
-        response = self.instrument.query("INP:POS:Y:ANG:LIM:LOW?").strip()
+        response = self.instrument.query(":INP:POS:Y:ANG:LIM:LOW?").strip()
         try:
             return float(response)
         except ValueError:
@@ -727,11 +727,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable the limit, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:POS:Y:ANG:LIM:STATE {scpi_value}")
+        self.instrument.write(f":INP:POS:Y:ANG:LIM:STATE {scpi_value}")
 
     def get_input_position_y_angle_limit_state(self) -> bool:
         """Returns True if the Y-axis angle limit is enabled, False if not."""
-        response = self.instrument.query("INP:POS:Y:ANG:LIM:STATE?").strip()
+        response = self.instrument.query(":INP:POS:Y:ANG:LIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -743,11 +743,11 @@ class InstrumentCommands():
         """Defines a single value that is subtracted from the physical Y-axis angle position.
         Parameters:
         value: The offset value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:ANG:OFFS {value}")
+        self.instrument.write(f":INP:POS:Y:ANG:OFFS {value}")
 
     def get_input_position_y_angle_offset(self) -> float:
         """Returns the offset value for the Y-axis angle position."""
-        response = self.instrument.query("INP:POS:Y:ANG:OFFS?").strip()
+        response = self.instrument.query(":INP:POS:Y:ANG:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -758,11 +758,11 @@ class InstrumentCommands():
         """Controls the velocity of the angular rotation around the y-axis.
         Parameters:
         value: The velocity value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:ANG:VEL {value}")
+        self.instrument.write(f":INP:POS:Y:ANG:VEL {value}")
 
     def get_input_position_y_angle_velocity(self) -> float:
         """Returns the velocity of the angular rotation around the y-axis."""
-        response = self.instrument.query("INP:POS:Y:ANG:VEL?").strip()
+        response = self.instrument.query(":INP:POS:Y:ANG:VEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -776,22 +776,22 @@ class InstrumentCommands():
         direction_upper = direction.upper()
         if direction_upper not in valid_directions:
             raise ValueError(f"Invalid direction: '{direction}'. Must be 'UP' or 'DOWN'.")
-        self.instrument.write(f"INP:POS:Y:DIST:DIR {direction_upper}")
+        self.instrument.write(f":INP:POS:Y:DIST:DIR {direction_upper}")
 
     def get_input_position_y_distance_direction(self) -> str:
         """Returns the direction of the movement for Y-axis linear distance ('UP' or 'DOWN')."""
-        response = self.instrument.query("INP:POS:Y:DIST:DIR?").strip().upper()
+        response = self.instrument.query(":INP:POS:Y:DIST:DIR?").strip().upper()
         return response
 
     def set_input_position_y_distance_immediate(self, value: float):
         """Indicates that the input is moved to the specified Y-axis linear distance position without waiting for further commands.
         Parameters:
         value: The immediate position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:DIST:IMM {value}")
+        self.instrument.write(f":INP:POS:Y:DIST:IMM {value}")
 
     def get_input_position_y_distance_immediate(self) -> float:
         """Returns the immediate position value for Y-axis linear distance."""
-        response = self.instrument.query("INP:POS:Y:DIST:IMM?").strip()
+        response = self.instrument.query(":INP:POS:Y:DIST:IMM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -801,11 +801,11 @@ class InstrumentCommands():
         """Sets the maximum for the Y-axis linear distance position limit.
         Parameters:
         value: The maximum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:DIST:LIM:HIGH {value}")
+        self.instrument.write(f":INP:POS:Y:DIST:LIM:HIGH {value}")
 
     def get_input_position_y_distance_limit_high(self) -> float:
         """Returns the maximum for the Y-axis linear distance position limit."""
-        response = self.instrument.query("INP:POS:Y:DIST:LIM:HIGH?").strip()
+        response = self.instrument.query(":INP:POS:Y:DIST:LIM:HIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -815,11 +815,11 @@ class InstrumentCommands():
         """Sets the minimum for the Y-axis linear distance position limit.
         Parameters:
         value: The minimum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:DIST:LIM:LOW {value}")
+        self.instrument.write(f":INP:POS:Y:DIST:LIM:LOW {value}")
 
     def get_input_position_y_distance_limit_low(self) -> float:
         """Returns the minimum for the Y-axis linear distance position limit."""
-        response = self.instrument.query("INP:POS:Y:DIST:LIM:LOW?").strip()
+        response = self.instrument.query(":INP:POS:Y:DIST:LIM:LOW?").strip()
         try:
             return float(response)
         except ValueError:
@@ -830,11 +830,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable the limit, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:POS:Y:DIST:LIM:STATE {scpi_value}")
+        self.instrument.write(f":INP:POS:Y:DIST:LIM:STATE {scpi_value}")
 
     def get_input_position_y_distance_limit_state(self) -> bool:
         """Returns True if the Y-axis linear distance limit is enabled, False if not."""
-        response = self.instrument.query("INP:POS:Y:DIST:LIM:STATE?").strip()
+        response = self.instrument.query(":INP:POS:Y:DIST:LIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -846,11 +846,11 @@ class InstrumentCommands():
         """Defines a single value that is subtracted from the physical Y-axis linear distance position.
         Parameters:
         value: The offset value (numeric value)."""
-        self.instrument.write(f"INP:POS:Y:DIST:OFFS {value}")
+        self.instrument.write(f":INP:POS:Y:DIST:OFFS {value}")
 
     def get_input_position_y_distance_offset(self) -> float:
         """Returns the offset value for the Y-axis linear distance position."""
-        response = self.instrument.query("INP:POS:Y:DIST:OFFS?").strip()
+        response = self.instrument.query(":INP:POS:Y:DIST:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -865,22 +865,22 @@ class InstrumentCommands():
         direction_upper = direction.upper()
         if direction_upper not in valid_directions:
             raise ValueError(f"Invalid direction: '{direction}'. Must be 'UP' or 'DOWN'.")
-        self.instrument.write(f"INP:POS:Z:ANG:DIR {direction_upper}")
+        self.instrument.write(f":INP:POS:Z:ANG:DIR {direction_upper}")
 
     def get_input_position_z_angle_direction(self) -> str:
         """Returns the direction of the movement for Z-axis angle rotation ('UP' or 'DOWN')."""
-        response = self.instrument.query("INP:POS:Z:ANG:DIR?").strip().upper()
+        response = self.instrument.query(":INP:POS:Z:ANG:DIR?").strip().upper()
         return response
 
     def set_input_position_z_angle_immediate(self, value: float):
         """Indicates that the input is moved to the specified Z-axis angle position without waiting for further commands.
         Parameters:
         value: The immediate position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:ANG:IMM {value}")
+        self.instrument.write(f":INP:POS:Z:ANG:IMM {value}")
 
     def get_input_position_z_angle_immediate(self) -> float:
         """Returns the immediate position value for Z-axis angle."""
-        response = self.instrument.query("INP:POS:Z:ANG:IMM?").strip()
+        response = self.instrument.query(":INP:POS:Z:ANG:IMM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -890,11 +890,11 @@ class InstrumentCommands():
         """Sets the maximum for the Z-axis angle position limit.
         Parameters:
         value: The maximum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:ANG:LIM:HIGH {value}")
+        self.instrument.write(f":INP:POS:Z:ANG:LIM:HIGH {value}")
 
     def get_input_position_z_angle_limit_high(self) -> float:
         """Returns the maximum for the Z-axis angle position limit."""
-        response = self.instrument.query("INP:POS:Z:ANG:LIM:HIGH?").strip()
+        response = self.instrument.query(":INP:POS:Z:ANG:LIM:HIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -904,11 +904,11 @@ class InstrumentCommands():
         """Sets the minimum for the Z-axis angle position limit.
         Parameters:
         value: The minimum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:ANG:LIM:LOW {value}")
+        self.instrument.write(f":INP:POS:Z:ANG:LIM:LOW {value}")
 
     def get_input_position_z_angle_limit_low(self) -> float:
         """Returns the minimum for the Z-axis angle position limit."""
-        response = self.instrument.query("INP:POS:Z:ANG:LIM:LOW?").strip()
+        response = self.instrument.query(":INP:POS:Z:ANG:LIM:LOW?").strip()
         try:
             return float(response)
         except ValueError:
@@ -919,11 +919,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable the limit, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:POS:Z:ANG:LIM:STATE {scpi_value}")
+        self.instrument.write(f":INP:POS:Z:ANG:LIM:STATE {scpi_value}")
 
     def get_input_position_z_angle_limit_state(self) -> bool:
         """Returns True if the Z-axis angle limit is enabled, False if not."""
-        response = self.instrument.query("INP:POS:Z:ANG:LIM:STATE?").strip()
+        response = self.instrument.query(":INP:POS:Z:ANG:LIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -935,11 +935,11 @@ class InstrumentCommands():
         """Defines a single value that is subtracted from the physical Z-axis angle position.
         Parameters:
         value: The offset value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:ANG:OFFS {value}")
+        self.instrument.write(f":INP:POS:Z:ANG:OFFS {value}")
 
     def get_input_position_z_angle_offset(self) -> float:
         """Returns the offset value for the Z-axis angle position."""
-        response = self.instrument.query("INP:POS:Z:ANG:OFFS?").strip()
+        response = self.instrument.query(":INP:POS:Z:ANG:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -950,11 +950,11 @@ class InstrumentCommands():
         """Controls the velocity of the angular rotation around the z-axis.
         Parameters:
         value: The velocity value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:ANG:VEL {value}")
+        self.instrument.write(f":INP:POS:Z:ANG:VEL {value}")
 
     def get_input_position_z_angle_velocity(self) -> float:
         """Returns the velocity of the angular rotation around the z-axis."""
-        response = self.instrument.query("INP:POS:Z:ANG:VEL?").strip()
+        response = self.instrument.query(":INP:POS:Z:ANG:VEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -968,22 +968,22 @@ class InstrumentCommands():
         direction_upper = direction.upper()
         if direction_upper not in valid_directions:
             raise ValueError(f"Invalid direction: '{direction}'. Must be 'UP' or 'DOWN'.")
-        self.instrument.write(f"INP:POS:Z:DIST:DIR {direction_upper}")
+        self.instrument.write(f":INP:POS:Z:DIST:DIR {direction_upper}")
 
     def get_input_position_z_distance_direction(self) -> str:
         """Returns the direction of the movement for Z-axis linear distance ('UP' or 'DOWN')."""
-        response = self.instrument.query("INP:POS:Z:DIST:DIR?").strip().upper()
+        response = self.instrument.query(":INP:POS:Z:DIST:DIR?").strip().upper()
         return response
 
     def set_input_position_z_distance_immediate(self, value: float):
         """Indicates that the input is moved to the specified Z-axis linear distance position without waiting for further commands.
         Parameters:
         value: The immediate position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:DIST:IMM {value}")
+        self.instrument.write(f":INP:POS:Z:DIST:IMM {value}")
 
     def get_input_position_z_distance_immediate(self) -> float:
         """Returns the immediate position value for Z-axis linear distance."""
-        response = self.instrument.query("INP:POS:Z:DIST:IMM?").strip()
+        response = self.instrument.query(":INP:POS:Z:DIST:IMM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -993,11 +993,11 @@ class InstrumentCommands():
         """Sets the maximum for the Z-axis linear distance position limit.
         Parameters:
         value: The maximum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:DIST:LIM:HIGH {value}")
+        self.instrument.write(f":INP:POS:Z:DIST:LIM:HIGH {value}")
 
     def get_input_position_z_distance_limit_high(self) -> float:
         """Returns the maximum for the Z-axis linear distance position limit."""
-        response = self.instrument.query("INP:POS:Z:DIST:LIM:HIGH?").strip()
+        response = self.instrument.query(":INP:POS:Z:DIST:LIM:HIGH?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1007,11 +1007,11 @@ class InstrumentCommands():
         """Sets the minimum for the Z-axis linear distance position limit.
         Parameters:
         value: The minimum position value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:DIST:LIM:LOW {value}")
+        self.instrument.write(f":INP:POS:Z:DIST:LIM:LOW {value}")
 
     def get_input_position_z_distance_limit_low(self) -> float:
         """Returns the minimum for the Z-axis linear distance position limit."""
-        response = self.instrument.query("INP:POS:Z:DIST:LIM:LOW?").strip()
+        response = self.instrument.query(":INP:POS:Z:DIST:LIM:LOW?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1022,11 +1022,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to enable the limit, False to disable."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:POS:Z:DIST:LIM:STATE {scpi_value}")
+        self.instrument.write(f":INP:POS:Z:DIST:LIM:STATE {scpi_value}")
 
     def get_input_position_z_distance_limit_state(self) -> bool:
         """Returns True if the Z-axis linear distance limit is enabled, False if not."""
-        response = self.instrument.query("INP:POS:Z:DIST:LIM:STATE?").strip()
+        response = self.instrument.query(":INP:POS:Z:DIST:LIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -1038,11 +1038,11 @@ class InstrumentCommands():
         """Defines a single value that is subtracted from the physical Z-axis linear distance position.
         Parameters:
         value: The offset value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:DIST:OFFS {value}")
+        self.instrument.write(f":INP:POS:Z:DIST:OFFS {value}")
 
     def get_input_position_z_distance_offset(self) -> float:
         """Returns the offset value for the Z-axis linear distance position."""
-        response = self.instrument.query("INP:POS:Z:DIST:OFFS?").strip()
+        response = self.instrument.query(":INP:POS:Z:DIST:OFFS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1053,11 +1053,11 @@ class InstrumentCommands():
         """Controls the velocity of the displacement on the z-axis.
         Parameters:
         value: The velocity value (numeric value)."""
-        self.instrument.write(f"INP:POS:Z:DIST:VEL {value}")
+        self.instrument.write(f":INP:POS:Z:DIST:VEL {value}")
 
     def get_input_position_z_distance_velocity(self) -> float:
         """Returns the velocity of the displacement on the z-axis."""
-        response = self.instrument.query("INP:POS:Z:DIST:VEL?").strip()
+        response = self.instrument.query(":INP:POS:Z:DIST:VEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1068,11 +1068,11 @@ class InstrumentCommands():
         Parameters:
         enable: True to connect input terminal, False for maximum isolation."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"INP:STATE {scpi_value}")
+        self.instrument.write(f":INP:STATE {scpi_value}")
 
     def get_input_state(self) -> bool:
         """Returns True if the input terminal is connected to the measurement signal path, False if not."""
-        response = self.instrument.query("INP:STATE?").strip()
+        response = self.instrument.query(":INP:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -1093,11 +1093,11 @@ class InstrumentCommands():
         elif type_upper == "UNBALANCED": scpi_value = "UNB"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"INP:TYPE {scpi_value}")
+        self.instrument.write(f":INP:TYPE {scpi_value}")
 
     def get_input_type(self) -> str:
         """Returns the input characteristic being used ('BALANCED' or 'UNBALANCED')."""
-        response = self.instrument.query("INP:TYPE?").strip().upper()
+        response = self.instrument.query(":INP:TYPE?").strip().upper()
         if response.startswith("BAL"):
             return "BALANCED"
         elif response.startswith("UNB"):
