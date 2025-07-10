@@ -8,9 +8,11 @@ from time import sleep
 import pyvisa
 class RigolOscilloscope(instrument.Instrument):
 
-    def __init__(self, name):
+    def __init__(self, instru):
         
-        self.instrument = name
+        self.name = "Oscilloscope"
+        self.instrument = instru
+        self.generalInstrument = instrument(self.name, self.instrument)
     #General
     def autoscale(self):
         """Enable the waveform auto setting function. The oscilloscope will automatically adjust the
@@ -2604,17 +2606,9 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
                           Other sections (nnn) can be 0-255.
         """
         # Basic regex for IP address validation (simplified)
-        ip_pattern = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-        if re.match(ip_pattern, gateway_ip):
-            # Further specific validation for the first octet (0-223, except 127)
-            first_octet = int(gateway_ip.split('.')[0])
-            if (0 <= first_octet <= 223) and (first_octet != 127):
-                self.instrument.write(f":LAN:GATeway {gateway_ip}")
-            else:
-                print(f"Invalid first octet for gateway IP ({first_octet}). Must be 0-223 (except 127).")
-        else:
-            print(f"Invalid gateway IP format ({gateway_ip}). Expected 'nnn.nnn.nnn.nnn'.")
-
+       
+        self.instrument.write(f":LAN:GATeway {gateway_ip}")
+          
     def get_lan_gateway(self):
         """
         Query the current default gateway.
@@ -2634,17 +2628,9 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
                       The first section (nnn) can be 0-223 (except 127).
                       Other sections (nnn) can be 0-255.
         """
-        ip_pattern = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-        if re.match(ip_pattern, dns_ip):
-            # Further specific validation for the first octet (0-223, except 127)
-            first_octet = int(dns_ip.split('.')[0])
-            if (0 <= first_octet <= 223) and (first_octet != 127):
-                self.instrument.write(f":LAN:DNS {dns_ip}")
-            else:
-                print(f"Invalid first octet for DNS IP ({first_octet}). Must be 0-223 (except 127).")
-        else:
-            print(f"Invalid DNS IP format ({dns_ip}). Expected 'nnn.nnn.nnn.nnn'.")
-
+        
+        self.instrument.write(f":LAN:DNS {dns_ip}")
+       
     def get_lan_dns(self):
         """
         Query the current DNS address.
@@ -2701,17 +2687,9 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
                           The first section (nnn) can be 0-223 (except 127).
                           Other sections (nnn) can be 0-255.
         """
-        ip_pattern = r
-        "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-        if re.match(ip_pattern, ip_address):
-            # Further specific validation for the first octet (0-223, except 127)
-            first_octet = int(ip_address.split('.')[0])
-            if (0 <= first_octet <= 223) and (first_octet != 127):
-                self.instrument.write(f":LAN:IPADdress {ip_address}")
-            else:
-                print(f"Invalid first octet for IP address ({first_octet}). Must be 0-223 (except 127).")
-        else:
-            print(f"Invalid IP address format ({ip_address}). Expected 'nnn.nnn.nnn.nnn'.")
+        
+        self.instrument.write(f":LAN:IPADdress {ip_address}")
+
 
     def get_lan_ip_address(self):
         """
@@ -2731,12 +2709,9 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         subnet_mask (str): The subnet mask in "nnn.nnn.nnn.nnn" format.
                            Each section (nnn) can be 0-255.
         """
-        ip_pattern = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-        if re.match(ip_pattern, subnet_mask):
-            self.instrument.write(f":LAN:SMASK {subnet_mask}")
-        else:
-            print(f"Invalid subnet mask format ({subnet_mask}). Expected 'nnn.nnn.nnn.nnn'.")
 
+        self.instrument.write(f":LAN:SMASK {subnet_mask}")
+        
     def get_lan_subnet_mask(self):
         """
         Query the current subnet mask.
@@ -4531,42 +4506,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         response = self.instrument.query(":SYSTem:AUToscale?")
         return bool(int(response.strip()))
 
-    def set_system_beeper_enable(self, state):
-        """
-        Enable or disable the beeper.
-
-        Parameters:
-        state (bool): True to enable (1|ON), False to disable (0|OFF).
-        """
-        super().set_system_beeper_enable(state)
-
-    def get_system_beeper_enable(self):
-        """
-        Query the status of the beeper.
-
-        Returns:
-        bool: True if beeper is ON, False if OFF.
-        """
-        response = super().get_system_beeper_enable()
-        return bool(int(response.strip()))
-
-    def query_system_error(self):
-        """
-        Query and delete the last system error message.
-
-        Returns:
-        tuple: A tuple containing (message_number: int, message_content: str).
-               Example: (-113, "Undefined header; command cannot be found").
-        """
-        response = super().get_system_error
-        # Response format: -113,"Undefined header; command cannot be found"
-        match = re.match(r"(-?\d+),\"(.*)\"", response.strip())
-        if match:
-            return int(match.group(1)), match.group(2)
-        else:
-            print(f"Could not parse system error response: {response}")
-            return None, None
-
+    
     def query_system_horizontal_grids(self):
         """
         Query the number of grids in the horizontal direction of the instrument screen.
@@ -4577,35 +4517,7 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         response = self.instrument.query(":SYSTem:GAM?")
         return int(response.strip())
 
-    def set_system_language(self, lang):
-        """
-        Set the system language.
-
-        Parameters:
-        lang (str): The language, one of {"SCHinese", "TCHinese", "ENGLish", "PORTuguese",
-                                        "GERMan", "POLish", "KORean", "JAPAnese",
-                                        "FRENch", "RUSSian"}.
-        """
-        ''' valid_languages = {"SCHinese", "TCHinese", "ENGLish", "PORTuguese",
-                           "GERMan", "POLish", "KORean", "JAPAnese",
-                           "FRENch", "RUSSian"}
-        lang = lang.upper()
-        if lang in valid_languages:
-            self.instrument.write(f":SYSTem:LANGuage {lang}")
-        else:
-            print(f"Invalid language ({lang}). Choose from {valid_languages}.")'''
-        super().set_system_language(lang)
-
-    def get_system_language(self):
-        """
-        Query the system language.
-
-        Returns:
-        str: The language, one of {"SCH", "TCH", "ENGL", "PORT", "GERM", "POL",
-                                   "KOR", "JAPA", "FREN", "RUSS"}.
-        """
-        
-        return super().get_system_language()
+  
 
     def set_system_keyboard_lock(self, state):
         """
@@ -4890,23 +4802,6 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         response = self.instrument.query(":TRIGger:MODE?")
         return response.strip().upper()
 
-    def set_trigger_coupling(self, coupling_type):
-        """
-        Select the trigger coupling type.
-
-        Parameters:
-        coupling_type (str): The coupling type, one of {"AC", "DC", "LFReject", "HFReject"}.
-        """
-        super().set_trigger_sequence_coupling(coupling_type, None)
-
-    def get_trigger_coupling(self):
-        """
-        Query the trigger coupling type.
-
-        Returns:
-        str: The coupling type, one of {"AC", "DC", "LFR", "HFR"}.
-        """
-        return super().get_trigger_sequence_coupling(None)
 
     def get_trigger_status(self):
         """
@@ -4942,27 +4837,6 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         response = self.instrument.query(":TRIGger:SWEep?")
         return response.strip().upper()
 
-    def set_trigger_holdoff_time(self, value):
-        """
-        Set the trigger holdoff time. Default unit is s.
-
-        Parameters:
-        value (float): The holdoff time in seconds, from 16ns to 10s.
-        """
-        if isinstance(value, (float, int)) and 16e-9 <= value <= 10.0:
-            super().set_trigger_sequence_holdoff(value, None)
-        else:
-            print(f"Invalid holdoff time ({value}). Must be a float between 16ns and 10s.")
-
-    def get_trigger_holdoff_time(self):
-        """
-        Query the trigger holdoff time.
-
-        Returns:
-        float: The trigger holdoff time in scientific notation (seconds).
-        """
-        response = super().get_trigger_sequence_holdoff()
-        return response
 
     def set_trigger_noise_reject(self, state):
         """
@@ -5466,23 +5340,6 @@ amplitude of the waveform to view the signal details. State: {{1|ON}|{0|OFF}}"""
         """
         response = self.instrument.query(":TRIGger:VIDeo:MODE?")
         return response.strip().upper()
-
-    def set_trigger_video_line(self, line_number):
-        """
-        Set the line number when the sync type in video trigger is LINE.
-
-        Parameters:
-        line_number (int): The line number. Range depends on video standard (e.g., 1 to 525 for NTSC).
-        """
-        super().set_trigger_video_line(line_number, None)
-    def get_trigger_video_line(self):
-        """
-        Query the line number when the sync type in video trigger is LINE.
-
-        Returns:
-        int: The line number.
-        """
-        return super().get_trigger_video_line(None)
 
     def set_trigger_video_standard(self, standard):
         """

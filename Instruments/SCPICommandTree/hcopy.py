@@ -2,11 +2,11 @@ class HCopy:
     """
    
     """
-    def __init__(self, instrument_connection):
+    def __init__(self, instrument):
         """
     
         """
-        self.instrument = instrument_connection
+        self.instrument = instrument
 
     
 

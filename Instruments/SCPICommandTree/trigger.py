@@ -4,13 +4,13 @@ class Trigger:
     """
     
     """
-    def __init__(self):
+    def __init__(self,instrument):
         """
         Initializes the InstrumentControl with an instrument connection.
         :param instrument_connection: An object capable of sending/receiving
                                       SCPI commands (e.g., pyvisa resource).
         """
-        self.instrument = None
+        self.instrument = instrument
 
     
     def abort(self):

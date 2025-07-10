@@ -1,6 +1,6 @@
 class Calibration():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self, instrument):
+        self.instrument = instrument
         
     def calibrate_all(self):
         """Performs a full calibration of the instrument.

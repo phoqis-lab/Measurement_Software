@@ -1,6 +1,6 @@
 class Display():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
     def set_display_annotation_all(self, enable: bool):
         """Controls ALL of the annotation information.
         Parameters:

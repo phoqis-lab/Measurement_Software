@@ -1,6 +1,6 @@
 class Mmemory():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
     
     def get_mmemory_catalog(self, msus: str = None) -> tuple[int, int, list[dict]]:
         """Returns information on the current contents and state of the mass storage media.

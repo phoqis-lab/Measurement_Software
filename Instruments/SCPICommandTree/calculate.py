@@ -1,12 +1,12 @@
 class Calculate():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self, instrument):
+        self.instrument = instrument
     
     def clear_average_data(self):
         """Clears the average data and resets the average counter to zero."""
         self.instrument.write(":CALC:AVER:CLE")
 
-    def set_count_of_results_in_average(self, auto: bool, count: int, once: bool = False):
+    def enable_count_of_results_in_average(self, auto: bool, count: int, once: bool = False):
         """Specifies the number of measurements to combine.
         Parameters:
         auto: True to enable auto-counting, False for manual count.
@@ -34,7 +34,7 @@ class Calculate():
 
         return count, auto_response
 
-    def set_averaging(self, turn_on: bool):
+    def enable_averaging(self, turn_on: bool):
         """Turns averaging ON or OFF.
         Parameters:
         turn_on: True to turn averaging ON, False to turn averaging OFF."""
@@ -53,7 +53,7 @@ class Calculate():
         else:
             raise ValueError(f"Unexpected response for averaging state: '{response}'") # Retain error for robustness
             
-    def make_average_weighted(self, update: str = "NORM"):
+    def set_average_weight_scheme(self, update: str = "NORM"):
         """Set how to update average when new data points are added to it.
         Parameters:
         update: EXPonential|MOVing|NORMal|REPeat"""
@@ -69,7 +69,7 @@ class Calculate():
         elif update_upper == "NORMAL": update_upper = "NORM"
         elif update_upper == "REPEAT": update_upper = "REP"
 
-        self.instrument.write(f"CALCulate:AVERage:TCONtrol {update_upper}")
+        self.instrument.write(f"CALC:AVER:TCON {update_upper}")
 
     def get_how_average_weighted(self) -> str:
         """Returns how the average is updated when new data points are added to it."""

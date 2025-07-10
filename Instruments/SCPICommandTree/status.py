@@ -5,9 +5,9 @@ class Status:
     Assumes 'self.instrument' is an object with 'write' and 'query' methods
     that handle communication with the physical instrument.
     """
-    def __init__(self):
+    def __init__(self,instrument):
 
-        self.instrument = None
+        self.instrument = instrument
 
     # --- Functions for general STATUS commands (Applicable to OPERation, QUEStionable, etc.) ---
     # These functions are designed to be generic and can be called with a specific register path.

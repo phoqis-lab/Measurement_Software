@@ -37,9 +37,9 @@ class Instrument(calculate.Calculate, calibration.Calibration, control.Control, 
                   mmemory.Mmemory, output.Output, route.Route, sense.Sense, source.Source, status.Status,
                   system.System, trace.Trace, trigger.Trigger, unit.Unit, vxi.VXI): 
 
-    def __init__(self, name):
+    def __init__(self, name, instrument):
         self.name = name
-        self.instrument = None
+        self.instrument = instrument
         self.saved_output_path = ""
 
     #Mandatory Commands

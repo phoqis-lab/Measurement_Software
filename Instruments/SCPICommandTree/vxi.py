@@ -4,11 +4,11 @@ class VXI:
     """
     
     """
-    def __init__(self, instrument_connection):
+    def __init__(self, instrument):
         """
        
         """
-        self.instrument = instrument_connection
+        self.instrument = instrument
 
     
     def get_vxi_configure_dnumber(self) -> int:

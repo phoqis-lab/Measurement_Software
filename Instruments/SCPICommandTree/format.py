@@ -1,6 +1,6 @@
 class Format():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
         
     def set_format_border(self, byte_order: str):
         """Controls whether binary data is transferred in normal or swapped byte order.

@@ -4,13 +4,13 @@ class Data:
     Assumes 'self.instrument' is an object with 'write' and 'query' methods
     that handle communication with the physical instrument.
     """
-    def __init__(self):
+    def __init__(self, instrument):
         """
         Initializes the InstrumentControl with an instrument connection.
         :param instrument_connection: An object capable of sending/receiving
                                       SCPI commands (e.g., pyvisa resource).
         """
-        self.instrument = None
+        self.instrument = instrument
 
     
     def get_data_catalog(self) -> list[str]:

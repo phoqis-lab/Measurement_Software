@@ -2,11 +2,11 @@ class Unit:
     """
     
     """
-    def __init__(self, instrument_connection):
+    def __init__(self, instrument):
         """
         
         """
-        self.instrument = None
+        self.instrument = instrument
 
     
     def set_unit_angle(self, unit_type: str):

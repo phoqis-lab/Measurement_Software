@@ -2,11 +2,11 @@ class System:
     """
     TODO: Add the description
     """
-    def __init__(self):
+    def __init__(self,instrument):
         """
     
         """
-        self.instrument = None
+        self.instrument = instrument
 
     
     def set_system_alternate(self, value: int):

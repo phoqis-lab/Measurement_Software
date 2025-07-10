@@ -1,6 +1,6 @@
 class Memory():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
 
     def get_memory_catalog(self) -> tuple[int, int, list[dict]]:
         """Returns information on the current contents and state of the instrument's memory.

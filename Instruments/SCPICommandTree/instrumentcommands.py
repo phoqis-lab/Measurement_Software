@@ -1,6 +1,6 @@
 class InstrumentCommands():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
     
 
     def set_input_attenuation(self, value: float):

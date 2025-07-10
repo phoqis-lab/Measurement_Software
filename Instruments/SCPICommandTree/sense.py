@@ -1,6 +1,6 @@
 class Sense():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
     
      
     def set_sense_am_depth_range_auto(self, auto_state: str):

@@ -16,6 +16,7 @@ print(ro.clear())
 print(ro.get_system_beeper_enable())
 ro.set_system_beeper_enable(0)
 print(ro.get_system_beeper_enable())
+ro.__data_copy("test", "test")
 
 
 

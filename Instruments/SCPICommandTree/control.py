@@ -1,6 +1,6 @@
 class Control():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self, instrument):
+        self.instrument = instrument
     
     def set_apower_state(self, enable: bool):
         """Turns the Auxiliary Power ON and OFF.

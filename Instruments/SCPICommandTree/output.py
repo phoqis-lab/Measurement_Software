@@ -1,6 +1,6 @@
 class Output():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
 
     def set_output_attenuation(self, value: float):
         """Sets the output attenuation level.

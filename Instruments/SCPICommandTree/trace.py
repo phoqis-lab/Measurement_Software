@@ -4,13 +4,13 @@ class Trace:
     Assumes 'self.instrument' is an object with 'write' and 'query' methods
     that handle communication with the physical instrument.
     """
-    def __init__(self, instrument_connection):
+    def __init__(self, instrument):
         """
         Initializes the InstrumentControl with an instrument connection.
         :param instrument_connection: An object capable of sending/receiving
                                       SCPI commands (e.g., pyvisa resource).
         """
-        self.instrument = instrument_connection
+        self.instrument = instrument
 
     
     def get_trace_catalog(self) -> list[str]:

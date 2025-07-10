@@ -1,6 +1,6 @@
 class Route():
-    def __init__(self):
-        self.instrument = None
+    def __init__(self,instrument):
+        self.instrument = instrument
    
 
     def close_route_channel(self, channel_list: str):
