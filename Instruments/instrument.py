@@ -7,29 +7,29 @@ from time import sleep
 from time import sleep
 import pyvisa
 
-from SCPICommandTree import calculate
-from SCPICommandTree import calibration
-from SCPICommandTree import control
-from SCPICommandTree import data
-from SCPICommandTree import display
-from SCPICommandTree import format
-from SCPICommandTree import hcopy
-from SCPICommandTree import input
-from SCPICommandTree import instrumentcommands
-from SCPICommandTree import measure
-from SCPICommandTree import memory
-from SCPICommandTree import mmemory
-from SCPICommandTree import output
-from SCPICommandTree import program
-from SCPICommandTree import route
-from SCPICommandTree import sense
-from SCPICommandTree import source
-from SCPICommandTree import status
-from SCPICommandTree import system
-from SCPICommandTree import trace
-from SCPICommandTree import trigger
-from SCPICommandTree import unit
-from SCPICommandTree import vxi
+from Instruments.SCPICommandTree import calculate
+from Instruments.SCPICommandTree import calibration
+from Instruments.SCPICommandTree import control
+from Instruments.SCPICommandTree import data
+from Instruments.SCPICommandTree import display
+from Instruments.SCPICommandTree import format
+from Instruments.SCPICommandTree import hcopy
+from Instruments.SCPICommandTree import input
+from Instruments.SCPICommandTree import instrumentcommands
+from Instruments.SCPICommandTree import measure
+from Instruments.SCPICommandTree import memory
+from Instruments.SCPICommandTree import mmemory
+from Instruments.SCPICommandTree import output
+from Instruments.SCPICommandTree import program
+from Instruments.SCPICommandTree import route
+from Instruments.SCPICommandTree import sense
+from Instruments.SCPICommandTree import source
+from Instruments.SCPICommandTree import status
+from Instruments.SCPICommandTree import system
+from Instruments.SCPICommandTree import trace
+from Instruments.SCPICommandTree import trigger
+from Instruments.SCPICommandTree import unit
+from Instruments.SCPICommandTree import vxi
 
 
 class Instrument(calculate.Calculate, calibration.Calibration, control.Control, data.Data, display.Display,

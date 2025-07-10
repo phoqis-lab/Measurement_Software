@@ -19,14 +19,14 @@ class Unit:
         type_upper = unit_type.upper()
         if type_upper not in valid_types:
             raise ValueError(f"Invalid angle unit: '{unit_type}'. Must be 'DEG' or 'RAD'.")
-        self.instrument.write(f"UNIT:ANG {type_upper}")
+        self.instrument.write(f":UNIT:ANG {type_upper}")
 
     def get_unit_angle(self) -> str:
         """
         Queries the fundamental unit of angle.
         :return: The angle unit ("DEG" or "RAD").
         """
-        response = self.instrument.query("UNIT:ANG?").strip().upper()
+        response = self.instrument.query(":UNIT:ANG?").strip().upper()
         return response
 
     def set_unit_current(self, amplitude_unit: str):
@@ -41,14 +41,14 @@ class Unit:
         # However, a basic check for non-empty string is good.
         if not amplitude_unit:
             raise ValueError("Amplitude unit cannot be empty.")
-        self.instrument.write(f"UNIT:CURR {amplitude_unit}")
+        self.instrument.write(f":UNIT:CURR {amplitude_unit}")
 
     def get_unit_current(self) -> str:
         """
         Queries the default unit for commands which program absolute amplitude for current.
         :return: The amplitude unit string.
         """
-        response = self.instrument.query("UNIT:CURR?").strip()
+        response = self.instrument.query(":UNIT:CURR?").strip()
         return response
 
     def set_unit_power(self, amplitude_unit: str):
@@ -60,14 +60,14 @@ class Unit:
         """
         if not amplitude_unit:
             raise ValueError("Amplitude unit cannot be empty.")
-        self.instrument.write(f"UNIT:POW {amplitude_unit}")
+        self.instrument.write(f":UNIT:POW {amplitude_unit}")
 
     def get_unit_power(self) -> str:
         """
         Queries the default unit for commands which program absolute amplitude for power.
         :return: The amplitude unit string.
         """
-        response = self.instrument.query("UNIT:POW?").strip()
+        response = self.instrument.query(":UNIT:POW?").strip()
         return response
 
     
@@ -90,14 +90,14 @@ class Unit:
         elif type_upper == "F": scpi_value = "F" # Explicitly keep F if that's the intention
         else: scpi_value = type_upper
 
-        self.instrument.write(f"UNIT:TEMP {scpi_value}")
+        self.instrument.write(f":UNIT:TEMP {scpi_value}")
 
     def get_unit_temperature(self) -> str:
         """
         Queries the fundamental unit of temperature.
         :return: The temperature unit ("C", "CEL", "F", "FAR", or "K").
         """
-        response = self.instrument.query("UNIT:TEMP?").strip().upper()
+        response = self.instrument.query(":UNIT:TEMP?").strip().upper()
         return response
 
     def set_unit_time(self, unit_type: str):
@@ -115,14 +115,14 @@ class Unit:
         elif type_upper.startswith("SEC"): scpi_value = "SEC"
         else: scpi_value = type_upper
 
-        self.instrument.write(f"UNIT:TIME {scpi_value}")
+        self.instrument.write(f":UNIT:TIME {scpi_value}")
 
     def get_unit_time(self) -> str:
         """
         Queries the fundamental unit of time.
         :return: The time unit ("HOUR", "MINute", or "SECond").
         """
-        response = self.instrument.query("UNIT:TIME?").strip().upper()
+        response = self.instrument.query(":UNIT:TIME?").strip().upper()
         if response.startswith("MIN"): return "MINute"
         if response.startswith("SEC"): return "SECond"
         return response
@@ -136,12 +136,12 @@ class Unit:
         """
         if not amplitude_unit:
             raise ValueError("Amplitude unit cannot be empty.")
-        self.instrument.write(f"UNIT:VOLT {amplitude_unit}")
+        self.instrument.write(f":UNIT:VOLT {amplitude_unit}")
 
     def get_unit_voltage(self) -> str:
         """
         Queries the default unit for commands which program absolute amplitude for voltage.
         :return: The amplitude unit string.
         """
-        response = self.instrument.query("UNIT:VOLT?").strip()
+        response = self.instrument.query(":UNIT:VOLT?").strip()
         return response

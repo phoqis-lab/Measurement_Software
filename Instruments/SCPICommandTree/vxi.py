@@ -16,7 +16,7 @@ class VXI:
         Returns the number of devices in the system.
         :return: The number of devices (1 to 256 inclusive).
         """
-        response = self.instrument.query("VXI:CONF:DNUM?").strip()
+        response = self.instrument.query(":VXI:CONF:DNUM?").strip()
         try:
             return int(response)
         except ValueError:
@@ -29,7 +29,7 @@ class VXI:
                  Fields: 'logical_address', 'commander_logical_address', 'interrupt_handlers',
                          'interrupters', 'pass_failed', 'manufacturer_comment'.
         """
-        response = self.instrument.query("VXI:CONF:HIER?").strip()
+        response = self.instrument.query(":VXI:CONF:HIER?").strip()
         parts = response.split(',')
         if len(parts) < 13: # Minimum expected parts based on documentation
             raise ValueError(f"Unexpected response format for VXI HIERarchy: '{response}'")
@@ -72,7 +72,7 @@ class VXI:
         Information for multiple logical addresses is semicolon-separated.
         :return: A list of dictionaries, each containing hierarchy information for a device.
         """
-        response = self.instrument.query("VXI:CONF:HIER:ALL?").strip()
+        response = self.instrument.query(":VXI:CONF:HIER:ALL?").strip()
         device_configs = []
         # Responses for multiple devices are semicolon-separated
         raw_devices = response.split(';')
@@ -120,7 +120,7 @@ class VXI:
         The format of this string is manufacturer specific.
         :return: The verbose hierarchy information string.
         """
-        response = self.instrument.query("VXI:CONF:HIER:VERB?").strip()
+        response = self.instrument.query(":VXI:CONF:HIER:VERB?").strip()
         # The response is a quoted string
         if response.startswith('"') and response.endswith('"'):
             return response[1:-1]
@@ -132,7 +132,7 @@ class VXI:
         The format of each string is manufacturer specific.
         :return: A list of verbose hierarchy information strings.
         """
-        response = self.instrument.query("VXI:CONF:HIER:VERB:ALL?").strip()
+        response = self.instrument.query(":VXI:CONF:HIER:VERB:ALL?").strip()
         # Responses for multiple devices are semicolon-separated, and each is a quoted string.
         raw_strings = response.split(';')
         return [s.strip().strip('"') for s in raw_strings if s.strip()]
@@ -146,7 +146,7 @@ class VXI:
                  'a32_memory_offset', 'a16_memory_size', 'a24_memory_size', 'a32_memory_size',
                  'slot_number', 'slot0_logical_address', 'subclass', 'attribute', 'manufacturer_comment'.
         """
-        response = self.instrument.query("VXI:CONF:INF?").strip()
+        response = self.instrument.query(":VXI:CONF:INF?").strip()
         parts = response.split(',')
         if len(parts) < 15: # Minimum expected parts
             raise ValueError(f"Unexpected response format for VXI INF (too few parts): '{response}'")
@@ -207,7 +207,7 @@ class VXI:
         Information for multiple logical addresses is semicolon-separated.
         :return: A list of dictionaries, each containing static information for a device.
         """
-        response = self.instrument.query("VXI:CONF:INF:ALL?").strip()
+        response = self.instrument.query(":VXI:CONF:INF:ALL?").strip()
         device_infos = []
         raw_devices = response.split(';')
         for raw_device_response in raw_devices:
@@ -272,7 +272,7 @@ class VXI:
         The format of this string is manufacturer specific.
         :return: The verbose information string.
         """
-        response = self.instrument.query("VXI:CONF:INF:VERB?").strip()
+        response = self.instrument.query(":VXI:CONF:INF:VERB?").strip()
         if response.startswith('"') and response.endswith('"'):
             return response[1:-1]
         return response
@@ -283,7 +283,7 @@ class VXI:
         The format of each string is manufacturer specific.
         :return: A list of verbose information strings.
         """
-        response = self.instrument.query("VXI:CONF:INF:VERB:ALL?").strip()
+        response = self.instrument.query(":VXI:CONF:INF:VERB:ALL?").strip()
         raw_strings = response.split(';')
         return [s.strip().strip('"') for s in raw_strings if s.strip()]
 
@@ -296,7 +296,7 @@ class VXI:
         followed by list of immediate servants.
         :return: A list of logical addresses (0 to 255 inclusive).
         """
-        response = self.instrument.query("VXI:CONF:LADD?").strip()
+        response = self.instrument.query(":VXI:CONF:LADD?").strip()
         try:
             return [int(addr) for addr in response.split(',') if addr.strip()]
         except ValueError:
@@ -309,7 +309,7 @@ class VXI:
         including the destination device itself.
         :return: The number of devices (1 to 256 inclusive).
         """
-        response = self.instrument.query("VXI:CONF:NUMB?").strip()
+        response = self.instrument.query(":VXI:CONF:NUMB?").strip()
         try:
             return int(response)
         except ValueError:
@@ -337,11 +337,11 @@ class VXI:
                 "VNUMBER": "VNUM"
             }
             mapped_id = register_id_map.get(register_id.upper(), register_id)
-            query_cmd = f"VXI:REG:READ? {mapped_id}"
+            query_cmd = f":VXI:REG:READ? {mapped_id}"
         elif isinstance(register_id, int):
             if register_id % 2 != 0 or not (0 <= register_id <= 62):
                 raise ValueError("Register byte address must be an even number from 0 to 62.")
-            query_cmd = f"VXI:REG:READ? {register_id}"
+            query_cmd = f":VXI:REG:READ? {register_id}"
         else:
             raise TypeError("register_id must be an integer (byte address) or a string (register name).")
 
@@ -368,11 +368,11 @@ class VXI:
                 "VNUMBER": "VNUM"
             }
             mapped_id = register_id_map.get(register_id.upper(), register_id)
-            query_cmd = f"VXI:REG:READ:VERB? {mapped_id}"
+            query_cmd = f":VXI:REG:READ:VERB? {mapped_id}"
         elif isinstance(register_id, int):
             if register_id % 2 != 0 or not (0 <= register_id <= 62):
                 raise ValueError("Register byte address must be an even number from 0 to 62.")
-            query_cmd = f"VXI:REG:READ:VERB? {register_id}"
+            query_cmd = f":VXI:REG:READ:VERB? {register_id}"
         else:
             raise TypeError("register_id must be an integer (byte address) or a string (register name).")
 
@@ -400,11 +400,11 @@ class VXI:
                 "LADDRESS": "LADD", "OFFSET": "OFFS", "SIGNAL": "SIGN"
             }
             mapped_id = register_id_map.get(register_id.upper(), register_id)
-            write_cmd = f"VXI:REG:WRITE {mapped_id},{data}"
+            write_cmd = f":VXI:REG:WRITE {mapped_id},{data}"
         elif isinstance(register_id, int):
             if register_id % 2 != 0 or not (0 <= register_id <= 62):
                 raise ValueError("Register byte address must be an even number from 0 to 62.")
-            write_cmd = f"VXI:REG:WRITE {register_id},{data}"
+            write_cmd = f":VXI:REG:WRITE {register_id},{data}"
         else:
             raise TypeError("register_id must be an integer (byte address) or a string (register name).")
 
@@ -417,7 +417,7 @@ class VXI:
         The command waits for five seconds or until the selected device has indicated passed (whichever occurs first).
         :return: The state of the selected device after reset (FAIL=0, PASS=2, READY=3).
         """
-        response = self.instrument.query("VXI:RES?").strip()
+        response = self.instrument.query(":VXI:RES?").strip()
         try:
             return int(response)
         except ValueError:
@@ -429,7 +429,7 @@ class VXI:
         The format of this string is manufacturer specific.
         :return: The verbose reset state string.
         """
-        response = self.instrument.query("VXI:RES:VERB?").strip()
+        response = self.instrument.query(":VXI:RES:VERB?").strip()
         if response.startswith('"') and response.endswith('"'):
             return response[1:-1]
         return response
@@ -444,14 +444,14 @@ class VXI:
         """
         if not (0 <= logical_address <= 255):
             raise ValueError("Logical address must be between 0 and 255.")
-        self.instrument.write(f"VXI:SEL {logical_address}")
+        self.instrument.write(f":VXI:SEL {logical_address}")
 
     def get_vxi_select(self) -> int:
         """
         Queries the currently selected logical address.
         :return: The logical address (0 to 255), or -1 if no logical address has been selected.
         """
-        response = self.instrument.query("VXI:SEL?").strip()
+        response = self.instrument.query(":VXI:SEL?").strip()
         try:
             return int(response)
         except ValueError:
@@ -464,7 +464,7 @@ class VXI:
         :param data: The numeric or non-decimal value specifying the command to be sent.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write(f"VXI:WSPR:COMM:ANY {data}")
+        self.instrument.write(f":VXI:WSPR:COMM:ANY {data}")
 
     def vxi_wsprotocol_command_ahiline(self, hand_id: int, line_number: int):
         """
@@ -477,7 +477,7 @@ class VXI:
             raise ValueError("hand_id must be between 1 and 7.")
         if not (0 <= line_number <= 7):
             raise ValueError("line_number must be between 0 and 7.")
-        self.instrument.write(f"VXI:WSPR:COMM:AHIL {hand_id},{line_number}")
+        self.instrument.write(f":VXI:WSPR:COMM:AHIL {hand_id},{line_number}")
 
     def vxi_wsprotocol_command_ailine(self, int_id: int, line_number: int):
         """
@@ -490,7 +490,7 @@ class VXI:
             raise ValueError("int_id must be between 1 and 7.")
         if not (0 <= line_number <= 7):
             raise ValueError("line_number must be between 0 and 7.")
-        self.instrument.write(f"VXI:WSPR:COMM:AIL {int_id},{line_number}")
+        self.instrument.write(f":VXI:WSPR:COMM:AIL {int_id},{line_number}")
 
     
     def vxi_wsprotocol_command_amcontrol(self, response_mask: int):
@@ -501,14 +501,14 @@ class VXI:
         """
         if not (0 <= response_mask <= 15):
             raise ValueError("response_mask must be between 0 and 15.")
-        self.instrument.write(f"VXI:WSPR:COMM:AMCON {response_mask}")
+        self.instrument.write(f":VXI:WSPR:COMM:AMCON {response_mask}")
 
     def vxi_wsprotocol_command_ano(self):
         """
         Sends an Abort Normal Operation command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:ANO")
+        self.instrument.write(":VXI:WSPR:COMM:ANO")
 
     def vxi_wsprotocol_command_bavailable(self, boolean_field: bool, byte_value: int):
         """
@@ -519,7 +519,7 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= byte_value <= 255):
             raise ValueError("byte_value must be between 0 and 255.")
-        self.instrument.write(f"VXI:WSPR:COMM:BAV {scpi_bool},{byte_value}")
+        self.instrument.write(f":VXI:WSPR:COMM:BAV {scpi_bool},{byte_value}")
 
     def vxi_wsprotocol_command_bno(self, boolean_field: bool):
         """
@@ -528,14 +528,14 @@ class VXI:
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
         scpi_bool = "1" if boolean_field else "0"
-        self.instrument.write(f"VXI:WSPR:COMM:BNO {scpi_bool}")
+        self.instrument.write(f":VXI:WSPR:COMM:BNO {scpi_bool}")
 
     def vxi_wsprotocol_command_brq(self):
         """
         Sends a Byte Request command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:BRQ")
+        self.instrument.write(":VXI:WSPR:COMM:BRQ")
 
     def vxi_wsprotocol_command_cevent(self, boolean_field: bool, event_number: int):
         """
@@ -547,20 +547,20 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= event_number <= 127):
             raise ValueError("event_number must be between 0 and 127.")
-        self.instrument.write(f"VXI:WSPR:COMM:CEV {scpi_bool},{event_number}")
+        self.instrument.write(f":VXI:WSPR:COMM:CEV {scpi_bool},{event_number}")
 
     def vxi_wsprotocol_command_clr(self):
         """
         Sends a Clear command to the selected logical address.
         """
-        self.instrument.write("VXI:WSPR:COMM:CLR")
+        self.instrument.write(":VXI:WSPR:COMM:CLR")
 
     
     def vxi_wsprotocol_command_clock(self):
         """
         Sends a Clear Lock command to the selected logical address.
         """
-        self.instrument.write("VXI:WSPR:COMM:CLOC")
+        self.instrument.write(":VXI:WSPR:COMM:CLOC")
 
     def vxi_wsprotocol_command_cresponse(self, response_mask: int):
         """
@@ -570,14 +570,14 @@ class VXI:
         """
         if not (0 <= response_mask <= 127):
             raise ValueError("response_mask must be between 0 and 127.")
-        self.instrument.write(f"VXI:WSPR:COMM:CRES {response_mask}")
+        self.instrument.write(f":VXI:WSPR:COMM:CRES {response_mask}")
 
     def vxi_wsprotocol_command_eno(self):
         """
         Sends an End Normal Operation command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:ENO")
+        self.instrument.write(":VXI:WSPR:COMM:ENO")
 
     def vxi_wsprotocol_command_gdevice(self, logical_address: int):
         """
@@ -586,7 +586,7 @@ class VXI:
         """
         if not (0 <= logical_address <= 255):
             raise ValueError("logical_address must be between 0 and 255.")
-        self.instrument.write(f"VXI:WSPR:COMM:GDEV {logical_address}")
+        self.instrument.write(f":VXI:WSPR:COMM:GDEV {logical_address}")
 
     def vxi_wsprotocol_command_icommand(self, logical_address: int):
         """
@@ -595,7 +595,7 @@ class VXI:
         """
         if not (0 <= logical_address <= 255):
             raise ValueError("logical_address must be between 0 and 255.")
-        self.instrument.write(f"VXI:WSPR:COMM:ICOM {logical_address}")
+        self.instrument.write(f":VXI:WSPR:COMM:ICOM {logical_address}")
 
     def vxi_wsprotocol_command_rdevice(self, logical_address: int):
         """
@@ -605,14 +605,14 @@ class VXI:
         """
         if not (0 <= logical_address <= 255):
             raise ValueError("logical_address must be between 0 and 255.")
-        self.instrument.write(f"VXI:WSPR:COMM:RDEV {logical_address}")
+        self.instrument.write(f":VXI:WSPR:COMM:RDEV {logical_address}")
 
     def vxi_wsprotocol_command_rhandlers(self):
         """
         Sends a Read Handlers command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RHAN")
+        self.instrument.write(":VXI:WSPR:COMM:RHAN")
 
     
     def vxi_wsprotocol_command_rhline(self, hand_id: int):
@@ -623,7 +623,7 @@ class VXI:
         """
         if not (1 <= hand_id <= 7):
             raise ValueError("hand_id must be between 1 and 7.")
-        self.instrument.write(f"VXI:WSPR:COMM:RHL {hand_id}")
+        self.instrument.write(f":VXI:WSPR:COMM:RHL {hand_id}")
 
     def vxi_wsprotocol_command_riline(self, int_id: int):
         """
@@ -633,42 +633,42 @@ class VXI:
         """
         if not (1 <= int_id <= 7):
             raise ValueError("int_id must be between 1 and 7.")
-        self.instrument.write(f"VXI:WSPR:COMM:RIL {int_id}")
+        self.instrument.write(f":VXI:WSPR:COMM:RIL {int_id}")
 
     def vxi_wsprotocol_command_rinterrupter(self):
         """
         Sends a Read Interrupters command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RINT")
+        self.instrument.write(":VXI:WSPR:COMM:RINT")
 
     def vxi_wsprotocol_command_rmodid(self):
         """
         Sends a Read MODid command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RMOD")
+        self.instrument.write(":VXI:WSPR:COMM:RMOD")
 
     def vxi_wsprotocol_command_rperror(self):
         """
         Sends a Read Protocol Error command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RPER")
+        self.instrument.write(":VXI:WSPR:COMM:RPER")
 
     def vxi_wsprotocol_command_rprotocol(self):
         """
         Sends a Read Protocol command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RPR")
+        self.instrument.write(":VXI:WSPR:COMM:RPR")
 
     def vxi_wsprotocol_command_rstb(self):
         """
         Sends a Read Status Byte command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RSTB")
+        self.instrument.write(":VXI:WSPR:COMM:RSTB")
 
     
     def vxi_wsprotocol_command_rsarea(self):
@@ -676,7 +676,7 @@ class VXI:
         Sends a Read Servant Area command to the selected logical address.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        self.instrument.write("VXI:WSPR:COMM:RSAR")
+        self.instrument.write(":VXI:WSPR:COMM:RSAR")
 
     def vxi_wsprotocol_command_slmodid(self, boolean_field: bool, modid_value: int):
         """
@@ -688,13 +688,13 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= modid_value <= 127):
             raise ValueError("MODID 6-0 value must be between 0 and 127.")
-        self.instrument.write(f"VXI:WSPR:COMM:SLMOD {scpi_bool},{modid_value}")
+        self.instrument.write(f":VXI:WSPR:COMM:SLMOD {scpi_bool},{modid_value}")
 
     def vxi_wsprotocol_command_slock(self):
         """
         Sends a Set Lock command to the selected logical address.
         """
-        self.instrument.write("VXI:WSPR:COMM:SLOC")
+        self.instrument.write(":VXI:WSPR:COMM:SLOC")
 
     def vxi_wsprotocol_command_sumodid(self, boolean_field: bool, modid_value: int):
         """
@@ -706,13 +706,13 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= modid_value <= 63):
             raise ValueError("MODID 12-7 value must be between 0 and 63.")
-        self.instrument.write(f"VXI:WSPR:COMM:SUMOD {scpi_bool},{modid_value}")
+        self.instrument.write(f":VXI:WSPR:COMM:SUMOD {scpi_bool},{modid_value}")
 
     def vxi_wsprotocol_command_trigger(self):
         """
         Sends a Trigger command to the selected logical address.
         """
-        self.instrument.write("VXI:WSPR:COMM:TRIG")
+        self.instrument.write(":VXI:WSPR:COMM:TRIG")
 
     
     def get_vxi_wsprotocol_message_receive(self, count_or_terminator):
@@ -723,11 +723,11 @@ class VXI:
         :return: The received message as a string.
         """
         if count_or_terminator is None:
-            query_cmd = "VXI:WSPR:MESS:REC?"
+            query_cmd = ":VXI:WSPR:MESS:REC?"
         elif isinstance(count_or_terminator, int):
-            query_cmd = f"VXI:WSPR:MESS:REC? {count_or_terminator}"
+            query_cmd = f":VXI:WSPR:MESS:REC? {count_or_terminator}"
         elif isinstance(count_or_terminator, str):
-            query_cmd = f"VXI:WSPR:MESS:REC? {count_or_terminator.upper()}"
+            query_cmd = f":VXI:WSPR:MESS:REC? {count_or_terminator.upper()}"
         else:
             raise TypeError("count_or_terminator must be an integer or a string.")
         
@@ -745,7 +745,7 @@ class VXI:
         if end_bit_upper not in valid_end_bits:
             raise ValueError(f"Invalid end_bit: '{end_bit}'. Must be 'END' or 'NEND'.")
         
-        send_cmd = f"VXI:WSPR:MESS:SEND '{message_string}'"
+        send_cmd = f":VXI:WSPR:MESS:SEND '{message_string}'"
         if end_bit_upper == "NEND":
             send_cmd += ",NEND"
         self.instrument.write(send_cmd)
@@ -757,7 +757,7 @@ class VXI:
         :param data: The numeric or non-decimal value specifying the query to be sent.
         :return: The response to the word serial query as an integer.
         """
-        response = self.instrument.query(f"VXI:WSPR:QUER:ANY? {data}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:ANY? {data}").strip()
         try:
             return int(response)
         except ValueError:
@@ -774,7 +774,7 @@ class VXI:
             raise ValueError("hand_id must be between 1 and 7.")
         if not (0 <= line_number <= 7):
             raise ValueError("line_number must be between 0 and 7.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:AHIL? {hand_id},{line_number}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:AHIL? {hand_id},{line_number}").strip()
         try:
             return int(response)
         except ValueError:
@@ -791,7 +791,7 @@ class VXI:
             raise ValueError("int_id must be between 1 and 7.")
         if not (0 <= line_number <= 7):
             raise ValueError("line_number must be between 0 and 7.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:AIL? {int_id},{line_number}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:AIL? {int_id},{line_number}").strip()
         try:
             return int(response)
         except ValueError:
@@ -805,7 +805,7 @@ class VXI:
         """
         if not (0 <= response_mask <= 15):
             raise ValueError("response_mask must be between 0 and 15.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:AMCON? {response_mask}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:AMCON? {response_mask}").strip()
         try:
             return int(response)
         except ValueError:
@@ -816,7 +816,7 @@ class VXI:
         Sends an Abort Normal Operation command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:ANO?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:ANO?").strip()
         try:
             return int(response)
         except ValueError:
@@ -829,7 +829,7 @@ class VXI:
         :return: The response to the command as an integer.
         """
         scpi_bool = "1" if boolean_field else "0"
-        response = self.instrument.query(f"VXI:WSPR:QUER:BNO? {scpi_bool}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:BNO? {scpi_bool}").strip()
         try:
             return int(response)
         except ValueError:
@@ -841,7 +841,7 @@ class VXI:
         Sends a Byte Request command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:BRQ?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:BRQ?").strip()
         try:
             return int(response)
         except ValueError:
@@ -857,7 +857,7 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= event_number <= 127):
             raise ValueError("event_number must be between 0 and 127.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:CEV? {scpi_bool},{event_number}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:CEV? {scpi_bool},{event_number}").strip()
         try:
             return int(response)
         except ValueError:
@@ -871,7 +871,7 @@ class VXI:
         """
         if not (0 <= response_mask <= 127):
             raise ValueError("response_mask must be between 0 and 127.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:CRES? {response_mask}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:CRES? {response_mask}").strip()
         try:
             return int(response)
         except ValueError:
@@ -882,7 +882,7 @@ class VXI:
         Sends an End Normal Operation command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:ENO?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:ENO?").strip()
         try:
             return int(response)
         except ValueError:
@@ -896,7 +896,7 @@ class VXI:
         """
         if not (0 <= logical_address <= 255):
             raise ValueError("logical_address must be between 0 and 255.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:RDEV? {logical_address}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:RDEV? {logical_address}").strip()
         try:
             return int(response)
         except ValueError:
@@ -907,7 +907,7 @@ class VXI:
         Sends a Read Handlers command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RHAN?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RHAN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -921,7 +921,7 @@ class VXI:
         """
         if not (1 <= hand_id <= 7):
             raise ValueError("hand_id must be between 1 and 7.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:RHL? {hand_id}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:RHL? {hand_id}").strip()
         try:
             return int(response)
         except ValueError:
@@ -936,7 +936,7 @@ class VXI:
         """
         if not (1 <= int_id <= 7):
             raise ValueError("int_id must be between 1 and 7.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:RIL? {int_id}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:RIL? {int_id}").strip()
         try:
             return int(response)
         except ValueError:
@@ -947,7 +947,7 @@ class VXI:
         Sends a Read Interrupters command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RINT?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RINT?").strip()
         try:
             return int(response)
         except ValueError:
@@ -958,7 +958,7 @@ class VXI:
         Sends a Read MODid command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RMOD?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RMOD?").strip()
         try:
             return int(response)
         except ValueError:
@@ -969,7 +969,7 @@ class VXI:
         Sends a Read Protocol Error command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RPER?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RPER?").strip()
         try:
             return int(response)
         except ValueError:
@@ -980,7 +980,7 @@ class VXI:
         Sends a Read Protocol command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RPR?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RPR?").strip()
         try:
             return int(response)
         except ValueError:
@@ -991,7 +991,7 @@ class VXI:
         Sends a Read Status Byte command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RSTB?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RSTB?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1002,7 +1002,7 @@ class VXI:
         Sends a Read Servant Area command query to the selected logical address.
         :return: The response to the command as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:QUER:RSAR?").strip()
+        response = self.instrument.query(":VXI:WSPR:QUER:RSAR?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1019,7 +1019,7 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= modid_value <= 127):
             raise ValueError("MODID 6-0 value must be between 0 and 127.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:SLMOD? {scpi_bool},{modid_value}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:SLMOD? {scpi_bool},{modid_value}").strip()
         try:
             return int(response)
         except ValueError:
@@ -1035,7 +1035,7 @@ class VXI:
         scpi_bool = "1" if boolean_field else "0"
         if not (0 <= modid_value <= 63):
             raise ValueError("MODID 12-7 value must be between 0 and 63.")
-        response = self.instrument.query(f"VXI:WSPR:QUER:SUMOD? {scpi_bool},{modid_value}").strip()
+        response = self.instrument.query(f":VXI:WSPR:QUER:SUMOD? {scpi_bool},{modid_value}").strip()
         try:
             return int(response)
         except ValueError:
@@ -1047,7 +1047,7 @@ class VXI:
         Returns one word of data from the data low register on the selected logical address.
         :return: The data word as an integer.
         """
-        response = self.instrument.query("VXI:WSPR:RESP?").strip()
+        response = self.instrument.query(":VXI:WSPR:RESP?").strip()
         try:
             return int(response)
         except ValueError:

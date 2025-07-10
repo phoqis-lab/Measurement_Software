@@ -19,14 +19,14 @@ class Trigger:
         Any actions related to the trigger system that are in progress shall also be aborted.
         This command is an event and has no associated *RST condition or query form.
         """
-        self.instrument.write("ABORt")
+        self.instrument.write(":ABORt")
 
     """def arm(self):
         
         #Initializes the ARM subsystem.
         #This command is an event and has no query form.
         
-        self.instrument.write("ARM")"""
+        self.instrument.write(":ARM")"""
 
     """def initiate(self):
         
@@ -54,9 +54,9 @@ class Trigger:
         Notes: Overwrites previously defined name. *RST has no effect on the defined name.
         """
         if sequence_number is not None:
-            self.instrument.write(f"ARM:SEQ{sequence_number}:DEF '{sequence_name}'")
+            self.instrument.write(f":ARM:SEQ{sequence_number}:DEF '{sequence_name}'")
         else:
-            self.instrument.write(f"ARM:SEQ:DEF '{sequence_name}'")
+            self.instrument.write(f":ARM:SEQ:DEF '{sequence_name}'")
 
     def get_arm_sequence_define(self, sequence_number: int = None) -> str:
         """
@@ -65,9 +65,9 @@ class Trigger:
         :return: The character data string of the sequence alias, or a null string if nothing is defined.
         """
         if sequence_number is not None:
-            response = self.instrument.query(f"ARM:SEQ{sequence_number}:DEF?").strip()
+            response = self.instrument.query(f":ARM:SEQ{sequence_number}:DEF?").strip()
         else:
-            response = self.instrument.query("ARM:SEQ:DEF?").strip()
+            response = self.instrument.query(":ARM:SEQ:DEF?").strip()
         return response.strip("'") # Remove quotes if present
 
     def set_arm_sequence_define_mgrules(self, enable: bool, sequence_number: int = None):
@@ -79,9 +79,9 @@ class Trigger:
         """
         scpi_value = "1" if enable else "0"
         if sequence_number is not None:
-            self.instrument.write(f"ARM:SEQ{sequence_number}:DEF:MGR {scpi_value}")
+            self.instrument.write(f":ARM:SEQ{sequence_number}:DEF:MGR {scpi_value}")
         else:
-            self.instrument.write(f"ARM:SEQ:DEF:MGR {scpi_value}")
+            self.instrument.write(f":ARM:SEQ:DEF:MGR {scpi_value}")
 
     def get_arm_sequence_define_mgrules(self, sequence_number: int = None) -> bool:
         """
@@ -90,9 +90,9 @@ class Trigger:
         :return: True if MGRules is enabled, False if disabled.
         """
         if sequence_number is not None:
-            response = self.instrument.query(f"ARM:SEQ{sequence_number}:DEF:MGR?").strip()
+            response = self.instrument.query(f":ARM:SEQ{sequence_number}:DEF:MGR?").strip()
         else:
-            response = self.instrument.query("ARM:SEQ:DEF:MGR?").strip()
+            response = self.instrument.query(":ARM:SEQ:DEF:MGR?").strip()
         return response == "1"
 
     
@@ -106,7 +106,7 @@ class Trigger:
         """
         if value < 1:
             raise ValueError("COUNt must be 1 or greater.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -120,7 +120,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The count value.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -145,7 +145,7 @@ class Trigger:
         type_upper = coupling_type.upper()
         if type_upper not in valid_types:
             raise ValueError(f"Invalid coupling type: '{coupling_type}'. Must be 'AC' or 'DC'.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -159,7 +159,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The coupling type ("AC" or "DC").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -177,7 +177,7 @@ class Trigger:
         """
         if value < 0:
             raise ValueError("DELay must be zero or a positive value.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -191,7 +191,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The delay time in seconds.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -213,7 +213,7 @@ class Trigger:
         normalized_state = auto_state.upper()
         if normalized_state not in {"ON", "OFF", "ONCE"}:
             raise ValueError(f"Invalid auto_state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -227,7 +227,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The auto-delay state ("ON", "OFF", or "ONCE").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -246,7 +246,7 @@ class Trigger:
         :param sequence_number: Optional. The numeric suffix for SEQuence.
         :param layer_number: Optional. The numeric suffix for LAYer.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -263,7 +263,7 @@ class Trigger:
         """
         if value < 1:
             raise ValueError("ECOunt must be 1 or greater.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -277,7 +277,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The event count.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -296,7 +296,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -310,7 +310,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The frequency in Hertz.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -330,7 +330,7 @@ class Trigger:
         Notes: At *RST, this value is device-dependent.
         """
         scpi_value = "1" if enable else "0"
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -344,7 +344,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: True if ON, False if OFF.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -360,7 +360,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -374,7 +374,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The frequency in Hertz.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -394,7 +394,7 @@ class Trigger:
         Notes: At *RST, this value is device-dependent.
         """
         scpi_value = "1" if enable else "0"
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -408,7 +408,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: True if ON, False if OFF.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -427,7 +427,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -441,7 +441,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The hysteresis value.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -460,7 +460,7 @@ class Trigger:
         :param sequence_number: Optional. The numeric suffix for SEQuence.
         :param layer_number: Optional. The numeric suffix for LAYer.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -477,7 +477,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is instrument-dependent.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -491,7 +491,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The level value.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -513,7 +513,7 @@ class Trigger:
         normalized_state = auto_state.upper()
         if normalized_state not in {"ON", "OFF", "ONCE"}:
             raise ValueError(f"Invalid auto_state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -527,7 +527,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The auto-level state ("ON", "OFF", or "ONCE").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -547,7 +547,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -561,7 +561,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The event handle string.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -582,7 +582,7 @@ class Trigger:
         if type_upper not in valid_types:
             raise ValueError(f"Invalid protocol_type: '{protocol_type}'. Must be 'SYNChronous', 'SSYNchronous', or 'ASYNchronous'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -602,7 +602,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The protocol type ("SYNChronous", "SSYNchronous", or "ASYNchronous").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -621,7 +621,7 @@ class Trigger:
         :param sequence_number: Optional. The numeric suffix for SEQuence.
         :param layer_number: Optional. The numeric suffix for LAYer.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -642,7 +642,7 @@ class Trigger:
         if type_upper not in valid_types:
             raise ValueError(f"Invalid slope_type: '{slope_type}'. Must be 'POSitive', 'NEGative', or 'EITHer'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -662,7 +662,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The slope type ("POSitive", "NEGative", or "EITHer").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -692,7 +692,7 @@ class Trigger:
         if type_upper not in valid_types:
             raise ValueError(f"Invalid source_type: '{source_type}'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -726,7 +726,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The source type string (e.g., "IMMediate", "TTLTrg0").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -755,7 +755,7 @@ class Trigger:
         """
         if value <= 0:
             raise ValueError("TIMer value must be positive.")
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -769,7 +769,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The timer period in seconds.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -787,7 +787,7 @@ class Trigger:
         :param sequence_number: Optional. The numeric suffix for SEQuence.
         :param layer_number: Optional. The numeric suffix for LAYer.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -807,7 +807,7 @@ class Trigger:
         if type_upper not in valid_types:
             raise ValueError(f"Invalid type_value: '{type_value}'. Must be 'EDGE' or 'VIDeo'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -825,7 +825,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The type of triggering ("EDGE" or "VIDeo").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -843,7 +843,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, the value of this parameter is 1. Setting has no effect on SELect parameter.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -857,7 +857,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The field number.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -881,7 +881,7 @@ class Trigger:
         if mode_upper not in valid_modes:
             raise ValueError(f"Invalid select_mode: '{select_mode}'. Must be 'ODD', 'EVEN', 'ALL', or 'NUMBer'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -899,7 +899,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The video field selection method ("ODD", "EVEN", "ALL", or "NUMBer").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -917,7 +917,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device dependent.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -931,7 +931,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: Lines Per Frame.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -951,7 +951,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, the value of this parameter is device dependent. Setting has no effect on SELect parameter.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -965,7 +965,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The line number.
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -989,7 +989,7 @@ class Trigger:
         if mode_upper not in valid_modes:
             raise ValueError(f"Invalid select_mode: '{select_mode}'. Must be 'ALL' or 'NUMBer'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -1007,7 +1007,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The video line selection method ("ALL" or "NUMBer").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -1030,7 +1030,7 @@ class Trigger:
         if type_upper not in valid_types:
             raise ValueError(f"Invalid polarity_type: '{polarity_type}'. Must be 'POSitive' or 'NEGative'.")
 
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -1049,7 +1049,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         :return: The polarity type ("POSitive" or "NEGative").
         """
-        path = "ARM"
+        path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if layer_number is not None:
@@ -1202,14 +1202,14 @@ class Trigger:
         Notes: At *RST, the value of this parameter is OFF.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"TRIG:SEQ:ATR:STATE {scpi_value}")
+        self.instrument.write(f":TRIG:SEQ:ATR:STATE {scpi_value}")
 
     def get_trigger_sequence_atrigger_state(self) -> bool:
         """
         Queries the state of the auto trigger function.
         :return: True if enabled, False if disabled.
         """
-        response = self.instrument.query("TRIG:SEQ:ATR:STATE?").strip()
+        response = self.instrument.query(":TRIG:SEQ:ATR:STATE?").strip()
         return response == "1"
 
     
@@ -1221,14 +1221,14 @@ class Trigger:
         """
         if value < 1:
             raise ValueError("COUNt must be 1 or greater.")
-        self.instrument.write(f"TRIG:SEQ:COUN {value}")
+        self.instrument.write(f":TRIG:SEQ:COUN {value}")
 
     def get_trigger_sequence_count(self) -> int:
         """
         Queries the count for the TRIGger sequence.
         :return: The count value.
         """
-        response = self.instrument.query("TRIG:SEQ:COUN?").strip()
+        response = self.instrument.query(":TRIG:SEQ:COUN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1243,7 +1243,7 @@ class Trigger:
         """
         valid_types = {"AC", "DC", "LFR", "HFR", "LFReject", "HFReject"}
         type_upper = coupling_type.upper()
-        path = "TRIG:"
+        path = ":TRIG:"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         if type_upper not in valid_types:
@@ -1255,7 +1255,7 @@ class Trigger:
         Queries the coupling type for the TRIGger sequence.
         :return: The coupling type ("AC" or "DC").
         """
-        path = "TRIG:"
+        path = ":TRIG:"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
         response = self.instrument.query(f"{path}:COUP?").strip().upper()
@@ -1263,15 +1263,15 @@ class Trigger:
 
     def set_trigger_sequence_define(self, sequence_name: str, sequence_number: int = None):
         """
-        Sets the SEQuence alias. This command is an alias to ARM:SEQuence:DEFine.
+        Sets the SEQuence alias. This command is an alias to :ARM:SEQuence:DEFine.
         :param sequence_name: The character data string for the sequence alias.
         :param sequence_number: Optional. The numeric suffix (sequence number) to apply the alias to.
         Notes: Overwrites previously defined name. *RST has no effect on the defined name.
         """
         if sequence_number is not None:
-            self.instrument.write(f"TRIG:SEQ{sequence_number}:DEF '{sequence_name}'")
+            self.instrument.write(f":TRIG:SEQ{sequence_number}:DEF '{sequence_name}'")
         else:
-            self.instrument.write(f"TRIG:SEQ:DEF '{sequence_name}'")
+            self.instrument.write(f":TRIG:SEQ:DEF '{sequence_name}'")
 
     def get_trigger_sequence_define(self, sequence_number: int = None) -> str:
         """
@@ -1280,9 +1280,9 @@ class Trigger:
         :return: The character data string of the sequence alias, or a null string if nothing is defined.
         """
         if sequence_number is not None:
-            response = self.instrument.query(f"TRIG:SEQ{sequence_number}:DEF?").strip()
+            response = self.instrument.query(f":TRIG:SEQ{sequence_number}:DEF?").strip()
         else:
-            response = self.instrument.query("TRIG:SEQ:DEF?").strip()
+            response = self.instrument.query(":TRIG:SEQ:DEF?").strip()
         return response.strip("'") # Remove quotes if present
 
     
@@ -1295,9 +1295,9 @@ class Trigger:
         """
         scpi_value = "1" if enable else "0"
         if sequence_number is not None:
-            self.instrument.write(f"TRIG:SEQ{sequence_number}:DEF:MGR {scpi_value}")
+            self.instrument.write(f":TRIG:SEQ{sequence_number}:DEF:MGR {scpi_value}")
         else:
-            self.instrument.write(f"TRIG:SEQ:DEF:MGR {scpi_value}")
+            self.instrument.write(f":TRIG:SEQ:DEF:MGR {scpi_value}")
 
     def get_trigger_sequence_define_mgrules(self, sequence_number: int = None) -> bool:
         """
@@ -1306,9 +1306,9 @@ class Trigger:
         :return: True if MGRules is enabled, False if disabled.
         """
         if sequence_number is not None:
-            response = self.instrument.query(f"TRIG:SEQ{sequence_number}:DEF:MGR?").strip()
+            response = self.instrument.query(f":TRIG:SEQ{sequence_number}:DEF:MGR?").strip()
         else:
-            response = self.instrument.query("TRIG:SEQ:DEF:MGR?").strip()
+            response = self.instrument.query(":TRIG:SEQ:DEF:MGR?").strip()
         return response == "1"
 
     def set_trigger_sequence_delay(self, value: float, seq:bool = None):
@@ -1319,7 +1319,7 @@ class Trigger:
         """
         if value < 0:
             raise ValueError("DELay must be zero or a positive value.")
-        path = "TRIG:"
+        path = ":TRIG:"
         if seq is not None:
             path += f":SEQ"
         self.instrument.write(f"{path}:DEL {value}")
@@ -1329,7 +1329,7 @@ class Trigger:
         Queries the delay time for the TRIGger sequence.
         :return: The delay time in seconds.
         """
-        path = "TRIG:"
+        path = ":TRIG:"
         if seq is not None:
             path += f":SEQ"
         response = self.instrument.query(f"{path}:DEL?").strip()
@@ -1348,14 +1348,14 @@ class Trigger:
         normalized_state = auto_state.upper()
         if normalized_state not in {"ON", "OFF", "ONCE"}:
             raise ValueError(f"Invalid auto_state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"TRIG:SEQ:DEL:AUTO {normalized_state}")
+        self.instrument.write(f":TRIG:SEQ:DEL:AUTO {normalized_state}")
 
     def get_trigger_sequence_delay_auto(self) -> str:
         """
         Queries the auto-delay state for the TRIGger sequence delay.
         :return: The auto-delay state ("ON", "OFF", or "ONCE").
         """
-        response = self.instrument.query("TRIG:SEQ:DEL:AUTO?").strip().upper()
+        response = self.instrument.query(":TRIG:SEQ:DEL:AUTO?").strip().upper()
         if response == "1": return "ON"
         if response == "0": return "OFF"
         return response
@@ -1365,7 +1365,7 @@ class Trigger:
         Presets LEVel, HYSTeresis, COUPling, and DELay to values appropriate for an ECL signal.
         This command is an event and cannot be queried.
         """
-        self.instrument.write("TRIG:SEQ:ECL")
+        self.instrument.write(":TRIG:SEQ:ECL")
 
     def set_trigger_sequence_ecount(self, value: int):
         """
@@ -1375,14 +1375,14 @@ class Trigger:
         """
         if value < 1:
             raise ValueError("ECOunt must be 1 or greater.")
-        self.instrument.write(f"TRIG:SEQ:ECO {value}")
+        self.instrument.write(f":TRIG:SEQ:ECO {value}")
 
     def get_trigger_sequence_ecount(self) -> int:
         """
         Queries the event count for the TRIGger sequence.
         :return: The event count.
         """
-        response = self.instrument.query("TRIG:SEQ:ECO?").strip()
+        response = self.instrument.query(":TRIG:SEQ:ECO?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1394,14 +1394,14 @@ class Trigger:
         :param value: The frequency in Hertz (numeric value).
         Notes: At *RST, this value is device-dependent.
         """
-        self.instrument.write(f"TRIG:SEQ:FILT:HPAS:FREQ {value}")
+        self.instrument.write(f":TRIG:SEQ:FILT:HPAS:FREQ {value}")
 
     def get_trigger_sequence_filter_hpass_frequency(self) -> float:
         """
         Queries the cutoff frequency of the high pass filter for the TRIGger sequence.
         :return: The frequency in Hertz.
         """
-        response = self.instrument.query(f"TRIG:SEQ:FILT:HPAS:FREQ?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:FILT:HPAS:FREQ?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1414,14 +1414,14 @@ class Trigger:
         Notes: At *RST, this value is device-dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"TRIG:SEQ:FILT:HPAS:STATE {scpi_value}")
+        self.instrument.write(f":TRIG:SEQ:FILT:HPAS:STATE {scpi_value}")
 
     def get_trigger_sequence_filter_hpass_state(self) -> bool:
         """
         Queries the state of the high pass filter for the TRIGger sequence.
         :return: True if ON, False if OFF.
         """
-        response = self.instrument.query(f"TRIG:SEQ:FILT:HPAS:STATE?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:FILT:HPAS:STATE?").strip()
         return response == "1"
 
     def set_trigger_sequence_filter_lpass_frequency(self, value: float):
@@ -1430,14 +1430,14 @@ class Trigger:
         :param value: The frequency in Hertz (numeric value).
         Notes: At *RST, this value is device-dependent.
         """
-        self.instrument.write(f"TRIG:SEQ:FILT:LPAS:FREQ {value}")
+        self.instrument.write(f":TRIG:SEQ:FILT:LPAS:FREQ {value}")
 
     def get_trigger_sequence_filter_lpass_frequency(self) -> float:
         """
         Queries the cutoff frequency of the low pass filter for the TRIGger sequence.
         :return: The frequency in Hertz.
         """
-        response = self.instrument.query(f"TRIG:SEQ:FILT:LPAS:FREQ?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:FILT:LPAS:FREQ?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1450,14 +1450,14 @@ class Trigger:
         Notes: At *RST, this value is device-dependent.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"TRIG:SEQ:FILT:LPAS:STATE {scpi_value}")
+        self.instrument.write(f":TRIG:SEQ:FILT:LPAS:STATE {scpi_value}")
 
     def get_trigger_sequence_filter_lpass_state(self) -> bool:
         """
         Queries the state of the low pass filter for the TRIGger sequence.
         :return: True if ON, False if OFF.
         """
-        response = self.instrument.query(f"TRIG:SEQ:FILT:LPAS:STATE?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:FILT:LPAS:STATE?").strip()
         return response == "1"
 
     
@@ -1467,7 +1467,7 @@ class Trigger:
         :param value: The holdoff value (numeric value, zero to one).
         Notes: At *RST, the value of the parameter is zero.
         """
-        path = "TRIG:"
+        path = ":TRIG:"
         if seq is not None:
             path = path + "SEQ:"
 
@@ -1478,7 +1478,7 @@ class Trigger:
         Queries the holdoff value for the TRIGger sequence.
         :return: The holdoff value.
         """
-        path = "TRIG:"
+        path = ":TRIG:"
         if seq is not None:
             path = path + "SEQ:"
         response = self.instrument.query(f"{path}:HOLD?").strip()
@@ -1495,14 +1495,14 @@ class Trigger:
         :param value: The hysteresis value (numeric value).
         Notes: At *RST, this value is device-dependent.
         """
-        self.instrument.write(f"TRIG:SEQ:HYST {value}")
+        self.instrument.write(f":TRIG:SEQ:HYST {value}")
 
     def get_trigger_sequence_hysteresis(self) -> float:
         """
         Queries the hysteresis value for the TRIGger sequence.
         :return: The hysteresis value.
         """
-        response = self.instrument.query(f"TRIG:SEQ:HYST?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:HYST?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1514,7 +1514,7 @@ class Trigger:
         Causes immediate exit of the specified event detection layer if the trigger system is in that layer.
         This command is an event, has no *RST condition, and cannot be queried.
         """
-        self.instrument.write("TRIG:SEQ:IMM")
+        self.instrument.write(":TRIG:SEQ:IMM")
 
     def set_trigger_sequence_level(self, value: float):
         """
@@ -1524,14 +1524,14 @@ class Trigger:
         :param value: The level value (numeric value).
         Notes: At *RST, this value is instrument-dependent.
         """
-        self.instrument.write(f"TRIG:SEQ:LEV {value}")
+        self.instrument.write(f":TRIG:SEQ:LEV {value}")
 
     def get_trigger_sequence_level(self) -> float:
         """
         Queries the level value for the TRIGger sequence.
         :return: The level value.
         """
-        response = self.instrument.query(f"TRIG:SEQ:LEV?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:LEV?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1546,14 +1546,14 @@ class Trigger:
         normalized_state = auto_state.upper()
         if normalized_state not in {"ON", "OFF", "ONCE"}:
             raise ValueError(f"Invalid auto_state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"TRIG:SEQ:LEV:AUTO {normalized_state}")
+        self.instrument.write(f":TRIG:SEQ:LEV:AUTO {normalized_state}")
 
     def get_trigger_sequence_level_auto(self) -> str:
         """
         Queries the auto-level state for the TRIGger sequence level.
         :return: The auto-level state ("ON", "OFF", or "ONCE").
         """
-        response = self.instrument.query(f"TRIG:SEQ:LEV:AUTO?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:LEV:AUTO?").strip().upper()
         if response == "1": return "ON"
         if response == "0": return "OFF"
         return response
@@ -1565,14 +1565,14 @@ class Trigger:
         :param event_handle: STRING PROGRAM DATA for the event.
         Notes: At *RST, this value is device-dependent.
         """
-        self.instrument.write(f"TRIG:SEQ:LINK '{event_handle}'")
+        self.instrument.write(f":TRIG:SEQ:LINK '{event_handle}'")
 
     def get_trigger_sequence_link(self) -> str:
         """
         Queries the internal event that is LINKed to the event detector in the TRIGger layer.
         :return: The event handle string.
         """
-        response = self.instrument.query(f"TRIG:SEQ:LINK?").strip().strip("'")
+        response = self.instrument.query(f":TRIG:SEQ:LINK?").strip().strip("'")
         return response
 
     def set_trigger_sequence_protocol_vxi(self, protocol_type: str):
@@ -1591,14 +1591,14 @@ class Trigger:
         elif type_upper.startswith("ASYN"): scpi_type = "ASYN"
         else: scpi_type = type_upper
 
-        self.instrument.write(f"TRIG:SEQ:PROT:VXI {scpi_type}")
+        self.instrument.write(f":TRIG:SEQ:PROT:VXI {scpi_type}")
 
     def get_trigger_sequence_protocol_vxi(self) -> str:
         """
         Queries the trigger protocol for the VXI TTLTrg or ECLTrg trigger line when used as the trigger source.
         :return: The protocol type ("SYNChronous", "SSYNchronous", or "ASYNchronous").
         """
-        response = self.instrument.query(f"TRIG:SEQ:PROT:VXI?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:PROT:VXI?").strip().upper()
         if response.startswith("SYN") and not response.startswith("SSYN"): return "SYNChronous"
         if response.startswith("SSYN"): return "SSYNchronous"
         if response.startswith("ASYN"): return "ASYNchronous"
@@ -1610,7 +1610,7 @@ class Trigger:
         Causes immediate exit of the event detector block if the trigger system is waiting for the event.
         This command defines an event and has no associated query form or *RST condition.
         """
-        self.instrument.write("TRIG:SEQ:SIGN")
+        self.instrument.write(":TRIG:SEQ:SIGN")
 
     
     def set_trigger_sequence_slope(self, slope_type: str):
@@ -1629,14 +1629,14 @@ class Trigger:
         elif type_upper.startswith("EITH"): scpi_type = "EITH"
         else: scpi_type = type_upper
 
-        self.instrument.write(f"TRIG:SEQ:SLOP {scpi_type}")
+        self.instrument.write(f":TRIG:SEQ:SLOP {scpi_type}")
 
     def get_trigger_sequence_slope(self) -> str:
         """
         Queries the slope type for the TRIGger sequence.
         :return: The slope type ("POSitive", "NEGative", or "EITHer").
         """
-        response = self.instrument.query(f"TRIG:SEQ:SLOP?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:SLOP?").strip().upper()
         if response.startswith("POS"): return "POSitive"
         if response.startswith("NEG"): return "NEGative"
         if response.startswith("EITH"): return "EITHer"
@@ -1676,16 +1676,16 @@ class Trigger:
         else: scpi_source = type_upper # Fallback for exact match
 
         if source_index is not None:
-            self.instrument.write(f"TRIG:SEQ:SOUR {scpi_source}{source_index}")
+            self.instrument.write(f":TRIG:SEQ:SOUR {scpi_source}{source_index}")
         else:
-            self.instrument.write(f"TRIG:SEQ:SOUR {scpi_source}")
+            self.instrument.write(f":TRIG:SEQ:SOUR {scpi_source}")
 
     def get_trigger_sequence_source(self) -> str:
         """
         Queries the source for the event detector for the TRIGger sequence.
         :return: The source type string (e.g., "IMMediate", "TTLTrg0").
         """
-        response = self.instrument.query(f"TRIG:SEQ:SOUR?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:SOUR?").strip().upper()
         if response.startswith("AINT"): return "AINTernal"
         if response.startswith("ECLTRG"): return response # Return as is with index
         if response.startswith("EXT"): return response # Return as is with index
@@ -1706,14 +1706,14 @@ class Trigger:
         """
         if value <= 0:
             raise ValueError("TIMer value must be positive.")
-        self.instrument.write(f"TRIG:SEQ:TIM {value}")
+        self.instrument.write(f":TRIG:SEQ:TIM {value}")
 
     def get_trigger_sequence_timer(self) -> float:
         """
         Queries the period of an internal periodic signal source for the TRIGger sequence.
         :return: The timer period in seconds.
         """
-        response = self.instrument.query(f"TRIG:SEQ:TIM?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:TIM?").strip()
         try:
             return float(response)
         except ValueError:
@@ -1724,7 +1724,7 @@ class Trigger:
         Presets LEVel, HYSTeresis, COUPling, and DELay to values appropriate for a TTL signal.
         This command is an event and cannot be queried.
         """
-        self.instrument.write("TRIG:SEQ:TTL")
+        self.instrument.write(":TRIG:SEQ:TTL")
 
     def set_trigger_sequence_type(self, type_value: str):
         """
@@ -1740,14 +1740,14 @@ class Trigger:
         if type_upper.startswith("VID"): scpi_type = "VID"
         else: scpi_type = type_upper
 
-        self.instrument.write(f"TRIG:SEQ:TYPE {scpi_type}")
+        self.instrument.write(f":TRIG:SEQ:TYPE {scpi_type}")
 
     def get_trigger_sequence_type(self) -> str:
         """
         Queries the type of triggering for the TRIGger sequence.
         :return: The type of triggering ("EDGE" or "VIDeo").
         """
-        response = self.instrument.query(f"TRIG:SEQ:TYPE?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:TYPE?").strip().upper()
         if response.startswith("VID"): return "VIDeo"
         return response
 
@@ -1758,14 +1758,14 @@ class Trigger:
         :param value: The field number (numeric value).
         Notes: At *RST, the value of this parameter is 1. Setting has no effect on SELect parameter.
         """
-        self.instrument.write(f"TRIG:SEQ:VID:FIELD:NUMB {value}")
+        self.instrument.write(f":TRIG:SEQ:VID:FIELD:NUMB {value}")
 
     def get_trigger_sequence_video_field_number(self) -> int:
         """
         Queries the field number to trigger on for the TRIGger video field.
         :return: The field number.
         """
-        response = self.instrument.query(f"TRIG:SEQ:VID:FIELD:NUMB?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:VID:FIELD:NUMB?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1785,14 +1785,14 @@ class Trigger:
         if mode_upper.startswith("NUMB"): scpi_mode = "NUMB"
         else: scpi_mode = mode_upper
 
-        self.instrument.write(f"TRIG:SEQ:VID:FIELD:SEL {scpi_mode}")
+        self.instrument.write(f":TRIG:SEQ:VID:FIELD:SEL {scpi_mode}")
 
     def get_trigger_sequence_video_field_select(self) -> str:
         """
         Queries the video field selection method for the TRIGger video field.
         :return: The video field selection method ("ODD", "EVEN", "ALL", or "NUMBer").
         """
-        response = self.instrument.query(f"TRIG:SEQ:VID:FIELD:SEL?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:VID:FIELD:SEL?").strip().upper()
         if response.startswith("NUMB"): return "NUMBer"
         return response
 
@@ -1802,14 +1802,14 @@ class Trigger:
         :param value: Lines Per Frame (numeric value).
         Notes: At *RST, this value is device dependent.
         """
-        self.instrument.write(f"TRIG:SEQ:VID:FORM:LPFR {value}")
+        self.instrument.write(f":TRIG:SEQ:VID:FORM:LPFR {value}")
 
     def get_trigger_sequence_video_format_lpframe(self) -> int:
         """
         Queries the lines per frame for the TRIGger video format.
         :return: Lines Per Frame.
         """
-        response = self.instrument.query(f"TRIG:SEQ:VID:FORM:LPFR?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:VID:FORM:LPFR?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1850,14 +1850,14 @@ class Trigger:
         path = ":TRIG"
         if seq is not None:
             path += f":SEQ{seq}"
-        self.instrument.write(f"TRIG:SEQ:VID:LINE:NUMB {value}")
+        self.instrument.write(f":TRIG:SEQ:VID:LINE:NUMB {value}")
 
     def get_trigger_sequence_video_line_number(self) -> int:
         """
         Queries the line number to trigger on for the TRIGger video line.
         :return: The line number.
         """
-        response = self.instrument.query(f"TRIG:SEQ:VID:LINE:NUMB?").strip()
+        response = self.instrument.query(f":TRIG:SEQ:VID:LINE:NUMB?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1877,14 +1877,14 @@ class Trigger:
         if mode_upper.startswith("NUMB"): scpi_mode = "NUMB"
         else: scpi_mode = mode_upper
 
-        self.instrument.write(f"TRIG:SEQ:VID:LINE:SEL {scpi_mode}")
+        self.instrument.write(f":TRIG:SEQ:VID:LINE:SEL {scpi_mode}")
 
     def get_trigger_sequence_video_line_select(self) -> str:
         """
         Queries the video line selection method for the TRIGger video line.
         :return: The video line selection method ("ALL" or "NUMBer").
         """
-        response = self.instrument.query(f"TRIG:SEQ:VID:LINE:SEL?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:VID:LINE:SEL?").strip().upper()
         if response.startswith("NUMB"): return "NUMBer"
         return response
 
@@ -1903,14 +1903,14 @@ class Trigger:
         elif type_upper.startswith("NEG"): scpi_type = "NEG"
         else: scpi_type = type_upper
 
-        self.instrument.write(f"TRIG:SEQ:VID:SSIG:POL {scpi_type}")
+        self.instrument.write(f":TRIG:SEQ:VID:SSIG:POL {scpi_type}")
 
     def get_trigger_sequence_video_ssignal_polarity(self) -> str:
         """
         Queries sync pulse triggering polarity for the TRIGger video synchronizing signal.
         :return: The polarity type ("POSitive" or "NEGative").
         """
-        response = self.instrument.query(f"TRIG:SEQ:VID:SSIG:POL?").strip().upper()
+        response = self.instrument.query(f":TRIG:SEQ:VID:SSIG:POL?").strip().upper()
         if response.startswith("POS"): return "POSitive"
         if response.startswith("NEG"): return "NEGative"
         return response
