@@ -4,7 +4,7 @@ class Calculate():
     
     def clear_average_data(self):
         """Clears the average data and resets the average counter to zero."""
-        self.instrument.write("CALC:AVER:CLE")
+        self.instrument.write(":CALC:AVER:CLE")
 
     def set_count_of_results_in_average(self, auto: bool, count: int, once: bool = False):
         """Specifies the number of measurements to combine.
@@ -14,17 +14,17 @@ class Calculate():
         once: (Optional) If auto is True, sets auto mode to 'ONCE' if True, otherwise 'AUTO ON' (Boolean equivalent)."""
         if auto:
             if once:
-                self.instrument.write(f"CALC:AVER:COUNT:AUTO ONCE")
+                self.instrument.write(f":CALC:AVER:COUNT:AUTO ONCE")
             else:
-                self.instrument.write(f"CALC:AVER:COUNT:AUTO 1") # SCPI '1' for ON
+                self.instrument.write(f":CALC:AVER:COUNT:AUTO 1") # SCPI '1' for ON
         else:
-            self.instrument.write(f"CALC:AVER:COUNT {count}")
+            self.instrument.write(f":CALC:AVER:COUNT {count}")
 
     def get_count_of_results_in_average(self):
         """Returns the current average count and auto-count setting.
         Returns: A tuple containing (current_count: int, auto_setting: str ('1', '0', or 'ONCE'))"""
-        auto_response = self.instrument.query(f"CALC:AVER:COUNT:AUTO?").strip()
-        count_response = self.instrument.query(f"CALC:AVER:COUNT?").strip()
+        auto_response = self.instrument.query(f":CALC:AVER:COUNT:AUTO?").strip()
+        count_response = self.instrument.query(f":CALC:AVER:COUNT?").strip()
         
         # Convert count to int, handle potential errors
         try:
@@ -39,13 +39,13 @@ class Calculate():
         Parameters:
         turn_on: True to turn averaging ON, False to turn averaging OFF."""
         if turn_on:
-            self.instrument.write(f"CALC:AVER:STATE 1")
+            self.instrument.write(f":CALC:AVER:STATE 1")
         else:
-            self.instrument.write(f"CALC:AVER:STATE 0")
+            self.instrument.write(f":CALC:AVER:STATE 0")
     
     def is_averaging_on(self) -> bool:
         """Returns True if averaging is ON, False if OFF."""
-        response = self.instrument.query("CALC:AVER:STATE?").strip()
+        response = self.instrument.query(":CALC:AVER:STATE?").strip()
         if response == "1":
             return True
         elif response == "0":
@@ -137,11 +137,11 @@ class Calculate():
         Parameters:
         enable: True to enable the derivative function, False to disable it."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"CALC:DER:STATE {scpi_value}")
+        self.instrument.write(f":CALC:DER:STATE {scpi_value}")
 
     def get_derivative_state(self) -> bool:
         """Returns True if the derivative function is enabled, False if disabled."""
-        response = self.instrument.query("CALC:DER:STATE?").strip()
+        response = self.instrument.query(":CALC:DER:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -155,11 +155,11 @@ class Calculate():
         points: The number of points (integer) for the algorithm. Must be a non-negative integer."""
         if not isinstance(points, int) or points < 0:
             raise ValueError("Derivative points must be a non-negative integer.")
-        self.instrument.write(f"CALC:DER:POIN {points}")
+        self.instrument.write(f":CALC:DER:POIN {points}")
 
     def get_derivative_points(self) -> int:
         """Returns the number of points provided to the differential algorithm."""
-        response = self.instrument.query("CALC:DER:POIN?").strip()
+        response = self.instrument.query(":CALC:DER:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -169,11 +169,11 @@ class Calculate():
         """Sets the data flow to be fed into the CALCulate block.
         Parameters:
         feed_source: A string representing the data source (e.g., 'TWIR01p13')."""
-        self.instrument.write(f"CALC:FEED {feed_source}")
+        self.instrument.write(f":CALC:FEED {feed_source}")
 
     def get_feed_source(self) -> str:
         """Returns the data flow currently fed into the CALCulate block."""
-        response = self.instrument.query("CALC:FEED?").strip()
+        response = self.instrument.query(":CALC:FEED?").strip()
         return response.strip('"')
 
     def set_filter_gate_time_state(self, enable: bool):
@@ -181,11 +181,11 @@ class Calculate():
         Parameters:
         enable: True to enable the time filter, False to disable it."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"CALC:FILT:GATE:TIME:STATE {scpi_value}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:STATE {scpi_value}")
 
     def get_filter_gate_time_state(self) -> bool:
         """Returns True if the time filter is enabled, False if disabled."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:STATE?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -201,11 +201,11 @@ class Calculate():
         filter_type_upper = filter_type.upper()
         if filter_type_upper not in valid_types:
             raise ValueError(f"Invalid filter type: '{filter_type}'. Must be one of {list(valid_types)}")
-        self.instrument.write(f"CALC:FILT:GATE:TIME:TYPE {filter_type_upper}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:TYPE {filter_type_upper}")
 
     def get_filter_gate_time_type(self) -> str:
         """Returns the type of filter ('BPASS' or 'NOTCH')."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:TYPE?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:TYPE?").strip()
         if response.upper().startswith("BPAS"):
             return "BPASS"
         elif response.upper().startswith("NOTC"):
@@ -217,11 +217,11 @@ class Calculate():
         """Specifies the start time of the filter in seconds.
         Parameters:
         start_time: The start time in seconds (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:TIME:STAR {start_time}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:STAR {start_time}")
 
     def get_filter_gate_time_start(self) -> float:
         """Returns the start time of the filter in seconds."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:STAR?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:STAR?").strip()
         try:
             return float(response)
         except ValueError:
@@ -231,11 +231,11 @@ class Calculate():
         """Specifies the stop time of the filter in seconds.
         Parameters:
         stop_time: The stop time in seconds (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:TIME:STOP {stop_time}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:STOP {stop_time}")
 
     def get_filter_gate_time_stop(self) -> float:
         """Returns the stop time of the filter in seconds."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:STOP?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:STOP?").strip()
         try:
             return float(response)
         except ValueError:
@@ -245,11 +245,11 @@ class Calculate():
         """Specifies the time span of the filter in seconds.
         Parameters:
         span_time: The time span in seconds (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:TIME:SPAN {span_time}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:SPAN {span_time}")
 
     def get_filter_gate_time_span(self) -> float:
         """Returns the time span of the filter in seconds."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:SPAN?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:SPAN?").strip()
         try:
             return float(response)
         except ValueError:
@@ -259,11 +259,11 @@ class Calculate():
         """Specifies the center time of the filter in seconds.
         Parameters:
         center_time: The center time in seconds (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:TIME:CENT {center_time}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:CENT {center_time}")
 
     def get_filter_gate_time_center(self) -> float:
         """Returns the center time of the filter in seconds."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:CENT?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:CENT?").strip()
         try:
             return float(response)
         except ValueError:
@@ -275,11 +275,11 @@ class Calculate():
         points: The number of points (integer) to be output."""
         if not isinstance(points, int) or points < 0:
             raise ValueError("Filter gate time points must be a non-negative integer.")
-        self.instrument.write(f"CALC:FILT:GATE:TIME:POIN {points}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:POIN {points}")
 
     def get_filter_gate_time_points(self) -> int:
         """Returns the number of points output by the filter subsystem."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:POIN?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:POIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -293,11 +293,11 @@ class Calculate():
         auto_mode_upper = auto_mode.upper()
         if auto_mode_upper not in valid_modes:
             raise ValueError(f"Invalid auto mode: '{auto_mode}'. Must be one of {list(valid_modes)}")
-        self.instrument.write(f"CALC:FILT:GATE:TIME:POIN:AUTO {auto_mode_upper}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:POIN:AUTO {auto_mode_upper}")
 
     def get_filter_gate_time_points_auto(self) -> str:
         """Returns whether the filter output points are automatically set ('AUTO' or 'ONCE')."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:POIN:AUTO?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:POIN:AUTO?").strip()
         if response == "1" or response.upper() == "AUTO":
             return "AUTO"
         elif response == "0" or response.upper() == "ONCE":
@@ -318,22 +318,22 @@ class Calculate():
             raise ValueError(
                 f"Invalid window type: '{window_type}'. Must be one of {list(valid_windows)}"
             )
-        self.instrument.write(f"CALC:FILT:GATE:TIME:WIND {window_type_upper}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:WIND {window_type_upper}")
 
     def get_filter_gate_time_window(self) -> str:
         """Returns the type of data windowing done prior to the filter."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:WIND?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:WIND?").strip()
         return response.upper()
 
     def set_filter_gate_time_kbessel_parameter(self, parameter: float):
         """Sets the parametric window parameter for the Kaiser Bessel window.
         Parameters:
         parameter: The parameter for the Kaiser Bessel window (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:TIME:KBES {parameter}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:KBES {parameter}")
 
     def get_filter_gate_time_kbessel_parameter(self) -> float:
         """Returns the parametric window parameter for the Kaiser Bessel window."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:KBES?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:KBES?").strip()
         try:
             return float(response)
         except ValueError:
@@ -343,11 +343,11 @@ class Calculate():
         """Enters the exponential decay time constant which characterizes the EXPonential window.
         Parameters:
         decay_time_constant: The exponential decay time constant (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:TIME:EXP {decay_time_constant}")
+        self.instrument.write(f":CALC:FILT:GATE:TIME:EXP {decay_time_constant}")
 
     def get_filter_gate_time_exponential_parameter(self) -> float:
         """Returns the exponential decay time constant which characterizes the EXPonential window."""
-        response = self.instrument.query("CALC:FILT:GATE:TIME:EXP?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:TIME:EXP?").strip()
         try:
             return float(response)
         except ValueError:
@@ -358,11 +358,11 @@ class Calculate():
         Parameters:
         enable: True to enable the frequency filter, False to disable it."""
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:STATE {scpi_value}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:STATE {scpi_value}")
 
     def get_filter_gate_frequency_state(self) -> bool:
         """Returns True if the frequency filter is enabled, False if disabled."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:STATE?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -378,11 +378,11 @@ class Calculate():
         filter_type_upper = filter_type.upper()
         if filter_type_upper not in valid_types:
             raise ValueError(f"Invalid filter type: '{filter_type}'. Must be one of {list(valid_types)}")
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:TYPE {filter_type_upper}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:TYPE {filter_type_upper}")
 
     def get_filter_gate_frequency_type(self) -> str:
         """Returns the type of filter ('BPASS' or 'NOTCH')."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:TYPE?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:TYPE?").strip()
         if response.upper().startswith("BPAS"):
             return "BPASS"
         elif response.upper().startswith("NOTC"):
@@ -394,11 +394,11 @@ class Calculate():
         """Specifies the start frequency of the filter in Hertz.
         Parameters:
         start_freq: The start frequency in Hertz (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:STAR {start_freq}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:STAR {start_freq}")
 
     def get_filter_gate_frequency_start(self) -> float:
         """Returns the start frequency of the filter in Hertz."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:STAR?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:STAR?").strip()
         try:
             return float(response)
         except ValueError:
@@ -408,11 +408,11 @@ class Calculate():
         """Specifies the stop frequency of the filter in Hertz.
         Parameters:
         stop_freq: The stop frequency in Hertz (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:STOP {stop_freq}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:STOP {stop_freq}")
 
     def get_filter_gate_frequency_stop(self) -> float:
         """Returns the stop frequency of the filter in Hertz."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:STOP?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:STOP?").strip()
         try:
             return float(response)
         except ValueError:
@@ -422,11 +422,11 @@ class Calculate():
         """Specifies the frequency span of the filter in Hertz.
         Parameters:
         span_freq: The frequency span in Hertz (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:SPAN {span_freq}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:SPAN {span_freq}")
 
     def get_filter_gate_frequency_span(self) -> float:
         """Returns the frequency span of the filter in Hertz."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:SPAN?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:SPAN?").strip()
         try:
             return float(response)
         except ValueError:
@@ -436,11 +436,11 @@ class Calculate():
         """Specifies the center frequency of the filter in Hertz.
         Parameters:
         center_freq: The center frequency in Hertz (float or int)."""
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:CENT {center_freq}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:CENT {center_freq}")
 
     def get_filter_gate_frequency_center(self) -> float:
         """Returns the center frequency of the filter in Hertz."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:CENT?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:CENT?").strip()
         try:
             return float(response)
         except ValueError:
@@ -452,11 +452,11 @@ class Calculate():
         points: The number of points (integer) to be output."""
         if not isinstance(points, int) or points < 0:
             raise ValueError("Filter gate frequency points must be a non-negative integer.")
-        self.instrument.write(f"CALC:FILT:GATE:FREQ:POIN {points}")
+        self.instrument.write(f":CALC:FILT:GATE:FREQ:POIN {points}")
 
     def get_filter_gate_frequency_points(self) -> int:
         """Returns the number of points output by the filter subsystem for frequency domain."""
-        response = self.instrument.query("CALC:FILT:GATE:FREQ:POIN?").strip()
+        response = self.instrument.query(":CALC:FILT:GATE:FREQ:POIN?").strip()
         try:
             return int(response)
         except ValueError:

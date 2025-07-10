@@ -15,13 +15,13 @@ class System:
         The <numeric_value> selects which of the states will be used. The states are created with the *SAV command.
         :param value: The numeric value selecting the alternate state.
         """
-        self.instrument.write(f"SYST:ALT {value}")
+        self.instrument.write(f":SYST:ALT {value}")
 
     def get_system_alternate(self) -> int:
         """
         Returns the currently selected alternate instrument state.
         """
-        response = self.instrument.query("SYST:ALT?").strip()
+        response = self.instrument.query(":SYST:ALT?").strip()
         try:
             return int(response)
         except ValueError:
@@ -34,13 +34,13 @@ class System:
         :param enable: True to enable alternate state mode, False to disable.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:ALT:STATE {scpi_value}")
+        self.instrument.write(f":SYST:ALT:STATE {scpi_value}")
 
     def get_system_alternate_state(self) -> bool:
         """
         Returns True if the alternate state mode is enabled, False if disabled.
         """
-        response = self.instrument.query("SYST:ALT:STATE?").strip()
+        response = self.instrument.query(":SYST:ALT:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -52,25 +52,25 @@ class System:
         Enables or disables system beeper
         :param value: 1|ON or 0|OFF
         """
-        self.instrument.write(f"SYST:BEEP {value}")
+        self.instrument.write(f":SYST:BEEP {value}")
     def get_system_beeper_enable(self):
         """
         Enables or disables system beeper
         :param value: 1|ON or 0|OFF
         """
-        return self.instrument.query(f"SYST:BEEP?")
+        return self.instrument.query(f":SYST:BEEP?")
     def set_system_beeper_frequency(self, value: float):
         """
         Programs the frequency of audible tones in Hz. It also sets the default frequency for the [:IMMediate] command.
         :param value: The frequency in Hz (numeric value).
         """
-        self.instrument.write(f"SYST:BEEP:FREQ {value}")
+        self.instrument.write(f":SYST:BEEP:FREQ {value}")
 
     def get_system_beeper_frequency(self) -> float:
         """
         Returns the frequency of audible tones in Hz.
         """
-        response = self.instrument.query("SYST:BEEP:FREQ?").strip()
+        response = self.instrument.query(":SYST:BEEP:FREQ?").strip()
         try:
             return float(response)
         except ValueError:
@@ -94,7 +94,7 @@ class System:
             params.append(str(volume))
 
         param_str = ",".join(params)
-        self.instrument.write(f"SYST:BEEP:IMM {param_str}")
+        self.instrument.write(f":SYST:BEEP:IMM {param_str}")
 
     def set_system_beeper_state(self, enable: bool):
         """
@@ -103,13 +103,13 @@ class System:
         :param enable: True to enable beeper, False to disable.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:BEEP:STATE {scpi_value}")
+        self.instrument.write(f":SYST:BEEP:STATE {scpi_value}")
 
     def get_system_beeper_state(self) -> bool:
         """
         Returns True if the beeper is enabled, False if disabled.
         """
-        response = self.instrument.query("SYST:BEEP:STATE?").strip()
+        response = self.instrument.query(":SYST:BEEP:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -122,13 +122,13 @@ class System:
         Programs the duration of audible tones in seconds. It also sets the default duration for the [:IMMediate] command.
         :param value: The duration in seconds (numeric value).
         """
-        self.instrument.write(f"SYST:BEEP:TIME {value}")
+        self.instrument.write(f":SYST:BEEP:TIME {value}")
 
     def get_system_beeper_time(self) -> float:
         """
         Returns the duration of audible tones in seconds.
         """
-        response = self.instrument.query("SYST:BEEP:TIME?").strip()
+        response = self.instrument.query(":SYST:BEEP:TIME?").strip()
         try:
             return float(response)
         except ValueError:
@@ -141,13 +141,13 @@ class System:
         """
         if not (0 <= value <= 1):
             raise ValueError("Volume must be between 0 and 1.")
-        self.instrument.write(f"SYST:BEEP:VOL {value}")
+        self.instrument.write(f":SYST:BEEP:VOL {value}")
 
     def get_system_beeper_volume(self) -> float:
         """
         Returns the volume of audible tones.
         """
-        response = self.instrument.query("SYST:BEEP:VOL?").strip()
+        response = self.instrument.query(":SYST:BEEP:VOL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -158,7 +158,7 @@ class System:
         Returns an <instrument_specifier> indicating the instrument's capabilities.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:CAP?").strip()
+        response = self.instrument.query(":SYST:CAP?").strip()
         return response
 
     
@@ -167,13 +167,13 @@ class System:
         Sets what data is used to FEED the remote CENTronics device.
         :param data_handle: The data handle (character data).
         """
-        self.instrument.write(f"SYST:COMM:CENT:FEED '{data_handle}'")
+        self.instrument.write(f":SYST:COMM:CENT:FEED '{data_handle}'")
 
     def get_system_communicate_centronics_feed(self) -> str:
         """
         Returns what data is used to FEED the remote CENTronics device.
         """
-        response = self.instrument.query("SYST:COMM:CENT:FEED?").strip().strip("'")
+        response = self.instrument.query(":SYST:COMM:CENT:FEED?").strip().strip("'")
         return response
 
     def set_system_communicate_gpib_rdevice_address(self, primary_address: int, secondary_address: int = None):
@@ -183,16 +183,16 @@ class System:
         :param secondary_address: Optional. The secondary address (numeric value).
         """
         if secondary_address is not None:
-            self.instrument.write(f"SYST:COMM:GPIB:RDEV:ADDR {primary_address},{secondary_address}")
+            self.instrument.write(f":SYST:COMM:GPIB:RDEV:ADDR {primary_address},{secondary_address}")
         else:
-            self.instrument.write(f"SYST:COMM:GPIB:RDEV:ADDR {primary_address}")
+            self.instrument.write(f":SYST:COMM:GPIB:RDEV:ADDR {primary_address}")
 
     def get_system_communicate_gpib_rdevice_address(self) -> tuple[int, int]:
         """
         Returns the bus address of the peripheral device connected to a GPIB port.
         :return: A tuple containing (primary_address, secondary_address or None).
         """
-        response = self.instrument.query("SYST:COMM:GPIB:RDEV:ADDR?").strip()
+        response = self.instrument.query(":SYST:COMM:GPIB:RDEV:ADDR?").strip()
         try:
             parts = [int(p) for p in response.split(',')]
             if len(parts) == 1:
@@ -209,13 +209,13 @@ class System:
         Sets what data is used to FEED the peripheral device connected to a GPIB port.
         :param data_handle: The data handle (character data).
         """
-        self.instrument.write(f"SYST:COMM:GPIB:RDEV:FEED '{data_handle}'")
+        self.instrument.write(f":SYST:COMM:GPIB:RDEV:FEED '{data_handle}'")
 
     def get_system_communicate_gpib_rdevice_feed(self) -> str:
         """
         Returns what data is used to FEED the peripheral device connected to a GPIB port.
         """
-        response = self.instrument.query("SYST:COMM:GPIB:RDEV:FEED?").strip().strip("'")
+        response = self.instrument.query(":SYST:COMM:GPIB:RDEV:FEED?").strip().strip("'")
         return response
 
     def set_system_communicate_gpib_self_address(self, primary_address: int, secondary_address: int = None):
@@ -225,16 +225,16 @@ class System:
         :param secondary_address: Optional. The secondary address (numeric value).
         """
         if secondary_address is not None:
-            self.instrument.write(f"SYST:COMM:GPIB:SELF:ADDR {primary_address},{secondary_address}")
+            self.instrument.write(f":SYST:COMM:GPIB:SELF:ADDR {primary_address},{secondary_address}")
         else:
-            self.instrument.write(f"SYST:COMM:GPIB:SELF:ADDR {primary_address}")
+            self.instrument.write(f":SYST:COMM:GPIB:SELF:ADDR {primary_address}")
 
     def get_system_communicate_gpib_self_address(self) -> tuple[int, int]:
         """
         Returns the GPIB address of the instrument itself.
         :return: A tuple containing (primary_address, secondary_address or None).
         """
-        response = self.instrument.query("SYST:COMM:GPIB:SELF:ADDR?").strip()
+        response = self.instrument.query(":SYST:COMM:GPIB:SELF:ADDR?").strip()
         try:
             parts = [int(p) for p in response.split(',')]
             if len(parts) == 1:
@@ -259,13 +259,13 @@ class System:
         if mode_upper == "STANDARD": scpi_value = "STAN"
         elif mode_upper == "IBFULL": scpi_value = "IBF"
         else: scpi_value = mode_upper
-        self.instrument.write(f"SYST:COMM:SER:CONT:DTR {scpi_value}")
+        self.instrument.write(f":SYST:COMM:SER:CONT:DTR {scpi_value}")
 
     def get_system_communicate_serial_control_dtr(self) -> str:
         """
         Returns the hardware pacing scheme for the DTR line on the serial port.
         """
-        response = self.instrument.query("SYST:COMM:SER:CONT:DTR?").strip().upper()
+        response = self.instrument.query(":SYST:COMM:SER:CONT:DTR?").strip().upper()
         if response == "ON": return "ON"
         elif response == "OFF": return "OFF"
         elif response.startswith("STAN"): return "STANDARD"
@@ -284,13 +284,13 @@ class System:
         if mode_upper == "STANDARD": scpi_value = "STAN"
         elif mode_upper == "IBFULL": scpi_value = "IBF"
         else: scpi_value = mode_upper
-        self.instrument.write(f"SYST:COMM:SER:CONT:RTS {scpi_value}")
+        self.instrument.write(f":SYST:COMM:SER:CONT:RTS {scpi_value}")
 
     def get_system_communicate_serial_control_rts(self) -> str:
         """
         Returns the hardware pacing (hand-shaking) scheme for the RTS line on the serial port.
         """
-        response = self.instrument.query("SYST:COMM:SER:CONT:RTS?").strip().upper()
+        response = self.instrument.query(":SYST:COMM:SER:CONT:RTS?").strip().upper()
         if response == "ON": return "ON"
         elif response == "OFF": return "OFF"
         elif response.startswith("STAN"): return "STANDARD"
@@ -304,13 +304,13 @@ class System:
         Sets what data is used to FEED the peripheral device connected to the serial port.
         :param data_handle: The data handle (character data).
         """
-        self.instrument.write(f"SYST:COMM:SER:FEED '{data_handle}'")
+        self.instrument.write(f":SYST:COMM:SER:FEED '{data_handle}'")
 
     def get_system_communicate_serial_feed(self) -> str:
         """
         Returns what data is used to FEED the peripheral device connected to the serial port.
         """
-        response = self.instrument.query("SYST:COMM:SER:FEED?").strip().strip("'")
+        response = self.instrument.query(":SYST:COMM:SER:FEED?").strip().strip("'")
         return response
 
     def set_system_communicate_serial_receive_baud(self, value: int):
@@ -318,13 +318,13 @@ class System:
         Sets the baud rate for the serial receive channel.
         :param value: The baud rate (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:REC:BAUD {value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:BAUD {value}")
 
     def get_system_communicate_serial_receive_baud(self) -> int:
         """
         Returns the baud rate for the serial receive channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:BAUD?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:REC:BAUD?").strip()
         try:
             return int(response)
         except ValueError:
@@ -335,13 +335,13 @@ class System:
         Sets the number of data bits for the serial receive channel, typically 7 or 8.
         :param value: The number of data bits (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:REC:BITS {value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:BITS {value}")
 
     def get_system_communicate_serial_receive_bits(self) -> int:
         """
         Returns the number of data bits for the serial receive channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:BITS?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:REC:BITS?").strip()
         try:
             return int(response)
         except ValueError:
@@ -356,13 +356,13 @@ class System:
         mode_upper = mode.upper()
         if mode_upper not in valid_modes:
             raise ValueError(f"Invalid PACE mode: '{mode}'. Must be 'XON', 'ACK', or 'NONE'.")
-        self.instrument.write(f"SYST:COMM:SER:REC:PACE {mode_upper}")
+        self.instrument.write(f":SYST:COMM:SER:REC:PACE {mode_upper}")
 
     def get_system_communicate_serial_receive_pace(self) -> str:
         """
         Returns the software pacing scheme for the serial receive channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:PACE?").strip().upper()
+        response = self.instrument.query(":SYST:COMM:SER:REC:PACE?").strip().upper()
         return response
 
     
@@ -372,13 +372,13 @@ class System:
         the device should indicate that it is ready to receive.
         :param value: The start threshold (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:REC:PACE:THRES:STAR {value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:PACE:THRES:STAR {value}")
 
     def get_system_communicate_serial_receive_pace_threshold_start(self) -> int:
         """
         Returns the start threshold for receive pacing.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:PACE:THRES:STAR?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:REC:PACE:THRES:STAR?").strip()
         try:
             return int(response)
         except ValueError:
@@ -390,13 +390,13 @@ class System:
         the device should indicate that it is not ready to receive.
         :param value: The stop threshold (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:REC:PACE:THRES:STOP {value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:PACE:THRES:STOP {value}")
 
     def get_system_communicate_serial_receive_pace_threshold_stop(self) -> int:
         """
         Returns the stop threshold for receive pacing.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:PACE:THRES:STOP?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:REC:PACE:THRES:STOP?").strip()
         try:
             return int(response)
         except ValueError:
@@ -408,13 +408,13 @@ class System:
         :param enable: True to enable parity check, False to disable.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:COMM:SER:REC:PAR:CHEC {scpi_value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:PAR:CHEC {scpi_value}")
 
     def get_system_communicate_serial_receive_parity_check(self) -> bool:
         """
         Returns True if parity check is enabled for the serial receive channel, False if disabled.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:PAR:CHEC?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:REC:PAR:CHEC?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -433,13 +433,13 @@ class System:
             raise ValueError(f"Invalid parity type: '{parity_type}'.")
         if type_upper == "IGNORE": scpi_value = "IGN"
         else: scpi_value = type_upper
-        self.instrument.write(f"SYST:COMM:SER:REC:PAR:TYPE {scpi_value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:PAR:TYPE {scpi_value}")
 
     def get_system_communicate_serial_receive_parity_type(self) -> str:
         """
         Returns the parity scheme employed for reception.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:PAR:TYPE?").strip().upper()
+        response = self.instrument.query(":SYST:COMM:SER:REC:PAR:TYPE?").strip().upper()
         if response.startswith("IGN"): return "IGNORE"
         return response
 
@@ -448,13 +448,13 @@ class System:
         Sets the number of stop bits for the serial receive channel, typically 1, 1.5 or 2 bits.
         :param value: The number of stop bits (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:REC:SBITS {value}")
+        self.instrument.write(f":SYST:COMM:SER:REC:SBITS {value}")
 
     def get_system_communicate_serial_receive_sbits(self) -> float:
         """
         Returns the number of stop bits for the serial receive channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:REC:SBITS?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:REC:SBITS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -467,13 +467,13 @@ class System:
         :param enable: True to enable auto-coupling, False to disable.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:COMM:SER:TRAN:AUTO {scpi_value}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:AUTO {scpi_value}")
 
     def get_system_communicate_serial_transmit_auto(self) -> bool:
         """
         Returns True if auto-coupling is enabled for serial transmit parameters, False if disabled.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:AUTO?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:AUTO?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -486,13 +486,13 @@ class System:
         Sets the baud rate for the serial transmit channel.
         :param value: The baud rate (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:TRAN:BAUD {value}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:BAUD {value}")
 
     def get_system_communicate_serial_transmit_baud(self) -> int:
         """
         Returns the baud rate for the serial transmit channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:BAUD?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:BAUD?").strip()
         try:
             return int(response)
         except ValueError:
@@ -503,13 +503,13 @@ class System:
         Sets the number of data bits for the serial transmit channel, typically 7 or 8.
         :param value: The number of data bits (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:TRAN:BITS {value}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:BITS {value}")
 
     def get_system_communicate_serial_transmit_bits(self) -> int:
         """
         Returns the number of data bits for the serial transmit channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:BITS?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:BITS?").strip()
         try:
             return int(response)
         except ValueError:
@@ -520,13 +520,13 @@ class System:
         Sets the minimum delay in seconds that the device must wait after receipt of a Program Message Terminator before issuing a response message.
         :param value: The delay in seconds (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:TRAN:DEL {value}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:DEL {value}")
 
     def get_system_communicate_serial_transmit_delay(self) -> float:
         """
         Returns the minimum delay for serial transmit.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:DEL?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:DEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -541,13 +541,13 @@ class System:
         mode_upper = mode.upper()
         if mode_upper not in valid_modes:
             raise ValueError(f"Invalid PACE mode: '{mode}'. Must be 'XON', 'ACK', or 'NONE'.")
-        self.instrument.write(f"SYST:COMM:SER:TRAN:PACE {mode_upper}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:PACE {mode_upper}")
 
     def get_system_communicate_serial_transmit_pace(self) -> str:
         """
         Returns the software pacing scheme for the serial transmit channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:PACE?").strip().upper()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:PACE?").strip().upper()
         return response
 
     def set_system_communicate_serial_transmit_parity_type(self, parity_type: str):
@@ -559,13 +559,13 @@ class System:
         type_upper = parity_type.upper()
         if type_upper not in valid_types:
             raise ValueError(f"Invalid parity type: '{parity_type}'.")
-        self.instrument.write(f"SYST:COMM:SER:TRAN:PAR:TYPE {type_upper}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:PAR:TYPE {type_upper}")
 
     def get_system_communicate_serial_transmit_parity_type(self) -> str:
         """
         Returns the parity scheme employed for transmission.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:PAR:TYPE?").strip().upper()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:PAR:TYPE?").strip().upper()
         return response
 
     def set_system_communicate_serial_transmit_sbits(self, value: float):
@@ -573,13 +573,13 @@ class System:
         Sets the number of stop bits for the serial transmit channel, typically 1, 1.5, or 2 bits.
         :param value: The number of stop bits (numeric value).
         """
-        self.instrument.write(f"SYST:COMM:SER:TRAN:SBITS {value}")
+        self.instrument.write(f":SYST:COMM:SER:TRAN:SBITS {value}")
 
     def get_system_communicate_serial_transmit_sbits(self) -> float:
         """
         Returns the number of stop bits for the serial transmit channel.
         """
-        response = self.instrument.query("SYST:COMM:SER:TRAN:SBITS?").strip()
+        response = self.instrument.query(":SYST:COMM:SER:TRAN:SBITS?").strip()
         try:
             return float(response)
         except ValueError:
@@ -592,13 +592,13 @@ class System:
         :param socket_n: The socket number.
         :param address: The IP address (e.g., "123.45.67.89") or host name (e.g., "my_host").
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:ADDR '{address}'")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:ADDR '{address}'")
 
     def get_system_communicate_socket_address(self, socket_n: int) -> str:
         """
         Returns the IP address or host name of the remote device for a specified socket.
         """
-        response = self.instrument.query(f"SYST:COMM:SOCK{socket_n}:ADDR?").strip().strip("'")
+        response = self.instrument.query(f":SYST:COMM:SOCK{socket_n}:ADDR?").strip().strip("'")
         return response
 
     def system_communicate_socket_connect(self, socket_n: int):
@@ -606,14 +606,14 @@ class System:
         Implements the socket connection for a specified socket.
         :param socket_n: The socket number.
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:CONN")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:CONN")
 
     def system_communicate_socket_disconnect(self, socket_n: int):
         """
         Breaks the socket connection for a specified socket.
         :param socket_n: The socket number.
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:DISC")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:DISC")
 
     def set_system_communicate_socket_feed(self, socket_n: int, data_handles: list[str]):
         """
@@ -622,13 +622,13 @@ class System:
         :param data_handles: A list of data handles (character data).
         """
         formatted_handles = [f"'{dh}'" for dh in data_handles]
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:FEED {','.join(formatted_handles)}")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:FEED {','.join(formatted_handles)}")
 
     def get_system_communicate_socket_feed(self, socket_n: int) -> list[str]:
         """
         Returns what data is used to FEED the communications socket.
         """
-        response = self.instrument.query(f"SYST:COMM:SOCK{socket_n}:FEED?").strip()
+        response = self.instrument.query(f":SYST:COMM:SOCK{socket_n}:FEED?").strip()
         # The response might be comma-separated, possibly with quotes.
         # Example: "'handle1','handle2'" or "handle1,handle2"
         if not response:
@@ -643,13 +643,13 @@ class System:
         :param socket_n: The socket number.
         :param event_handle: The event handle (character data).
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:FEED:OCON '{event_handle}'")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:FEED:OCON '{event_handle}'")
 
     def get_system_communicate_socket_feed_ocondition(self, socket_n: int) -> str:
         """
         Returns the event handle defining the rate at which data will be collected and sent to the socket FEED.
         """
-        response = self.instrument.query(f"SYST:COMM:SOCK{socket_n}:FEED:OCON?").strip().strip("'")
+        response = self.instrument.query(f":SYST:COMM:SOCK{socket_n}:FEED:OCON?").strip().strip("'")
         return response
 
     def set_system_communicate_socket_feed_scondition(self, socket_n: int, event_handle: str):
@@ -658,13 +658,13 @@ class System:
         :param socket_n: The socket number.
         :param event_handle: The event handle (character data).
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:FEED:SCON '{event_handle}'")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:FEED:SCON '{event_handle}'")
 
     def get_system_communicate_socket_feed_scondition(self, socket_n: int) -> str:
         """
         Returns the event handle defining the rate at which the data will be transmitted on the socket.
         """
-        response = self.instrument.query(f"SYST:COMM:SOCK{socket_n}:FEED:SCON?").strip().strip("'")
+        response = self.instrument.query(f":SYST:COMM:SOCK{socket_n}:FEED:SCON?").strip().strip("'")
         return response
 
     def system_communicate_socket_listen(self, socket_n: int):
@@ -672,7 +672,7 @@ class System:
         Instructs the device (instrument) to listen for a connection on the specified socket.
         :param socket_n: The socket number.
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:LIST")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:LIST")
 
     def set_system_communicate_socket_port(self, socket_n: int, port_number: int):
         """
@@ -680,13 +680,13 @@ class System:
         :param socket_n: The socket number.
         :param port_number: The port number (16-bit integer).
         """
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:PORT {port_number}")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:PORT {port_number}")
 
     def get_system_communicate_socket_port(self, socket_n: int) -> int:
         """
         Returns the port number for a specified socket.
         """
-        response = self.instrument.query(f"SYST:COMM:SOCK{socket_n}:PORT?").strip()
+        response = self.instrument.query(f":SYST:COMM:SOCK{socket_n}:PORT?").strip()
         try:
             return int(response)
         except ValueError:
@@ -703,13 +703,13 @@ class System:
         type_upper = socket_type.upper()
         if type_upper not in valid_types:
             raise ValueError(f"Invalid socket type: '{socket_type}'. Must be 'TCP' or 'UDP'.")
-        self.instrument.write(f"SYST:COMM:SOCK{socket_n}:TYPE {type_upper}")
+        self.instrument.write(f":SYST:COMM:SOCK{socket_n}:TYPE {type_upper}")
 
     def get_system_communicate_socket_type(self, socket_n: int) -> str:
         """
         Returns the type of Ethernet port for a specified socket.
         """
-        response = self.instrument.query(f"SYST:COMM:SOCK{socket_n}:TYPE?").strip().upper()
+        response = self.instrument.query(f":SYST:COMM:SOCK{socket_n}:TYPE?").strip().upper()
         return response
 
     def system_cpon(self, card_destination: str):
@@ -719,16 +719,16 @@ class System:
         Notes: This is an event; no query is allowed.
         """
         if card_destination.upper() == "ALL":
-            self.instrument.write("SYST:CPON ALL")
+            self.instrument.write(":SYST:CPON ALL")
         else:
             # Assuming card_destination can be a string name or a numeric module number
             try:
                 # Try to convert to int if it's a number
                 int_val = int(card_destination)
-                self.instrument.write(f"SYST:CPON {int_val}")
+                self.instrument.write(f":SYST:CPON {int_val}")
             except ValueError:
                 # Otherwise treat as string name
-                self.instrument.write(f"SYST:CPON '{card_destination}'")
+                self.instrument.write(f":SYST:CPON '{card_destination}'")
 
 
     def get_system_ctype(self, card_destination: str) -> str:
@@ -740,10 +740,10 @@ class System:
         try:
             # Try to convert to int if it's a number
             int_val = int(card_destination)
-            response = self.instrument.query(f"SYST:CTYP? {int_val}").strip()
+            response = self.instrument.query(f":SYST:CTYP? {int_val}").strip()
         except ValueError:
             # Otherwise treat as string name
-            response = self.instrument.query(f"SYST:CTYP? '{card_destination}'").strip()
+            response = self.instrument.query(f":SYST:CTYP? '{card_destination}'").strip()
         return response
 
     def set_system_date(self, year: int, month: int, day: int):
@@ -758,14 +758,14 @@ class System:
             raise ValueError("Month must be between 1 and 12.")
         if not (1 <= day <= 31): # Basic check, more detailed validation can be added
             raise ValueError("Day must be between 1 and 31.")
-        self.instrument.write(f"SYST:DATE {year},{month},{day}")
+        self.instrument.write(f":SYST:DATE {year},{month},{day}")
 
     def get_system_date(self) -> tuple[int, int, int]:
         """
         Returns the internal calendar date of the instrument.
         :return: A tuple (year, month, day).
         """
-        response = self.instrument.query("SYST:DATE?").strip()
+        response = self.instrument.query(":SYST:DATE?").strip()
         try:
             parts = [int(p) for p in response.split(',')]
             if len(parts) == 3:
@@ -782,7 +782,7 @@ class System:
         Queries all errors from the error queue, returning a string that includes all error codes and messages.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:ERR:ALL?").strip()
+        response = self.instrument.query(":SYST:ERR:ALL?").strip()
         return response
 
     def get_system_error_code_all(self) -> str:
@@ -790,7 +790,7 @@ class System:
         Queries all error codes from the error queue.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:ERR:CODE:ALL?").strip()
+        response = self.instrument.query(":SYST:ERR:CODE:ALL?").strip()
         return response
 
     def get_system_error(self) -> str:
@@ -798,7 +798,7 @@ class System:
         Queries the next error from the error queue, returning its code and message.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:ERR:NEXT?").strip()
+        response = self.instrument.query(":SYST:ERR:NEXT?").strip()
         return response
 
     def get_system_error_count(self) -> int:
@@ -806,7 +806,7 @@ class System:
         Queries the number of errors currently in the error queue.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:ERR:COUN?").strip()
+        response = self.instrument.query(":SYST:ERR:COUN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -818,7 +818,7 @@ class System:
         :param error_numbers: A list of numeric error numbers.
         Notes: No query form.
         """
-        self.instrument.write(f"SYST:ERR:ENAB:ADD {','.join(map(str, error_numbers))}")
+        self.instrument.write(f":SYST:ERR:ENAB:ADD {','.join(map(str, error_numbers))}")
 
     def delete_system_error_enable(self, error_numbers: list[int]):
         """
@@ -826,14 +826,14 @@ class System:
         :param error_numbers: A list of numeric error numbers.
         Notes: No query form.
         """
-        self.instrument.write(f"SYST:ERR:ENAB:DEL {','.join(map(str, error_numbers))}")
+        self.instrument.write(f":SYST:ERR:ENAB:DEL {','.join(map(str, error_numbers))}")
 
     def delete_system_error_enable_list(self):
         """
         Deletes all error numbers from the enable list.
         Notes: No query form.
         """
-        self.instrument.write("SYST:ERR:ENAB:DEL:LIST")
+        self.instrument.write(":SYST:ERR:ENAB:DEL:LIST")
 
     
     def get_system_help_headers(self, command_header: str = None) -> str:
@@ -844,9 +844,9 @@ class System:
         Notes: Query only.
         """
         if command_header:
-            return self.instrument.query(f"SYST:HELP:HEAD? '{command_header}'").strip()
+            return self.instrument.query(f":SYST:HELP:HEAD? '{command_header}'").strip()
         else:
-            return self.instrument.query("SYST:HELP:HEAD?").strip()
+            return self.instrument.query(":SYST:HELP:HEAD?").strip()
 
     def get_system_help_syntax(self, command_header: str = None) -> str:
         """
@@ -856,9 +856,9 @@ class System:
         Notes: Query only.
         """
         if command_header:
-            return self.instrument.query(f"SYST:HELP:SYNT? '{command_header}'").strip()
+            return self.instrument.query(f":SYST:HELP:SYNT? '{command_header}'").strip()
         else:
-            return self.instrument.query("SYST:HELP:SYNT?").strip()
+            return self.instrument.query(":SYST:HELP:SYNT?").strip()
 
     
     def set_system_key_define(self, key_number: int, block_data: str, string_label: str = None):
@@ -870,9 +870,9 @@ class System:
         Notes: No query form.
         """
         if string_label:
-            self.instrument.write(f"SYST:KEY:DEF {key_number},{block_data},'{string_label}'")
+            self.instrument.write(f":SYST:KEY:DEF {key_number},{block_data},'{string_label}'")
         else:
-            self.instrument.write(f"SYST:KEY:DEF {key_number},{block_data}")
+            self.instrument.write(f":SYST:KEY:DEF {key_number},{block_data}")
 
     def system_key_delete(self, key_number: int):
         """
@@ -880,7 +880,7 @@ class System:
         :param key_number: The numeric value of the key to delete.
         Notes: No query form.
         """
-        self.instrument.write(f"SYST:KEY:DEL {key_number}")
+        self.instrument.write(f":SYST:KEY:DEL {key_number}")
 
     
     def set_system_klock(self, enable: bool):
@@ -889,13 +889,13 @@ class System:
         :param enable: True to lock the keyboard, False to unlock.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:KLOCK {scpi_value}")
+        self.instrument.write(f":SYST:KLOCK {scpi_value}")
 
     def get_system_klock(self) -> bool:
         """
         Returns True if the front panel keyboard is locked, False if unlocked.
         """
-        response = self.instrument.query("SYST:KLOCK?").strip()
+        response = self.instrument.query(":SYST:KLOCK?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -909,13 +909,13 @@ class System:
         Sets the display language of the instrument.
         :param language: The language string (e.g., "ENGlish").
         """
-        self.instrument.write(f"SYST:LANG '{language}'")
+        self.instrument.write(f":SYST:LANG '{language}'")
 
     def get_system_language(self) -> str:
         """
         Returns the display language of the instrument.
         """
-        response = self.instrument.query("SYST:LANG?").strip().strip("'")
+        response = self.instrument.query(":SYST:LANG?").strip().strip("'")
         return response
 
     
@@ -924,13 +924,13 @@ class System:
         Sets the line frequency of the instrument's power supply.
         :param value: The line frequency (numeric value).
         """
-        self.instrument.write(f"SYST:LFR {value}")
+        self.instrument.write(f":SYST:LFR {value}")
 
     def get_system_lfrequency(self) -> float:
         """
         Returns the line frequency of the instrument's power supply.
         """
-        response = self.instrument.query("SYST:LFR?").strip()
+        response = self.instrument.query(":SYST:LFR?").strip()
         try:
             return float(response)
         except ValueError:
@@ -950,13 +950,13 @@ class System:
             scpi_value = "ONCE"
         else:
             raise ValueError(f"Invalid auto state: '{auto_state}'. Must be 'ON', 'OFF', or 'ONCE'.")
-        self.instrument.write(f"SYST:LFR:AUTO {scpi_value}")
+        self.instrument.write(f":SYST:LFR:AUTO {scpi_value}")
 
     def get_system_lfrequency_auto(self) -> str:
         """
         Returns the auto state of the line frequency.
         """
-        response = self.instrument.query("SYST:LFR:AUTO?").strip()
+        response = self.instrument.query(":SYST:LFR:AUTO?").strip()
         if response == "1":
             return "ON"
         elif response == "0":
@@ -970,7 +970,7 @@ class System:
         Returns the ID of the resource that currently owns the lock.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:LOCK:OWN?").strip()
+        response = self.instrument.query(":SYST:LOCK:OWN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -981,14 +981,14 @@ class System:
         Releases the system lock.
         Notes: No query form.
         """
-        self.instrument.write("SYST:LOCK:REL")
+        self.instrument.write(":SYST:LOCK:REL")
 
     def get_system_lock_request(self) -> bool:
         """
         Returns True if a lock request is pending, False otherwise.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:LOCK:REQ?").strip()
+        response = self.instrument.query(":SYST:LOCK:REQ?").strip()
         if response == "1":
             return True
         elif response == "0":
@@ -1003,7 +1003,7 @@ class System:
         :param password: The password string.
         Notes: Event; no query.
         """
-        self.instrument.write(f"SYST:PASS:CDIS '{password}'")
+        self.instrument.write(f":SYST:PASS:CDIS '{password}'")
 
     def system_password_cenable(self, password: str):
         """
@@ -1011,14 +1011,14 @@ class System:
         :param password: The password string.
         Notes: Event; no query.
         """
-        self.instrument.write(f"SYST:PASS:CEN '{password}'")
+        self.instrument.write(f":SYST:PASS:CEN '{password}'")
 
     def get_system_password_state(self) -> bool:
         """
         Returns the state of the security password.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:PASS:STATE?").strip()
+        response = self.instrument.query(":SYST:PASS:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -1033,14 +1033,14 @@ class System:
         :param new_password: The new password string.
         Notes: Event; no query.
         """
-        self.instrument.write(f"SYST:PASS:NEW '{current_password}','{new_password}'")
+        self.instrument.write(f":SYST:PASS:NEW '{current_password}','{new_password}'")
 
     def system_password_preset(self):
         """
         Resets the password to its default value.
         Notes: Event; no query.
         """
-        self.instrument.write("SYST:PASS:PRES")
+        self.instrument.write(":SYST:PASS:PRES")
 
     
     def set_system_security_immediate(self, enable: bool):
@@ -1050,7 +1050,7 @@ class System:
         Notes: Event; no query.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:SEC:IMM {scpi_value}")
+        self.instrument.write(f":SYST:SEC:IMM {scpi_value}")
 
     def set_system_security_state(self, enable: bool):
         """
@@ -1058,13 +1058,13 @@ class System:
         :param enable: True to enable, False to disable.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:SEC:STATE {scpi_value}")
+        self.instrument.write(f":SYST:SEC:STATE {scpi_value}")
 
     def get_system_security_state(self) -> bool:
         """
         Returns True if security functions are enabled, False if disabled.
         """
-        response = self.instrument.query("SYST:SEC:STATE?").strip()
+        response = self.instrument.query(":SYST:SEC:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -1078,7 +1078,7 @@ class System:
         :param block_data: The block data string.
         Notes: No query form.
         """
-        self.instrument.write(f"SYST:SEC:SET {block_data}")
+        self.instrument.write(f":SYST:SEC:SET {block_data}")
 
     def set_system_time(self, hour: int, minute: int, second: int):
         """
@@ -1094,14 +1094,14 @@ class System:
             raise ValueError("Minute must be between 0 and 59.")
         if not (0 <= second <= 59):
             raise ValueError("Second must be between 0 and 59.")
-        self.instrument.write(f"SYST:TIME {hour},{minute},{second}")
+        self.instrument.write(f":SYST:TIME {hour},{minute},{second}")
 
     def get_system_time(self) -> tuple[int, int, int]:
         """
         Returns the internal time of the instrument.
         :return: A tuple (hour, minute, second).
         """
-        response = self.instrument.query("SYST:TIME?").strip()
+        response = self.instrument.query(":SYST:TIME?").strip()
         try:
             parts = [int(p) for p in response.split(',')]
             if len(parts) == 3:
@@ -1117,13 +1117,13 @@ class System:
         Sets the count for the system timer.
         :param value: The count (numeric value).
         """
-        self.instrument.write(f"SYST:TIM:COUN {value}")
+        self.instrument.write(f":SYST:TIM:COUN {value}")
 
     def get_system_timer_count(self) -> int:
         """
         Returns the count for the system timer.
         """
-        response = self.instrument.query("SYST:TIM:COUN?").strip()
+        response = self.instrument.query(":SYST:TIM:COUN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1135,13 +1135,13 @@ class System:
         :param enable: True to enable, False to disable.
         """
         scpi_value = "1" if enable else "0"
-        self.instrument.write(f"SYST:TIM:STATE {scpi_value}")
+        self.instrument.write(f":SYST:TIM:STATE {scpi_value}")
 
     def get_system_timer_state(self) -> bool:
         """
         Returns True if the system timer is enabled, False if disabled.
         """
-        response = self.instrument.query("SYST:TIM:STATE?").strip()
+        response = self.instrument.query(":SYST:TIM:STATE?").strip()
         if response == "1" or response.upper() == "ON":
             return True
         elif response == "0" or response.upper() == "OFF":
@@ -1157,16 +1157,16 @@ class System:
         :param minute_offset: Optional. The minute offset (numeric value).
         """
         if minute_offset is not None:
-            self.instrument.write(f"SYST:TZON {hour_offset},{minute_offset}")
+            self.instrument.write(f":SYST:TZON {hour_offset},{minute_offset}")
         else:
-            self.instrument.write(f"SYST:TZON {hour_offset}")
+            self.instrument.write(f":SYST:TZON {hour_offset}")
 
     def get_system_tzone(self) -> tuple[int, int]:
         """
         Returns the time zone offset from UTC.
         :return: A tuple (hour_offset, minute_offset or None).
         """
-        response = self.instrument.query("SYST:TZON?").strip()
+        response = self.instrument.query(":SYST:TZON?").strip()
         try:
             parts = [int(p) for p in response.split(',')]
             if len(parts) == 1:
@@ -1184,7 +1184,7 @@ class System:
         Returns the SCPI version supported by the instrument.
         Notes: Query only.
         """
-        response = self.instrument.query("SYST:VERS?").strip()
+        response = self.instrument.query(":SYST:VERS?").strip()
         return response
 
 
@@ -1198,7 +1198,7 @@ class System:
         :return: A tuple (error_number, error_description, device_dependent_info, timestamp).
                  device_dependent_info and timestamp can be None if not present.
         """
-        response = self.instrument.query("SYST:ERR:NEXT?").strip()
+        response = self.instrument.query(":SYST:ERR:NEXT?").strip()
         if response == '0,"No error"':
             return (0, "No error", None, None)
 
@@ -1263,7 +1263,7 @@ class System:
         # In a real scenario, you'd read from the queue and filter.
         # As per the document, this event is reported to the queue.
         # This function provides the static information as if it were retrieved.
-        # A direct query `SYST:ERR:POWON?` is not defined in the provided document.
+        # A direct query `:SYST:ERR:POWON?` is not defined in the provided document.
         # This function provides the *description* of the event.
         return (-500, "Power on")
 
