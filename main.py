@@ -1,5 +1,5 @@
-from instrument import Instrument
-from RigolOscilloscope import RigolOscilloscope
+from Instruments.instrument import Instrument
+from Instruments.RigolOscilloscope import RigolOscilloscope
 from rigol_ds1000z import Rigol_DS1000Z
 from rigol_ds1000z import process_display, process_waveform
 from rigol_ds1000z import process_display, process_waveform

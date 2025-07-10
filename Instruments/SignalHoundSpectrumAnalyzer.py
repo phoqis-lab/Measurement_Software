@@ -1,4 +1,4 @@
-import instrument
+import Instruments.instrument as instrument
 import time
 
 class SpectrumAnalyzer(instrument.Instrument):
@@ -1893,3 +1893,227 @@ class SpectrumAnalyzer(instrument.Instrument):
         """
         response = self.instrument.query(":SENS:OBW:POW?")
         return float(response)
+
+#Intermodulation Distortion (IMD) Controls
+    """These commands allow you to configure the intermodulation distortion measurement in the Spike software."""
+    def enable_intermodulation_distortion(self, enable: bool):
+        """
+        Enables or disables the intermodulation distortion measurement.
+        Parameters:
+        enable (bool): True to enable, False to disable.
+        """
+        self.instrument.write(f":SENS:IMD:STAT {'1' if enable else '0'}")
+
+    def is_intermodulation_distortion_enabled(self) -> bool:
+        """
+        Queries if the intermodulation distortion measurement is enabled.
+        Returns:
+        bool: True if enabled, False otherwise.
+        """
+        response = self.instrument.query(":SENS:IMD:STAT?")
+        return response == '1'
+
+    def get_intermodulation_frequency(self, product: str) -> float:
+        """
+        Returns the frequency of the specified intermodulation product.
+        Parameters:
+        product (str): 'F1', 'F2', 'IM3L', or 'IM3U'.
+        Returns:
+        float: The frequency in Hz.
+        """
+        response = self.instrument.query(f":SENS:IMD:FREQ? {product.upper()}")
+        return float(response)
+
+    def get_intermodulation_power(self, product: str) -> float:
+        """
+        Returns the tonal power in dBm of the specified intermodulation product.
+        Parameters:
+        product (str): 'F1', 'F2', 'IM3L', or 'IM3U'.
+        Returns:
+        float: The power in dBm.
+        """
+        response = self.instrument.query(f":SENS:IMD:TPOW? {product.upper()}")
+        return float(response)
+
+    def get_intermodulation_power_difference(self, product: str) -> float:
+        """
+        Returns the tonal power difference in dBc between the specified third order product and its corresponding first order product.
+        Parameters:
+        product (str): 'IM3L' or 'IM3U'.
+        Returns:
+        float: The power difference in dBc.
+        """
+        response = self.instrument.query(f":SENS:IMD:TPOW:DIFF? {product.upper()}")
+        return float(response)
+
+    def get_intermodulation_toi(self, product: str) -> float:
+        """
+        Returns the third-order intercept (TOI) in dBm of the specified third order product.
+        Parameters:
+        product (str): 'IM3L' or 'IM3U'.
+        Returns:
+        float: The TOI in dBm.
+        """
+        response = self.instrument.query(f":SENS:IMD:TOI? {product.upper()}")
+        return float(response)
+    
+# Peak Table Controls
+    """These commands control the Peak Table display panel in Swept Analysis mode."""
+    def enable_peak_table(self, enable: bool):
+        """
+        Enables or disables the Peak Table panel.
+        Parameters:
+        enable (bool): True to enable, False to disable.
+        """
+        self.instrument.write(f":SENS:PEAK:TABL:STAT {'1' if enable else '0'}")
+
+    def is_peak_table_enabled(self) -> bool:
+        """
+        Queries if the Peak Table panel is enabled.
+        Returns:
+        bool: True if enabled, False otherwise.
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:STATe?")
+        return response == '1'
+
+    def set_peak_table_trace(self, trace_index: int):
+        """
+        Selects which trace the peak measurements are performed on.
+        Parameters:
+        trace_index (int): The index of the trace.
+        """
+        self.instrument.write(f":SENS:PEAK:TABL:TRAC {trace_index}")
+
+    def get_peak_table_trace(self) -> int:
+        """
+        Queries which trace the peak measurements are performed on.
+        Returns:
+        int: The trace index.
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:TRACe?")
+        return int(response)
+
+    def set_peak_table_threshold(self, threshold_dbm: float):
+        """
+        Specifies the peak threshold in dBm.
+        Parameters:
+        threshold_dbm (float): The threshold in dBm.
+        """
+        self.instrument.write(f":SENS:PEAK:TABL:THR {threshold_dbm}")
+
+    def get_peak_table_threshold(self) -> float:
+        """
+        Queries the peak threshold in dBm.
+        Returns:
+        float: The threshold in dBm.
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:THR?")
+        return float(response)
+
+    def set_peak_table_excursion(self, excursion_db: float):
+        """
+        Specifies the peak excursion in dB.
+        Parameters:
+        excursion_db (float): The excursion in dB.
+        """
+        self.instrument.write(f":SENS:PEAK:TABL:EXC {excursion_db}")
+
+    def get_peak_table_excursion(self) -> float:
+        """
+        Queries the peak excursion in dB.
+        Returns:
+        float: The excursion in dB.
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:EXC?")
+        return float(response)
+
+    def set_peak_table_sort(self, sort_type: str):
+        """
+        Specifies the sort order of the table. Allowed values: 'FREQUENCY', 'AMPLITUDE'.
+        Parameters:
+        sort_type (str): The sort order.
+        """
+        valid_types = {"FREQUENCY", "AMPLITUDE"}
+        sort_type_upper = sort_type.upper()
+        if sort_type_upper not in valid_types:
+            raise ValueError(f"Invalid sort type: '{sort_type}'. Must be 'FREQUENCY' or 'AMPLITUDE'.")
+        self.instrument.write(f":SENS:PEAK:TABL:SORT {sort_type_upper}")
+
+    def get_peak_table_sort(self) -> str:
+        """
+        Queries the sort order of the table.
+        Returns:
+        str: The sort order ('FREQUENCY' or 'AMPLITUDE').
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:SORT?")
+        return response.upper()
+
+    def get_peak_table_count(self) -> int:
+        """
+        Returns the number of peaks in the table.
+        Returns:
+        int: The number of peaks.
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:COUN?")
+        return int(response)
+
+    def set_peak_table_max(self, max_peaks: int):
+        """
+        Specifies the maximum number of peaks that can appear in the table [0, 99].
+        Parameters:
+        max_peaks (int): The maximum number of peaks.
+        """
+        self.instrument.write(f":SENS:PEAK:TABL:MAX {max_peaks}")
+
+    def get_peak_table_max(self) -> int:
+        """
+        Queries the maximum number of peaks that can appear in the table.
+        Returns:
+        int: The maximum number of peaks.
+        """
+        response = self.instrument.query(":SENS:PEAK:TABL:MAX?")
+        return int(response)
+
+    def get_peak_table_frequency(self, peak_index: int) -> float:
+        """
+        Returns the frequency of the specified peak.
+        Parameters:
+        peak_index (int): The peak index.
+        Returns:
+        float: The frequency in Hz.
+        """
+        response = self.instrument.query(f":SENS:PEAK:TABL:FREQ? {peak_index}")
+        return float(response)
+
+    def get_peak_table_amplitude(self, peak_index: int) -> float:
+        """
+        Returns the amplitude of the specified peak.
+        Parameters:
+        peak_index (int): The peak index.
+        Returns:
+        float: The amplitude in dBm.
+        """
+        response = self.instrument.query(f":SENS:PEAK:TABL:AMPL? {peak_index}")
+        return float(response)
+
+    def get_peak_table_frequency_delta(self, peak_index: int) -> float:
+        """
+        Returns the frequency difference between the specified peak and the first peak in the list.
+        Parameters:
+        peak_index (int): The peak index.
+        Returns:
+        float: The frequency delta in Hz.
+        """
+        response = self.instrument.query(f":SENS:PEAK:TABL:FREQ:DELT? {peak_index}")
+        return float(response)
+
+    def get_peak_table_amplitude_delta(self, peak_index: int) -> float:
+        """
+        Returns the amplitude difference between the specified peak and the first peak in the list.
+        Parameters:
+        peak_index (int): The peak index.
+        Returns:
+        float: The amplitude delta in dB.
+        """
+        response = self.instrument.query(f":SENS:PEAK:TABL:AMPL:DELT? {peak_index}")
+        return response

@@ -1,4 +1,4 @@
-import instrument
+import Instruments.instrument as instrument
 
 from rigol_ds1000z import Rigol_DS1000Z
 from rigol_ds1000z import process_display, process_waveform
@@ -7,29 +7,29 @@ from time import sleep
 from time import sleep
 import pyvisa
 
-from GenericClasses import calculate
-from GenericClasses import calibration
-from GenericClasses import control
-from GenericClasses import data
-from GenericClasses import display
-from GenericClasses import format
-from GenericClasses import hcopy
-from GenericClasses import input
-from GenericClasses import instrumentcommands
-from GenericClasses import measure
-from GenericClasses import memory
-from GenericClasses import mmemory
-from GenericClasses import output
-from GenericClasses import program
-from GenericClasses import route
-from GenericClasses import sense
-from GenericClasses import source
-from GenericClasses import status
-from GenericClasses import system
-from GenericClasses import trace
-from GenericClasses import trigger
-from GenericClasses import unit
-from GenericClasses import vxi
+from SCPICommandTree import calculate
+from SCPICommandTree import calibration
+from SCPICommandTree import control
+from SCPICommandTree import data
+from SCPICommandTree import display
+from SCPICommandTree import format
+from SCPICommandTree import hcopy
+from SCPICommandTree import input
+from SCPICommandTree import instrumentcommands
+from SCPICommandTree import measure
+from SCPICommandTree import memory
+from SCPICommandTree import mmemory
+from SCPICommandTree import output
+from SCPICommandTree import program
+from SCPICommandTree import route
+from SCPICommandTree import sense
+from SCPICommandTree import source
+from SCPICommandTree import status
+from SCPICommandTree import system
+from SCPICommandTree import trace
+from SCPICommandTree import trigger
+from SCPICommandTree import unit
+from SCPICommandTree import vxi
 
 
 class Instrument(calculate.Calculate, calibration.Calibration, control.Control, data.Data, display.Display,

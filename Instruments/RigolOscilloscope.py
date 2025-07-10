@@ -1,4 +1,4 @@
-import instrument
+import Instruments.instrument as instrument
 
 from rigol_ds1000z import Rigol_DS1000Z
 from rigol_ds1000z import process_display, process_waveform
