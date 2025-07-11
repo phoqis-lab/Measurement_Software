@@ -7,5 +7,6 @@ TO DOS:
 - Additional Insturments to Add: Tracking Generator, Signal Generator
 - Add circuit creation for DAC
 - Add automation script for new instrument creation
+- double check what is overlap vs sequential
 
   How to set up on New Computer: VISA and PyVisa

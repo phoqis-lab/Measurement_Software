@@ -15,7 +15,7 @@ class Oscilloscope(mandatory.Mandatory):
         self.instrument = instru
         
     #Mandatory Commands
-
+    #TODO Add nonimplemented 
     #General
     def autoscale(self):
         """Enable the waveform auto setting function. The oscilloscope will automatically adjust the
