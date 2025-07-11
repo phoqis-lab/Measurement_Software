@@ -1,7 +1,7 @@
-import Instruments.instrument as instrument
+from Instruments.SCPICommandTree import mandatory
 import time
 
-class SpectrumAnalyzer(instrument.Instrument):
+class SpectrumAnalyzer(mandatory.Mandatory):
     def __init__(self, device):
        #TODO Add in 
        self.instrument = device

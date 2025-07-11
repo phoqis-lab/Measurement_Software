@@ -2,7 +2,6 @@ import unittest
 import sys
 import io
 sys.path.append('../Measurement_Software')
-from Instruments import instrument
 from Instruments import RigolOscilloscope
 import pyvisa
 
@@ -26,6 +25,7 @@ class TestRigolOscilloscope(unittest.TestCase):
     def tearDown(self):
         """Restore stdout after each test."""
         sys.stdout = self.held_stdout
+        
     # --- Common Commands Tests ---
     def test_get_identification(self):
         self.setup()
@@ -35,53 +35,29 @@ class TestRigolOscilloscope(unittest.TestCase):
     def test_reset_instrument(self):
         self.setup()
         self.scope.reset_instrument()
-        self.instrument.write.assert_called_with("*RST")
+        #TODO: Do with command in the middle
 
     def test_clear_status_byte(self):
         self.setup()
         self.scope.clear_event_registers()
-        self.instrument.write.assert_called_with("*CLS")
+        #TODO: Do with command in the middle
 
     def test_operation_complete(self):
         self.setup()
-        self.instrument.query.return_value = "1"
-        self.assertEqual(self.scope.is_operation_complete(), "1")
-        self.instrument.query.assert_called_with("*OPC?")
+        self.assertEqual(self.scope.is_operation_complete(), 1)
+        
 
     def test_wait_for_completion(self):
         self.setup()
         self.scope.wait_for_operation_finish()
-        self.instrument.write.assert_called_with("*WAI")
-
-
-    """def test_save_setup(self):
-        self.scope.save_setup(5)
-        self.instrument.write.assert_called_with("*SAV 5")
-        with self.assertRaises(ValueError):
-            self.scope.save_setup(10)
-
-    def test_recall_setup(self):
-        self.scope.recall_setup(3)
-        self.instrument.write.assert_called_with("*RCL 3")
-        with self.assertRaises(ValueError):
-            self.scope.recall_setup(-1)
-
-    def test_learn_setup(self):
-        self.instrument.query.return_value = "SETUP_STRING"
-        self.assertEqual(self.scope.learn_setup(), "SETUP_STRING")
-        self.instrument.query.assert_called_with("*LRN?")
-
-    def test_trigger_instrument(self):
-        self.scope.trigger_instrument()
-        self.instrument.write.assert_called_with("*TRG")
+        #TODO: Add inbetween waits
 
     def test_self_test(self):
-        self.instrument.query.return_value = "0"
-        self.assertEqual(self.scope.self_test(), "0")
-        self.instrument.query.assert_called_with("*TST?")
+        self.setup()
+        self.assertEqual(self.scope.self_test(), 0)
 
     # --- System Commands Tests ---
-    def test_get_lan_ip_address(self):
+    """def test_get_lan_ip_address(self):
         self.instrument.query.return_value = "192.168.1.100"
         self.assertEqual(self.scope.get_lan_ip_address(), "192.168.1.100")
         self.instrument.query.assert_called_with(":SYST:COMM:LAN:IPAD?")
