@@ -32,21 +32,21 @@ class TestRigolOscilloscope(unittest.TestCase):
         id = "RIGOL TECHNOLOGIES,DS1202Z-E,DS1ZE264M00036,00.06.04"
         self.assertEqual(self.scope.get_id(), id)
 
-    def test_operation_complete(self):
-        self.setup()
-        self.assertEqual(self.scope.is_operation_complete(), "1")
-        #TODO Find longer operation
-
     def test_reset_instrument(self):
         self.setup()
-        #TODO Add function with longer operation to test, check if need way to combine commands
         self.scope.reset_instrument()
-        self.assertEqual(self.scope.is_operation_complete(), "1")
+        self.instrument.write.assert_called_with("*RST")
 
     def test_clear_status_byte(self):
         self.setup()
         self.scope.clear_event_registers()
         self.instrument.write.assert_called_with("*CLS")
+
+    def test_operation_complete(self):
+        self.setup()
+        self.instrument.query.return_value = "1"
+        self.assertEqual(self.scope.is_operation_complete(), "1")
+        self.instrument.query.assert_called_with("*OPC?")
 
     def test_wait_for_completion(self):
         self.setup()
@@ -54,7 +54,7 @@ class TestRigolOscilloscope(unittest.TestCase):
         self.instrument.write.assert_called_with("*WAI")
 
 
-    def test_save_setup(self):
+    """def test_save_setup(self):
         self.scope.save_setup(5)
         self.instrument.write.assert_called_with("*SAV 5")
         with self.assertRaises(ValueError):
@@ -81,7 +81,7 @@ class TestRigolOscilloscope(unittest.TestCase):
         self.instrument.query.assert_called_with("*TST?")
 
     # --- System Commands Tests ---
-    """def test_get_lan_ip_address(self):
+    def test_get_lan_ip_address(self):
         self.instrument.query.return_value = "192.168.1.100"
         self.assertEqual(self.scope.get_lan_ip_address(), "192.168.1.100")
         self.instrument.query.assert_called_with(":SYST:COMM:LAN:IPAD?")

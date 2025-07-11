@@ -2,14 +2,14 @@ class Control():
     def __init__(self, instrument):
         self.instrument = instrument
     
-    def set_apower_state(self, enable: bool):
+    def enable_aux_power(self, enable: bool):
         """Turns the Auxiliary Power ON and OFF.
         Parameters:
         enable: True to turn APOWer ON, False to turn APOWer OFF."""
         scpi_value = "1" if enable else "0"
         self.instrument.write(f":CONT:APOW:STATE {scpi_value}")
 
-    def get_apower_state(self) -> bool:
+    def is_aux_power_enabled(self) -> bool:
         """Returns True if Auxiliary Power is ON, False if OFF."""
         response = self.instrument.query(":CONT:APOW:STATE?").strip()
         if response == "1" or response.upper() == "ON":
@@ -20,14 +20,14 @@ class Control():
             raise ValueError(f"Unexpected response for Auxiliary Power state: '{response}'")
 
     
-    def set_blower_state(self, enable: bool):
+    def enable_blower(self, enable: bool):
         """Turns the Blower ON and OFF.
         Parameters:
         enable: True to turn BLOWer ON, False to turn BLOWer OFF."""
         scpi_value = "1" if enable else "0"
         self.instrument.write(f":CONT:BLOW:STATE {scpi_value}")
 
-    def get_blower_state(self) -> bool:
+    def is_blower_enabled(self) -> bool:
         """Returns True if Blower is ON, False if OFF."""
         response = self.instrument.query(":CONT:BLOW:STATE?").strip()
         if response == "1" or response.upper() == "ON":
@@ -37,7 +37,7 @@ class Control():
         else:
             raise ValueError(f"Unexpected response for Blower state: '{response}'")
 
-    def set_brake_state(self, enable: bool):
+    def enable_brake(self, enable: bool):
         """Sets or queries the state of the brake.
         Parameters:
         enable: True to set BRAKE ON, False to set BRAKE OFF."""
