@@ -333,12 +333,12 @@ class Trace:
         quoted_trace_name = f"'{trace_name}'"
 
         if isinstance(auto_state, bool):
-            scpi_value = "1" if auto_state else "0"
+            scpi_value = 1 if auto_state else 0
         elif isinstance(auto_state, str):
             normalized_state = auto_state.upper()
-            if normalized_state in {"1", "ON"}:
+            if normalized_state in {1, "ON"}:
                 scpi_value = "ON"
-            elif normalized_state in {"0", "OFF"}:
+            elif normalized_state in {0, "OFF"}:
                 scpi_value = "OFF"
             elif normalized_state == "ONCE":
                 scpi_value = "ONCE"

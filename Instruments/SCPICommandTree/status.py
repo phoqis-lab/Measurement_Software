@@ -148,29 +148,16 @@ class Status:
         Returns the contents of the OPERation condition register.
         Notes: Query only. See Section 20.1.2 for details.
         """
-        return self._get_status_condition("OPER")
+        return self._get_status_condition(":STAT:OPER")
 
-    def set_status_operation_enable(self, value: int):
-        """
-        Sets the enable mask for the OPERation register.
-        :param value: The integer value of the enable mask (range: 0 through 65535).
-        Notes: See Section 20.1.3 for details.
-        """
-        self._set_status_enable("OPER", value)
 
-    def get_status_operation_enable(self) -> int:
-        """
-        Returns the contents of the enable mask for the OPERation register.
-        Notes: See Section 20.1.3 for details.
-        """
-        return self._get_status_enable("OPER")
 
     def get_status_operation_event(self) -> int:
         """
         Returns the contents of the OPERation event register. Reading clears it.
         Notes: Query only. See Section 20.1.4 for details.
         """
-        return self._get_status_event("OPER")
+        return self._get_status_event(":STAT:OPER")
 
     def set_status_operation_map(self, bit_location: int, event_number: int):
         """
@@ -179,7 +166,7 @@ class Status:
         :param event_number: The event number to map.
         Notes: See Section 20.1.5 for details.
         """
-        self._set_status_map("OPER", bit_location, event_number)
+        self._set_status_map(":STAT:OPER", bit_location, event_number)
 
     def set_status_operation_ntransition(self, value: int):
         """
@@ -187,14 +174,14 @@ class Status:
         :param value: The integer value (range: 0 through 65535).
         Notes: See Section 20.1.6 for details.
         """
-        self._set_status_ntransition("OPER", value)
+        self._set_status_ntransition(":STAT:OPER", value)
 
     def get_status_operation_ntransition(self) -> int:
         """
         Returns the contents of the negative transition filter for the OPERation register.
         Notes: See Section 20.1.6 for details.
         """
-        return self._get_status_ntransition("OPER")
+        return self._get_status_ntransition(":STAT:OPER")
 
     def set_status_operation_ptransition(self, value: int):
         """
@@ -202,14 +189,14 @@ class Status:
         :param value: The integer value (range: 0 through 65535).
         Notes: See Section 20.1.7 for details.
         """
-        self._set_status_ptransition("OPER", value)
+        self._set_status_ptransition(":STAT:OPER", value)
 
     def get_status_operation_ptransition(self) -> int:
         """
         Returns the contents of the positive transition filter for the OPERation register.
         Notes: See Section 20.1.7 for details.
         """
-        return self._get_status_ptransition("OPER")
+        return self._get_status_ptransition(":STAT:OPER")
 
     # --- STATUS:PRESet (Page 4) ---
 
@@ -220,7 +207,7 @@ class Status:
         mandatory part of the status-reporting mechanism.
         Notes: This command is an event and has no query form. See Section 20.2 for details.
         """
-        self.instrument.write("STAT:PRES")
+        self.instrument.write(":STAT:PRES")
 
     # --- STATUS:QUEStionable Subsystem (Page 7) ---
 

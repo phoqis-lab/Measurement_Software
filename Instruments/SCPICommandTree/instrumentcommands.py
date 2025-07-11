@@ -22,13 +22,13 @@ class InstrumentCommands():
         Parameters:
         auto_state: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE')."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
 
 
 
             
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -39,9 +39,9 @@ class InstrumentCommands():
     def get_input_attenuation_auto(self) -> str:
         """Returns whether attenuation is automatically controlled ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":INP:ATT:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -50,15 +50,15 @@ class InstrumentCommands():
         """Turns the input attenuator ON and OFF.
         Parameters:
         enable: True to turn the attenuator ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:ATT:STATE {scpi_value}")
 
     def get_input_attenuation_state(self) -> bool:
         """Returns True if the input attenuator is ON, False if OFF."""
         response = self.instrument.query(":INP:ATT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for input attenuation state: '{response}'")
@@ -96,15 +96,15 @@ class InstrumentCommands():
         """Sets whether or not input biasing is enabled.
         Parameters:
         enable: True to enable input biasing, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:BIAS:STATE {scpi_value}")
 
     def get_input_bias_state(self) -> bool:
         """Returns True if input biasing is enabled, False if not."""
         response = self.instrument.query(":INP:BIAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for input bias state: '{response}'")
@@ -187,15 +187,15 @@ class InstrumentCommands():
         """Turns the "A" weighting input filter on and off.
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:FILT:AWE:STATE {scpi_value}")
 
     def get_input_filter_aweighting_state(self) -> bool:
         """Returns True if the "A" weighting input filter is ON, False if OFF."""
         response = self.instrument.query(":INP:FILT:AWE:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for A-weighting filter state: '{response}'")
@@ -218,15 +218,15 @@ class InstrumentCommands():
         """Turns the high pass filter ON and OFF.
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:FILT:HPAS:STATE {scpi_value}")
 
     def get_input_filter_hpass_state(self) -> bool:
         """Returns True if the high pass filter is ON, False if OFF."""
         response = self.instrument.query(":INP:FILT:HPAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for high pass filter state: '{response}'")
@@ -249,15 +249,15 @@ class InstrumentCommands():
         """Turns the low pass filter ON and OFF.
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:FILT:LPAS:STATE {scpi_value}")
 
     def get_input_filter_lpass_state(self) -> bool:
         """Returns True if the low pass filter is ON, False if OFF."""
         response = self.instrument.query(":INP:FILT:LPAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for low pass filter state: '{response}'")
@@ -282,9 +282,9 @@ class InstrumentCommands():
         Parameters:
         auto_state: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE')."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -295,9 +295,9 @@ class InstrumentCommands():
     def get_input_gain_auto(self) -> str:
         """Returns whether gain is automatically controlled ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":INP:GAIN:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -306,15 +306,15 @@ class InstrumentCommands():
         """Turns the input gain (preamplifier) ON and OFF.
         Parameters:
         enable: True to turn the preamplifier ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:GAIN:STATE {scpi_value}")
 
     def get_input_gain_state(self) -> bool:
         """Returns True if the input gain (preamplifier) is ON, False if OFF."""
         response = self.instrument.query(":INP:GAIN:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for input gain state: '{response}'")
@@ -397,15 +397,15 @@ class InstrumentCommands():
         """Turns the effect of OFFSet ON or OFF.
         Parameters:
         enable: True to turn offset effect ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:OFFS:STATE {scpi_value}")
 
     def get_input_offset_state(self) -> bool:
         """Returns True if the effect of OFFSet is ON, False if OFF."""
         response = self.instrument.query(":INP:OFFS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for input offset state: '{response}'")
@@ -520,15 +520,15 @@ class InstrumentCommands():
         """Controls whether the X-axis angle limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:POS:X:ANG:LIM:STATE {scpi_value}")
 
     def get_input_position_x_angle_limit_state(self) -> bool:
         """Returns True if the X-axis angle limit is enabled, False if not."""
         response = self.instrument.query(":INP:POS:X:ANG:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for X-axis angle limit state: '{response}'")
@@ -623,15 +623,15 @@ class InstrumentCommands():
         """Controls whether the X-axis linear distance limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:POS:X:DIST:LIM:STATE {scpi_value}")
 
     def get_input_position_x_distance_limit_state(self) -> bool:
         """Returns True if the X-axis linear distance limit is enabled, False if not."""
         response = self.instrument.query(":INP:POS:X:DIST:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for X-axis distance limit state: '{response}'")
@@ -726,15 +726,15 @@ class InstrumentCommands():
         """Controls whether the Y-axis angle limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:POS:Y:ANG:LIM:STATE {scpi_value}")
 
     def get_input_position_y_angle_limit_state(self) -> bool:
         """Returns True if the Y-axis angle limit is enabled, False if not."""
         response = self.instrument.query(":INP:POS:Y:ANG:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Y-axis angle limit state: '{response}'")
@@ -829,15 +829,15 @@ class InstrumentCommands():
         """Controls whether the Y-axis linear distance limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:POS:Y:DIST:LIM:STATE {scpi_value}")
 
     def get_input_position_y_distance_limit_state(self) -> bool:
         """Returns True if the Y-axis linear distance limit is enabled, False if not."""
         response = self.instrument.query(":INP:POS:Y:DIST:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Y-axis distance limit state: '{response}'")
@@ -918,15 +918,15 @@ class InstrumentCommands():
         """Controls whether the Z-axis angle limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:POS:Z:ANG:LIM:STATE {scpi_value}")
 
     def get_input_position_z_angle_limit_state(self) -> bool:
         """Returns True if the Z-axis angle limit is enabled, False if not."""
         response = self.instrument.query(":INP:POS:Z:ANG:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Z-axis angle limit state: '{response}'")
@@ -1021,15 +1021,15 @@ class InstrumentCommands():
         """Controls whether the Z-axis linear distance limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:POS:Z:DIST:LIM:STATE {scpi_value}")
 
     def get_input_position_z_distance_limit_state(self) -> bool:
         """Returns True if the Z-axis linear distance limit is enabled, False if not."""
         response = self.instrument.query(":INP:POS:Z:DIST:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Z-axis distance limit state: '{response}'")
@@ -1067,15 +1067,15 @@ class InstrumentCommands():
         """Connects the input terminal to the measurement signal path when ON.
         Parameters:
         enable: True to connect input terminal, False for maximum isolation."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":INP:STATE {scpi_value}")
 
     def get_input_state(self) -> bool:
         """Returns True if the input terminal is connected to the measurement signal path, False if not."""
         response = self.instrument.query(":INP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for input state: '{response}'")

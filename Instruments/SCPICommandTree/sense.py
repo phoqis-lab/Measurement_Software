@@ -8,9 +8,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -21,9 +21,9 @@ class Sense():
     def get_sense_am_depth_range_auto(self) -> str:
         """Returns the auto state of the AM depth range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:AM:DEP:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -102,9 +102,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -115,9 +115,9 @@ class Sense():
     def get_sense_average_count_auto(self) -> str:
         """Returns the auto state of the average count ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:AVER:COUN:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -126,15 +126,15 @@ class Sense():
         """Turns averaging ON and OFF.
         Parameters:
         enable: True to turn averaging ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:AVER:STATE {scpi_value}")
 
     def get_sense_average_state(self) -> bool:
         """Returns True if averaging is ON, False if OFF."""
         response = self.instrument.query(":SENSE:AVER:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for average state: '{response}'")
@@ -222,9 +222,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -235,9 +235,9 @@ class Sense():
     def get_sense_bandwidth_resolution_auto(self) -> str:
         """Returns the auto state of the resolution bandwidth ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:BAND:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -260,15 +260,15 @@ class Sense():
         """Allows the resolution bandwidth to dynamically change during a logarithmic frequency sweep.
         Parameters:
         enable: True to enable tracking, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:BAND:RES:TRACK {scpi_value}")
 
     def get_sense_bandwidth_resolution_track(self) -> bool:
         """Returns True if resolution bandwidth tracking is ON, False if OFF."""
         response = self.instrument.query(":SENSE:BAND:RES:TRACK?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for bandwidth resolution track state: '{response}'")
@@ -293,9 +293,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -306,9 +306,9 @@ class Sense():
     def get_sense_bandwidth_video_auto(self) -> str:
         """Returns the auto state of the video bandwidth ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:BAND:VID:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -428,15 +428,15 @@ class Sense():
         """Turns the automatic range switching feature on or off.
         Parameters:
         enable: True to turn auto-ranging ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CONC:RANG:AUTO:STATE {scpi_value}")
 
     def get_sense_concentration_range_auto_state(self) -> bool:
         """Returns True if automatic range switching is ON, False if OFF."""
         response = self.instrument.query(":SENSE:CONC:RANG:AUTO:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for concentration range auto state: '{response}'")
@@ -583,15 +583,15 @@ class Sense():
         """Determines whether the correction data defined in the selected set is applied to the measurement.
         Parameters:
         enable: True to apply correction, False to not apply."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:CSET:STATE {scpi_value}")
 
     def get_sense_correction_cset_state(self) -> bool:
         """Returns True if the correction data is applied, False if not."""
         response = self.instrument.query(":SENSE:CORR:CSET:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for correction CSET state: '{response}'")
@@ -615,15 +615,15 @@ class Sense():
         """Enables or disables the electrical delay correction.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:EDEL:STATE {scpi_value}")
 
     def get_sense_correction_edelay_state(self) -> bool:
         """Returns True if electrical delay correction is enabled, False if disabled."""
         response = self.instrument.query(":SENSE:CORR:EDEL:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for electrical delay state: '{response}'")
@@ -675,15 +675,15 @@ class Sense():
         """Enables or disables external IMPedance correction factors.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:IMP:STATE {scpi_value}")
 
     def get_sense_correction_impedance_state(self) -> bool:
         """Returns True if external IMPedance correction factors are enabled, False if disabled."""
         response = self.instrument.query(":SENSE:CORR:IMP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for impedance state: '{response}'")
@@ -700,7 +700,7 @@ class Sense():
         if prefix_upper not in valid_prefixes:
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:{prefix_upper}:INP:AUTO {scpi_value}")
 
     def get_sense_correction_loss_gain_slope_input_auto(self, type_prefix: str) -> bool:
@@ -711,9 +711,9 @@ class Sense():
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
         response = self.instrument.query(f":SENSE:CORR:{prefix_upper}:INP:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for {type_prefix} input auto state: '{response}'")
@@ -778,7 +778,7 @@ class Sense():
         if prefix_upper not in valid_prefixes:
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:{prefix_upper}:OUTP:AUTO {scpi_value}")
 
     def get_sense_correction_loss_gain_slope_output_auto(self, type_prefix: str) -> bool:
@@ -789,9 +789,9 @@ class Sense():
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
         response = self.instrument.query(f":SENSE:CORR:{prefix_upper}:OUTP:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for {type_prefix} output auto state: '{response}'")
@@ -857,7 +857,7 @@ class Sense():
         if prefix_upper not in valid_prefixes:
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:{prefix_upper}:STATE {scpi_value}")
 
     def get_sense_correction_loss_gain_slope_state(self, type_prefix: str) -> bool:
@@ -868,9 +868,9 @@ class Sense():
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
         response = self.instrument.query(f":SENSE:CORR:{prefix_upper}:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for {type_prefix} state: '{response}'")
@@ -908,15 +908,15 @@ class Sense():
         """Enables or disables the offset correction.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:OFFS:STATE {scpi_value}")
 
     def get_sense_correction_offset_state(self) -> bool:
         """Returns True if the offset correction is enabled, False if disabled."""
         response = self.instrument.query(":SENSE:CORR:OFFS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for offset state: '{response}'")
@@ -960,15 +960,15 @@ class Sense():
         """Enables or disables the relative velocity correction.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:RVEL:STATE {scpi_value}")
 
     def get_sense_correction_rvelocity_state(self) -> bool:
         """Returns True if the relative velocity correction is enabled, False if disabled."""
         response = self.instrument.query(":SENSE:CORR:RVEL:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for relative velocity state: '{response}'")
@@ -1025,15 +1025,15 @@ class Sense():
         """Determines whether the correction data defined in this section is applied to the measurement.
         Parameters:
         enable: True to apply, False to not apply."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CORR:STATE {scpi_value}")
 
     def get_sense_correction_state(self) -> bool:
         """Returns True if the correction data is applied, False if not."""
         response = self.instrument.query(":SENSE:CORR:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for correction state: '{response}'")
@@ -1104,15 +1104,15 @@ class Sense():
         """Couples the attenuator to RANGe for AC Current such that maximum dynamic range is assured.
         Parameters:
         enable: True to enable auto-attenuation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CURR:AC:ATT:AUTO {scpi_value}")
 
     def get_sense_current_ac_attenuation_auto(self) -> bool:
         """Returns True if auto-attenuation is enabled for AC Current, False if disabled."""
         response = self.instrument.query(":SENSE:CURR:AC:ATT:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current AC attenuation auto state: '{response}'")
@@ -1136,15 +1136,15 @@ class Sense():
         """Controls whether the input protection circuit is enabled for AC Current.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CURR:AC:PROT:STATE {scpi_value}")
 
     def get_sense_current_ac_protection_state(self) -> bool:
         """Returns True if the input protection circuit is enabled for AC Current, False if disabled."""
         response = self.instrument.query(":SENSE:CURR:AC:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current AC protection state: '{response}'")
@@ -1153,9 +1153,9 @@ class Sense():
         """Returns True if the protection circuit is tripped for AC Current, False if untripped.
         Notes: Query only."""
         response = self.instrument.query(":SENSE:CURR:AC:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for current AC protection tripped status: '{response}'")
@@ -1199,9 +1199,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1212,9 +1212,9 @@ class Sense():
     def get_sense_current_ac_range_auto(self) -> str:
         """Returns the auto state of the AC Current range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:CURR:AC:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1315,15 +1315,15 @@ class Sense():
         """Determines whether amplitude is measured in absolute or relative mode for AC Current.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:CURR:AC:REF:STATE {scpi_value}")
 
     def get_sense_current_ac_reference_state(self) -> bool:
         """Returns True if amplitude is measured in relative mode for AC Current, False for absolute mode."""
         response = self.instrument.query(":SENSE:CURR:AC:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current AC reference state: '{response}'")
@@ -1347,9 +1347,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1360,9 +1360,9 @@ class Sense():
     def get_sense_current_ac_resolution_auto(self) -> str:
         """Returns the auto state of the AC Current resolution ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:CURR:AC:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1451,9 +1451,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1464,9 +1464,9 @@ class Sense():
     def get_sense_detector_function_auto(self) -> str:
         """Returns the auto state of the detector function ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:DET:FUNC:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1506,15 +1506,15 @@ class Sense():
         """Turns the sensor low pass filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:LPAS:STATE {scpi_value}")
 
     def get_sense_filter_lpass_state(self) -> bool:
         """Returns True if the sensor low pass filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:LPAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter low pass state: '{response}'")
@@ -1537,15 +1537,15 @@ class Sense():
         """Turns the sensor high pass filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:HPAS:STATE {scpi_value}")
 
     def get_sense_filter_hpass_state(self) -> bool:
         """Returns True if the sensor high pass filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:HPAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter high pass state: '{response}'")
@@ -1569,15 +1569,15 @@ class Sense():
         """Turns the FM de-emphasis filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:DEMP:STATE {scpi_value}")
 
     def get_sense_filter_demphasis_state(self) -> bool:
         """Returns True if the FM de-emphasis filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:DEMP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter de-emphasis state: '{response}'")
@@ -1600,15 +1600,15 @@ class Sense():
         """Turns the CCITT filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:CCIT:STATE {scpi_value}")
 
     def get_sense_filter_ccitt_state(self) -> bool:
         """Returns True if the CCITT filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:CCIT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter CCITT state: '{response}'")
@@ -1617,15 +1617,15 @@ class Sense():
         """Turns the C-Message sensor filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:CMES:STATE {scpi_value}")
 
     def get_sense_filter_cmessage_state(self) -> bool:
         """Returns True if the C-Message sensor filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:CMES:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter C-Message state: '{response}'")
@@ -1635,15 +1635,15 @@ class Sense():
         """Turns the CCIR weighting filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:CCIR:STATE {scpi_value}")
 
     def get_sense_filter_ccir_state(self) -> bool:
         """Returns True if the CCIR weighting filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:CCIR:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter CCIR state: '{response}'")
@@ -1652,15 +1652,15 @@ class Sense():
         """Turns the CCIR/ARM weighting filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:CARM:STATE {scpi_value}")
 
     def get_sense_filter_carm_state(self) -> bool:
         """Returns True if the CCIR/ARM weighting filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:CARM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter CARM state: '{response}'")
@@ -1669,15 +1669,15 @@ class Sense():
         """Turns the "A" weighting sensor filter on and off.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FILT:AW:STATE {scpi_value}")
 
     def get_sense_filter_aweighting_state(self) -> bool:
         """Returns True if the "A" weighting sensor filter is ON, False if OFF."""
         response = self.instrument.query(":SENSE:FILT:AW:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter A-Weighting state: '{response}'")
@@ -1688,9 +1688,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1701,9 +1701,9 @@ class Sense():
     def get_sense_fm_deviation_range_auto(self) -> str:
         """Returns the auto state of the FM deviation range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:FM:DEV:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1785,9 +1785,9 @@ class Sense():
         Parameters:
         afc_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = afc_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1798,9 +1798,9 @@ class Sense():
     def get_sense_frequency_cw_afc(self) -> str:
         """Returns the AFC state of the CW frequency ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:FREQ:CW:AFC?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1810,9 +1810,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1823,9 +1823,9 @@ class Sense():
     def get_sense_frequency_cw_auto(self) -> str:
         """Returns the auto state of the CW frequency ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:FREQ:CW:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1932,9 +1932,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1945,9 +1945,9 @@ class Sense():
     def get_sense_frequency_range_auto(self) -> str:
         """Returns the auto state of the frequency range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:FREQ:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1972,9 +1972,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1985,9 +1985,9 @@ class Sense():
     def get_sense_frequency_resolution_auto(self) -> str:
         """Returns the auto state of the frequency resolution ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:FREQ:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2010,15 +2010,15 @@ class Sense():
         """Prevents the SPAN from being changed implicitly by coupling.
         Parameters:
         enable: True to hold, False to allow changes."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FREQ:SPAN:HOLD {scpi_value}")
 
     def get_sense_frequency_span_hold(self) -> bool:
         """Returns True if SPAN is held, False if not."""
         response = self.instrument.query(":SENSE:FREQ:SPAN:HOLD?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for frequency span hold state: '{response}'")
@@ -2108,15 +2108,15 @@ class Sense():
         """Indicates whether the SENSor block should be configured to SENSe one function at a time or concurrently.
         Parameters:
         enable: True for concurrent sensing, False for one function at a time."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:FUNC:CONC {scpi_value}")
 
     def get_sense_function_concurrent(self) -> bool:
         """Returns True if concurrent sensing is enabled, False if not."""
         response = self.instrument.query(":SENSE:FUNC:CONC?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for function concurrent state: '{response}'")
@@ -2187,9 +2187,9 @@ class Sense():
         sensor_function: The sensor function to query (e.g., 'VOLT:AC').
         Returns: True if ON, False if OFF."""
         response = self.instrument.query(f":SENSE:FUNC:STATE? '{sensor_function}'").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for sensor function state: '{response}'")
@@ -2581,9 +2581,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2594,9 +2594,9 @@ class Sense():
     def get_sense_list_sequence_auto(self) -> str:
         """Returns the auto state of the list sequence ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:LIST:SEQ:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2629,9 +2629,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2642,9 +2642,9 @@ class Sense():
     def get_sense_mixer_bias_auto(self) -> str:
         """Returns the auto state of the mixer bias ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:MIX:BIAS:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2684,9 +2684,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2697,9 +2697,9 @@ class Sense():
     def get_sense_mixer_harmonic_auto(self) -> str:
         """Returns the auto state of the mixer harmonic ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:MIX:HARM:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2723,15 +2723,15 @@ class Sense():
         """Sets the LOSS to the value appropriate to the connected external mixer.
         Parameters:
         enable: True to enable auto-loss compensation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:MIX:LOSS:AUTO {scpi_value}")
 
     def get_sense_mixer_loss_auto(self) -> bool:
         """Returns True if auto-loss compensation is enabled, False if disabled."""
         response = self.instrument.query(":SENSE:MIX:LOSS:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for mixer loss auto state: '{response}'")
@@ -2742,9 +2742,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2755,9 +2755,9 @@ class Sense():
     def get_sense_pm_deviation_range_auto(self) -> str:
         """Returns the auto state of the PM deviation range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:PM:DEV:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2810,15 +2810,15 @@ class Sense():
         """When AUTO is ON, the value of LOWer is coupled to the value of UPPER for Power Adjacent Channel Spacing.
         Parameters:
         enable: True to enable auto-coupling, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:POW:ACH:SPAC:LOW:AUTO {scpi_value}")
 
     def get_sense_power_achannel_spacing_lower_auto(self) -> bool:
         """Returns True if the lower spacing is auto-coupled to upper for Power Adjacent Channel Spacing, False if disabled."""
         response = self.instrument.query(":SENSE:POW:ACH:SPAC:LOW:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power ACHannel spacing lower auto state: '{response}'")
@@ -2884,15 +2884,15 @@ class Sense():
         """Couples the attenuator to RANGe for AC Power such that maximum dynamic range is assured.
         Parameters:
         enable: True to enable auto-attenuation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:POW:AC:ATT:AUTO {scpi_value}")
 
     def get_sense_power_ac_attenuation_auto(self) -> bool:
         """Returns True if auto-attenuation is enabled for AC Power, False if disabled."""
         response = self.instrument.query(":SENSE:POW:AC:ATT:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power AC attenuation auto state: '{response}'")
@@ -2915,15 +2915,15 @@ class Sense():
         """Controls whether the input protection circuit is enabled for AC Power.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:POW:AC:PROT:STATE {scpi_value}")
 
     def get_sense_power_ac_protection_state(self) -> bool:
         """Returns True if the input protection circuit is enabled for AC Power, False if disabled."""
         response = self.instrument.query(":SENSE:POW:AC:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power AC protection state: '{response}'")
@@ -2932,9 +2932,9 @@ class Sense():
         """Returns True if the protection circuit is tripped for AC Power, False if untripped.
         Notes: Query only."""
         response = self.instrument.query(":SENSE:POW:AC:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for power AC protection tripped status: '{response}'")
@@ -2978,9 +2978,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2991,9 +2991,9 @@ class Sense():
     def get_sense_power_ac_range_auto(self) -> str:
         """Returns the auto state of the AC Power range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:POW:AC:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3094,15 +3094,15 @@ class Sense():
         """Determines whether amplitude is measured in absolute or relative mode for AC Power.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:POW:AC:REF:STATE {scpi_value}")
 
     def get_sense_power_ac_reference_state(self) -> bool:
         """Returns True if amplitude is measured in relative mode for AC Power, False for absolute mode."""
         response = self.instrument.query(":SENSE:POW:AC:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power AC reference state: '{response}'")
@@ -3126,9 +3126,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3139,9 +3139,9 @@ class Sense():
     def get_sense_power_ac_resolution_auto(self) -> str:
         """Returns the auto state of the AC Power resolution ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:POW:AC:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3205,15 +3205,15 @@ class Sense():
         """Enables or disables the offset compensation when measuring resistance.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:RES:OCOM {scpi_value}")
 
     def get_sense_resistance_ocompensated(self) -> bool:
         """Returns True if offset compensation is enabled for Resistance, False if disabled."""
         response = self.instrument.query(":SENSE:RES:OCOM?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for resistance OCOMPensated state: '{response}'")
@@ -3252,9 +3252,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3265,9 +3265,9 @@ class Sense():
     def get_sense_resistance_range_auto(self) -> str:
         """Returns the auto state of the Resistance range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:RES:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3340,15 +3340,15 @@ class Sense():
         """Determines whether resistance is measured in absolute or relative mode.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:RES:REF:STATE {scpi_value}")
 
     def get_sense_resistance_reference_state(self) -> bool:
         """Returns True if resistance is measured in relative mode, False for absolute mode."""
         response = self.instrument.query(":SENSE:RES:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for resistance reference state: '{response}'")
@@ -3372,9 +3372,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3385,9 +3385,9 @@ class Sense():
     def get_sense_resistance_resolution_auto(self) -> str:
         """Returns the auto state of the Resistance resolution ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:RES:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3452,9 +3452,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3465,9 +3465,9 @@ class Sense():
     def get_sense_roscillator_source_auto(self) -> str:
         """Returns the auto state of the reference oscillator source ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:ROSC:SOUR:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3477,15 +3477,15 @@ class Sense():
         """Determines whether the smoothing algorithm is enabled.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:SMO:STATE {scpi_value}")
 
     def get_sense_smoothing_state(self) -> bool:
         """Returns True if the smoothing algorithm is enabled, False if disabled."""
         response = self.instrument.query(":SENSE:SMO:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for smoothing state: '{response}'")
@@ -3555,15 +3555,15 @@ class Sense():
         """Sets or queries the stabilization state for all sensors.
         Parameters:
         enable: True to enable stabilization, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:STAB:STATE {scpi_value}")
 
     def get_sense_stabilize_state(self) -> bool:
         """Returns True if stabilization is enabled, False if disabled."""
         response = self.instrument.query(":SENSE:STAB:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for stabilize state: '{response}'")
@@ -3640,9 +3640,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3653,9 +3653,9 @@ class Sense():
     def get_sense_sweep_dwell_auto(self) -> str:
         """Returns the auto state of the sweep dwell time ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:SWE:DWEL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3789,15 +3789,15 @@ class Sense():
         """When STATE is ON, the instrument is required to collect data in real time.
         Parameters:
         enable: True for real time, False to allow reconstruction techniques."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:SWE:REAL:STATE {scpi_value}")
 
     def get_sense_sweep_realtime_state(self) -> bool:
         """Returns True if real time data collection is enabled, False if not."""
         response = self.instrument.query(":SENSE:SWE:REAL:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for sweep real time state: '{response}'")
@@ -3861,9 +3861,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3874,9 +3874,9 @@ class Sense():
     def get_sense_sweep_time_auto(self) -> str:
         """Returns the auto state of the sweep time ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:SWE:TIME:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3957,15 +3957,15 @@ class Sense():
         """Couples the attenuator to RANGe for AC Voltage such that maximum dynamic range is assured.
         Parameters:
         enable: True to enable auto-attenuation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:VOLT:AC:ATT:AUTO {scpi_value}")
 
     def get_sense_voltage_ac_attenuation_auto(self) -> bool:
         """Returns True if auto-attenuation is enabled for AC Voltage, False if disabled."""
         response = self.instrument.query(":SENSE:VOLT:AC:ATT:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage AC attenuation auto state: '{response}'")
@@ -3988,15 +3988,15 @@ class Sense():
         """Controls whether the input protection circuit is enabled for AC Voltage.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:VOLT:AC:PROT:STATE {scpi_value}")
 
     def get_sense_voltage_ac_protection_state(self) -> bool:
         """Returns True if the input protection circuit is enabled for AC Voltage, False if disabled."""
         response = self.instrument.query(":SENSE:VOLT:AC:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage AC protection state: '{response}'")
@@ -4005,9 +4005,9 @@ class Sense():
         """Returns True if the protection circuit is tripped for AC Voltage, False if untripped.
         Notes: Query only."""
         response = self.instrument.query(":SENSE:VOLT:AC:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for voltage AC protection tripped status: '{response}'")
@@ -4051,9 +4051,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -4064,9 +4064,9 @@ class Sense():
     def get_sense_voltage_ac_range_auto(self) -> str:
         """Returns the auto state of the AC Voltage range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:VOLT:AC:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -4167,15 +4167,15 @@ class Sense():
         """Determines whether amplitude is measured in absolute or relative mode for AC Voltage.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SENSE:VOLT:AC:REF:STATE {scpi_value}")
 
     def get_sense_voltage_ac_reference_state(self) -> bool:
         """Returns True if amplitude is measured in relative mode for AC Voltage, False for absolute mode."""
         response = self.instrument.query(":SENSE:VOLT:AC:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage AC reference state: '{response}'")
@@ -4199,9 +4199,9 @@ class Sense():
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -4212,9 +4212,9 @@ class Sense():
     def get_sense_voltage_ac_resolution_auto(self) -> str:
         """Returns the auto state of the AC Voltage resolution ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SENSE:VOLT:AC:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()

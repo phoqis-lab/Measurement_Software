@@ -6,15 +6,15 @@ class Control():
         """Turns the Auxiliary Power ON and OFF.
         Parameters:
         enable: True to turn APOWer ON, False to turn APOWer OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CONT:APOW:STATE {scpi_value}")
 
     def is_aux_power_enabled(self) -> bool:
         """Returns True if Auxiliary Power is ON, False if OFF."""
         response = self.instrument.query(":CONT:APOW:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Auxiliary Power state: '{response}'")
@@ -24,15 +24,15 @@ class Control():
         """Turns the Blower ON and OFF.
         Parameters:
         enable: True to turn BLOWer ON, False to turn BLOWer OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CONT:BLOW:STATE {scpi_value}")
 
     def is_blower_enabled(self) -> bool:
         """Returns True if Blower is ON, False if OFF."""
         response = self.instrument.query(":CONT:BLOW:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Blower state: '{response}'")
@@ -41,15 +41,15 @@ class Control():
         """Sets or queries the state of the brake.
         Parameters:
         enable: True to set BRAKE ON, False to set BRAKE OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CONT:BRAK:STATE {scpi_value}")
 
     def get_brake_state(self) -> bool:
         """Returns True if the brake is ON, False if OFF."""
         response = self.instrument.query(":CONT:BRAK:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Brake state: '{response}'")
@@ -58,15 +58,15 @@ class Control():
         """Turns the Compressor ON and OFF.
         Parameters:
         enable: True to turn COMPressor ON, False to turn COMPressor OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CONT:COMP:STATE {scpi_value}")
 
     def get_compressor_state(self) -> bool:
         """Returns True if Compressor is ON, False if OFF."""
         response = self.instrument.query(":CONT:COMP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Compressor state: '{response}'")
@@ -147,15 +147,15 @@ class Control():
         """Turns the power of motor ON or OFF.
         Parameters:
         enable: True to turn motor power ON, False to turn motor power OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CONT:MCON:STATE {scpi_value}")
 
     def get_mcontrol_state(self) -> bool:
         """Returns True if motor power is ON, False if OFF."""
         response = self.instrument.query(":CONT:MCON:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Motor Control state: '{response}'")
@@ -183,15 +183,15 @@ class Control():
         """When the state is ON, the dynamometer is performing the centering function. When the state is OFF, centering is not being performed.
         Parameters:
         enable: True to enable centering function, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CONT:VCDE:STATE {scpi_value}")
 
     def get_vcdevice_state(self) -> bool:
         """Returns True if the vehicle centering device is performing centering, False if not."""
         response = self.instrument.query(":CONT:VCDE:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Vehicle Centering Device state: '{response}'")

@@ -37,7 +37,7 @@ class Route():
                 # Example: "(@101,102,103)" -> ["@101", "102", "103"]
                 # Need to strip parentheses and split by comma
                 channels_raw = channel_list_str.strip('()').split(',')
-                # This function is meant to return "1" or "0" for the state,
+                # This function is meant to return 1 or 0 for the state,
                 # but the query form for STATE? returns the list of closed switches.
                 # Adjusting to return the list of closed channels as strings.
                 return [ch.strip() for ch in channels_raw if ch.strip()]

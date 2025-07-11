@@ -21,9 +21,9 @@ class Calibration():
         Parameters:
         auto_state: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE'). 'ONCE' is also a valid state."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -34,9 +34,9 @@ class Calibration():
     def get_calibrate_auto(self) -> str:
         """Returns whether the instrument performs auto calibration ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":CAL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper() # Return ONCE as is if that's what the instrument sends
@@ -221,15 +221,15 @@ class Calibration():
         """Selects if the calibration data is applied or not.
         Parameters:
         enable: True to use calibration data for correction, False to make no correction."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CAL:STATE {scpi_value}")
 
     def get_calibration_state(self) -> bool:
         """Returns True if calibration data is applied, False if not."""
         response = self.instrument.query(":CAL:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for calibration state: '{response}'")
@@ -286,9 +286,9 @@ class Calibration():
         Parameters:
         auto_state: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE'). 'ONCE' is also a valid state."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -299,9 +299,9 @@ class Calibration():
     def get_zero_auto(self) -> str:
         """Returns whether autozeroing calibration occurs ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":CAL:ZERO:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()

@@ -106,7 +106,7 @@ class HCopy:
         :param enable: True to send color information, False for monochrome.
         Notes: At *RST, the value is OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:DEV:COL {scpi_value}")
 
     def get_hcopy_device_color(self) -> bool:
@@ -115,7 +115,7 @@ class HCopy:
         :return: True if color information is sent, False otherwise.
         """
         response = self.instrument.query(":HCOP:DEV:COL?").strip()
-        return response == "1"
+        return response == 1
 
 
 
@@ -336,7 +336,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:ANNOT:STATE {scpi_value}")
 
     def get_hcopy_item_annotation_state(self) -> bool:
@@ -345,7 +345,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:ANNOT:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
 
@@ -372,7 +372,7 @@ class HCopy:
         :param enable: True to enable page cut, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:CUT:STATE {scpi_value}")
 
     def get_hcopy_item_cut_state(self) -> bool:
@@ -381,7 +381,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:CUT:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
     def get_hcopy_item_ffeed_data(self) -> str:
@@ -407,7 +407,7 @@ class HCopy:
         :param enable: True to enable form feed, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:FFED:STATE {scpi_value}")
 
     def get_hcopy_item_ffeed_state(self) -> bool:
@@ -416,7 +416,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:FFED:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
 
@@ -463,7 +463,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:LAB:STATE {scpi_value}")
 
     def get_hcopy_item_label_state(self) -> bool:
@@ -472,7 +472,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:LAB:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     def set_hcopy_item_label_text(self, text_string: str):
         """
@@ -537,7 +537,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:MENU:STATE {scpi_value}")
 
     def get_hcopy_item_menu_state(self) -> bool:
@@ -546,7 +546,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:MENU:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
 
@@ -592,7 +592,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:TDST:STATE {scpi_value}")
 
     def get_hcopy_item_tdstamp_state(self) -> bool:
@@ -601,7 +601,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:TDST:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     def get_hcopy_item_window_data(self) -> str:
         """
@@ -625,7 +625,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:WIND:STATE {scpi_value}")
 
     def get_hcopy_item_window_state(self) -> bool:
@@ -634,7 +634,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:WIND:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
     def set_hcopy_item_window_text_color(self, color_value: int):
@@ -679,7 +679,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:WIND:TEXT:STATE {scpi_value}")
 
     def get_hcopy_item_window_text_state(self) -> bool:
@@ -688,7 +688,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:WIND:TEXT:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
     def set_hcopy_item_window_trace_color(self, color_value: int):
@@ -760,7 +760,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:WIND:TRAC:GRAT:STATE {scpi_value}")
 
     def get_hcopy_item_window_trace_graticule_state(self) -> bool:
@@ -769,7 +769,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:GRAT:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     def hcopy_item_window_trace_immediate(self):
         """
@@ -821,7 +821,7 @@ class HCopy:
         :param enable: True to enable plotting/printing, False to disable.
         Notes: At *RST, the value of this parameter is device dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:ITEM:WIND:TRAC:STATE {scpi_value}")
 
     def get_hcopy_item_window_trace_state(self) -> bool:
@@ -830,7 +830,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:ITEM:WIND:TRAC:STATE?").strip()
-        return response == "1"
+        return response == 1
 
 
     def set_hcopy_page_dimensions_auto(self, enable: bool):
@@ -840,7 +840,7 @@ class HCopy:
         :param enable: True to enable auto dimensions, False to disable.
         Notes: At *RST, the value of this parameter is ON.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":HCOP:PAGE:DIM:AUTO {scpi_value}")
 
     def get_hcopy_page_dimensions_auto(self) -> bool:
@@ -849,7 +849,7 @@ class HCopy:
         :return: True if enabled, False otherwise.
         """
         response = self.instrument.query(":HCOP:PAGE:DIM:AUTO?").strip()
-        return response == "1"
+        return response == 1
 
     def set_hcopy_page_dimensions_lleft(self, x_position: float, y_position: float):
         """

@@ -46,9 +46,9 @@ class Calculate():
     def is_averaging_on(self) -> bool:
         """Returns True if averaging is ON, False if OFF."""
         response = self.instrument.query(":CALC:AVER:STATE?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for averaging state: '{response}'") # Retain error for robustness
@@ -136,15 +136,15 @@ class Calculate():
         """Sets whether the derivative function is enabled.
         Parameters:
         enable: True to enable the derivative function, False to disable it."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CALC:DER:STATE {scpi_value}")
 
     def get_derivative_state(self) -> bool:
         """Returns True if the derivative function is enabled, False if disabled."""
         response = self.instrument.query(":CALC:DER:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for derivative state: '{response}'")
@@ -180,15 +180,15 @@ class Calculate():
         """Sets whether the time filter is enabled.
         Parameters:
         enable: True to enable the time filter, False to disable it."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CALC:FILT:GATE:TIME:STATE {scpi_value}")
 
     def get_filter_gate_time_state(self) -> bool:
         """Returns True if the time filter is enabled, False if disabled."""
         response = self.instrument.query(":CALC:FILT:GATE:TIME:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter gate time state: '{response}'")
@@ -298,9 +298,9 @@ class Calculate():
     def get_filter_gate_time_points_auto(self) -> str:
         """Returns whether the filter output points are automatically set ('AUTO' or 'ONCE')."""
         response = self.instrument.query(":CALC:FILT:GATE:TIME:POIN:AUTO?").strip()
-        if response == "1" or response.upper() == "AUTO":
+        if response == 1 or response.upper() == "AUTO":
             return "AUTO"
-        elif response == "0" or response.upper() == "ONCE":
+        elif response == 0 or response.upper() == "ONCE":
             return "ONCE"
         else:
             return response
@@ -357,15 +357,15 @@ class Calculate():
         """Sets whether the frequency filter is enabled.
         Parameters:
         enable: True to enable the frequency filter, False to disable it."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":CALC:FILT:GATE:FREQ:STATE {scpi_value}")
 
     def get_filter_gate_frequency_state(self) -> bool:
         """Returns True if the frequency filter is enabled, False if disabled."""
         response = self.instrument.query(":CALC:FILT:GATE:FREQ:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for filter gate frequency state: '{response}'")

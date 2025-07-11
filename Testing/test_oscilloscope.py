@@ -2,7 +2,7 @@ import unittest
 import sys
 import io
 sys.path.append('../Measurement_Software')
-from Instruments import RigolOscilloscope
+from Instruments import oscilloscope_rigol
 import pyvisa
 
 class TestRigolOscilloscope(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestRigolOscilloscope(unittest.TestCase):
 
         #Add auto connection
         r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
-        self.scope = RigolOscilloscope.Oscilloscope(r)
+        self.scope = oscilloscope_rigol.Oscilloscope(r)
         self.instrument = self.scope.instrument
         # Redirect stdout to capture print statements
         self.held_stdout = sys.stdout

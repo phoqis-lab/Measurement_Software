@@ -423,10 +423,10 @@ class Memory():
 
     
     def set_memory_table_condition_magnitude(self, booleans: list[bool]):
-        """Specifies the CONDition[:MAGNitude] points of the TABLE.
+        """Specifies the magnitudes points of the TABLE.
         Parameters:
         booleans: A list of boolean values."""
-        data_str = ",".join(["1" if b else "0" for b in booleans])
+        data_str = ",".join([1 if b else 0 for b in booleans])
         self.instrument.write(f":MEM:TABL:COND:MAGN {data_str}")
 
     def get_memory_table_condition_magnitude_points(self) -> int:

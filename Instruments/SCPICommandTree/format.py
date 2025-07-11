@@ -84,15 +84,15 @@ class Format():
         """Determines whether measurement data is formatted as a <dif_expression>.
         Parameters:
         enable: True to encapsulate returned data in the DIF structure, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":FORM:DINT {scpi_value}")
 
     def get_format_dinterchange(self) -> bool:
         """Returns True if measurement data is formatted as a <dif_expression>, False if not."""
         response = self.instrument.query(":FORM:DINT?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for data interchange state: '{response}'")

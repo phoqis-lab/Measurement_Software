@@ -231,15 +231,15 @@ class Source:
         """Turns Amplitude Modulation ON or OFF.
         Parameters:
         enable: True to turn AM modulation ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:AM:STATE {scpi_value}")
 
     def get_source_am_state(self) -> bool:
         """Returns True if Amplitude Modulation is ON, False if OFF."""
         response = self.instrument.query(":SOUR:AM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for AM state: '{response}'")
@@ -289,15 +289,15 @@ class Source:
         """Determines whether the correction data defined in this section is applied to the signal.
         Parameters:
         enable: True to apply correction, False to not apply."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CORR:STATE {scpi_value}")
 
     def get_source_correction_state(self) -> bool:
         """Returns True if the correction data is applied, False if not."""
         response = self.instrument.query(":SOUR:CORR:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for correction state: '{response}'")
@@ -349,15 +349,15 @@ class Source:
         """Determines whether the correction data defined in the selected set is applied to the output.
         Parameters:
         enable: True to apply correction, False to not apply."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CORR:CSET:STATE {scpi_value}")
 
     def get_source_correction_cset_state(self) -> bool:
         """Returns True if the correction data is applied, False if not."""
         response = self.instrument.query(":SOUR:CORR:CSET:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for correction CSET state: '{response}'")
@@ -395,15 +395,15 @@ class Source:
         """Enables or disables the offset correction.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CORR:OFFS:STATE {scpi_value}")
 
     def get_source_correction_offset_state(self) -> bool:
         """Returns True if the offset correction is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:CORR:OFFS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for offset state: '{response}'")
@@ -419,7 +419,7 @@ class Source:
         if prefix_upper not in valid_prefixes:
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CORR:{prefix_upper}:STATE {scpi_value}")
 
     def get_source_correction_loss_gain_slope_state(self, type_prefix: str) -> bool:
@@ -430,9 +430,9 @@ class Source:
             raise ValueError(f"Invalid type prefix: '{type_prefix}'. Must be 'LOSS', 'GAIN', or 'SLOPe'.")
 
         response = self.instrument.query(f":SOUR:CORR:{prefix_upper}:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for {type_prefix} state: '{response}'")
@@ -521,15 +521,15 @@ class Source:
         """Enables or disables the correction for electrical delay.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CORR:EDEL:STATE {scpi_value}")
 
     def get_source_correction_edelay_state(self) -> bool:
         """Returns True if electrical delay correction is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:CORR:EDEL:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for electrical delay state: '{response}'")
@@ -601,15 +601,15 @@ class Source:
         """Enables or disables the relative velocity correction.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CORR:RVEL:STATE {scpi_value}")
 
     def get_source_correction_rvelocity_state(self) -> bool:
         """Returns True if the relative velocity correction is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:CORR:RVEL:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for relative velocity state: '{response}'")
@@ -633,15 +633,15 @@ class Source:
         """Couples the attenuator to LEVel for Current.
         Parameters:
         enable: True to enable auto-coupling, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CURR:ATT:AUTO {scpi_value}")
 
     def get_source_current_attenuation_auto(self) -> bool:
         """Returns True if auto-coupling of attenuator to LEVel is enabled for Current, False if disabled."""
         response = self.instrument.query(":SOUR:CURR:ATT:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current attenuation auto state: '{response}'")
@@ -650,15 +650,15 @@ class Source:
         """Controls whether the ALC loop controls the output level for Current.
         Parameters:
         enable: True to enable ALC, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CURR:ALC:STATE {scpi_value}")
 
     def get_source_current_alc_state(self) -> bool:
         """Returns True if the ALC loop controls the output level for Current, False if not."""
         response = self.instrument.query(":SOUR:CURR:ALC:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current ALC state: '{response}'")
@@ -668,9 +668,9 @@ class Source:
         Parameters:
         search_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets SEARch to ON and then OFF."""
         normalized_state = search_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -681,9 +681,9 @@ class Source:
     def get_source_current_alc_search(self) -> str:
         """Returns the search state for Current ALC ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:CURR:ALC:SEAR?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -734,9 +734,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -747,9 +747,9 @@ class Source:
     def get_source_current_alc_bandwidth_auto(self) -> str:
         """Returns the auto state of the ALC bandwidth for Current ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:CURR:ALC:BAND:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -788,9 +788,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -801,9 +801,9 @@ class Source:
     def get_source_current_level_immediate_amplitude_auto(self) -> str:
         """Returns the auto state of the current level immediate amplitude ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:CURR:LEV:IMM:AMPL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -968,15 +968,15 @@ class Source:
         """Controls whether the LIMit is enabled for Current.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CURR:LIM:STATE {scpi_value}")
 
     def get_source_current_limit_state(self) -> bool:
         """Returns True if the LIMit is enabled for Current, False if disabled."""
         response = self.instrument.query(":SOUR:CURR:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current limit state: '{response}'")
@@ -1038,15 +1038,15 @@ class Source:
         """Controls whether the output protection circuit is enabled for Current.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CURR:PROT:STATE {scpi_value}")
 
     def get_source_current_protection_state(self) -> bool:
         """Returns True if the output protection circuit is enabled for Current, False if disabled."""
         response = self.instrument.query(":SOUR:CURR:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current protection state: '{response}'")
@@ -1055,9 +1055,9 @@ class Source:
         """Returns a 1 if the protection circuit is tripped for Current and a 0 if it is untripped.
         Notes: Query only."""
         response = self.instrument.query(":SOUR:CURR:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for current protection tripped status: '{response}'")
@@ -1086,9 +1086,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -1099,9 +1099,9 @@ class Source:
     def get_source_current_range_auto(self) -> str:
         """Returns the auto state of the Current range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:CURR:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -1125,15 +1125,15 @@ class Source:
         """Determines whether amplitude is measured/output in absolute or relative mode for Current.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CURR:REF:STATE {scpi_value}")
 
     def get_source_current_reference_state(self) -> bool:
         """Returns True if amplitude is measured/output in relative mode for Current, False for absolute mode."""
         response = self.instrument.query(":SOUR:CURR:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current reference state: '{response}'")
@@ -1175,15 +1175,15 @@ class Source:
         """Provides a mechanism to prevent the SPAN from being changed implicitly by the defined coupling between STARt, STOP, CENTer and SPAN for Current.
         Parameters:
         enable: True to hold SPAN, False to allow changes."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:CURR:SPAN:HOLD {scpi_value}")
 
     def get_source_current_span_hold(self) -> bool:
         """Returns True if SPAN is held for Current, False if not."""
         response = self.instrument.query(":SOUR:CURR:SPAN:HOLD?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for current span hold state: '{response}'")
@@ -1264,15 +1264,15 @@ class Source:
         """Turns the digital modulation subsystem ON or OFF.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:DM:STATE {scpi_value}")
 
     def get_source_dm_state(self) -> bool:
         """Returns True if the digital modulation subsystem is ON, False if OFF."""
         response = self.instrument.query(":SOUR:DM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for DM state: '{response}'")
@@ -1358,15 +1358,15 @@ class Source:
         """Turns ON and OFF the gain imbalance correction between the I and Q channels for Digital Modulation.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:DM:IQR:STATE {scpi_value}")
 
     def get_source_dm_iqratio_state(self) -> bool:
         """Returns True if the gain imbalance correction is ON, False if OFF for Digital Modulation."""
         response = self.instrument.query(":SOUR:DM:IQR:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for DM IQ Ratio state: '{response}'")
@@ -1389,15 +1389,15 @@ class Source:
         """Turns carrier leakage ON and OFF for Digital Modulation.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:DM:LEAK:STATE {scpi_value}")
 
     def get_source_dm_leakage_state(self) -> bool:
         """Returns True if carrier leakage is ON, False if OFF for Digital Modulation."""
         response = self.instrument.query(":SOUR:DM:LEAK:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for DM Leakage state: '{response}'")
@@ -1434,15 +1434,15 @@ class Source:
         """Turns ON or OFF the quadrature angle correction for Digital Modulation.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:DM:QUAD:STATE {scpi_value}")
 
     def get_source_dm_quadrature_state(self) -> bool:
         """Returns True if the quadrature angle correction is ON, False if OFF for Digital Modulation."""
         response = self.instrument.query(":SOUR:DM:QUAD:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for DM Quadrature state: '{response}'")
@@ -1953,15 +1953,15 @@ class Source:
         """Turns frequency modulation ON or OFF.
         Parameters:
         enable: True to turn FM modulation ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:FM:STATE {scpi_value}")
 
     def get_source_fm_state(self) -> bool:
         """Returns True if frequency modulation is ON, False if OFF."""
         response = self.instrument.query(":SOUR:FM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for FM state: '{response}'")
@@ -2068,15 +2068,15 @@ class Source:
         """Sets the augmented brake simulation state.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:FORC:CONF:ABR:STATE {scpi_value}")
 
     def get_source_force_configure_abrake_state(self) -> bool:
         """Returns True if the augmented brake simulation state is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:FORC:CONF:ABR:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for force configure abrake state: '{response}'")
@@ -2138,15 +2138,15 @@ class Source:
         """Sets the grade simulation state.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:FORC:CONF:GRAD:STATE {scpi_value}")
 
     def get_source_force_configure_grade_state(self) -> bool:
         """Returns True if the grade simulation state is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:FORC:CONF:GRAD:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for force configure grade state: '{response}'")
@@ -2186,15 +2186,15 @@ class Source:
         """Tells the dynamometer that a vehicle is on the rolls.
         Parameters:
         enable: True if vehicle is on rolls, False otherwise."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:FORC:CONF:VEH:STATE {scpi_value}")
 
     def get_source_force_configure_vehicle_state(self) -> bool:
         """Returns True if the dynamometer is configured for a vehicle on rolls, False otherwise."""
         response = self.instrument.query(":SOUR:FORC:CONF:VEH:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for force configure vehicle state: '{response}'")
@@ -2314,9 +2314,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2327,9 +2327,9 @@ class Source:
     def get_source_frequency_cw_auto(self) -> str:
         """Returns the auto state of the CW frequency coupling to center frequency ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:FREQ:CW:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2423,9 +2423,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2436,9 +2436,9 @@ class Source:
     def get_source_frequency_resolution_auto(self) -> str:
         """Returns the auto state of the frequency resolution ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:FREQ:RES:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2466,15 +2466,15 @@ class Source:
         """Provides a mechanism to prevent the SPAN from being changed implicitly by the defined coupling between STARt, STOP, CENTer, and SPAN.
         Parameters:
         enable: True to hold SPAN, False to allow changes."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:FREQ:SPAN:HOLD {scpi_value}")
 
     def get_source_frequency_span_hold(self) -> bool:
         """Returns True if SPAN is held, False if not."""
         response = self.instrument.query(":SOUR:FREQ:SPAN:HOLD?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for frequency span hold state: '{response}'")
@@ -2638,9 +2638,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2651,9 +2651,9 @@ class Source:
     def get_source_list_concurrent_auto(self) -> str:
         """Returns the auto state of the CONCurrent list ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:LIST:CONC:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2670,7 +2670,7 @@ class Source:
         """Turns the APOWer on or off.
         Parameters:
         states: A list of boolean values (True for ON, False for OFF)."""
-        value_str = ",".join(["1" if s else "0" for s in states])
+        value_str = ",".join([1 if s else 0 for s in states])
         self.instrument.write(f":SOUR:LIST:CONT:APOW {value_str}")
 
     def get_source_list_control_apower_points(self) -> int:
@@ -2685,7 +2685,7 @@ class Source:
         """Turns the BLOWer on or off.
         Parameters:
         states: A list of boolean values (True for ON, False for OFF)."""
-        value_str = ",".join(["1" if s else "0" for s in states])
+        value_str = ",".join([1 if s else 0 for s in states])
         self.instrument.write(f":SOUR:LIST:CONT:BLOW {value_str}")
 
     def get_source_list_control_blower_points(self) -> int:
@@ -2700,7 +2700,7 @@ class Source:
         """Turns the COMPressor on or off.
         Parameters:
         states: A list of boolean values (True for ON, False for OFF)."""
-        value_str = ",".join(["1" if s else "0" for s in states])
+        value_str = ",".join([1 if s else 0 for s in states])
         self.instrument.write(f":SOUR:LIST:CONT:COMP {value_str}")
 
     def get_source_list_control_compressor_points(self) -> int:
@@ -2819,7 +2819,7 @@ class Source:
         """Specifies the PULM STATe points of the list.
         Parameters:
         states: A list of boolean values (True for ON, False for OFF)."""
-        value_str = ",".join(["1" if s else "0" for s in states])
+        value_str = ",".join([1 if s else 0 for s in states])
         self.instrument.write(f":SOUR:LIST:PULM:STATE {value_str}")
 
     def get_source_list_pulm_state_points(self) -> int:
@@ -2889,9 +2889,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -2902,9 +2902,9 @@ class Source:
     def get_source_list_sequence_auto(self) -> str:
         """Returns the auto state of the sequence list ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:LIST:SEQ:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -2952,15 +2952,15 @@ class Source:
         """Controls whether the marker affects the signal.
         Parameters:
         enable: True to modify signal, False to affect only marker output port."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:MARK:AMPL {scpi_value}")
 
     def get_source_marker_amplitude(self) -> bool:
         """Returns True if the marker affects the signal, False if not."""
         response = self.instrument.query(":SOUR:MARK:AMPL?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for marker amplitude state: '{response}'")
@@ -3041,15 +3041,15 @@ class Source:
         """Turns ON and OFF the marker specified by the MARKer command header suffix.
         Parameters:
         enable: True to turn ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:MARK:STATE {scpi_value}")
 
     def get_source_marker_state(self) -> bool:
         """Returns True if the marker is ON, False if OFF."""
         response = self.instrument.query(":SOUR:MARK:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for marker state: '{response}'")
@@ -3182,15 +3182,15 @@ class Source:
         """Turns phase modulation ON or OFF.
         Parameters:
         enable: True to turn PM modulation ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:PM:STATE {scpi_value}")
 
     def get_source_pm_state(self) -> bool:
         """Returns True if phase modulation is ON, False if OFF."""
         response = self.instrument.query(":SOUR:PM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for PM state: '{response}'")
@@ -3362,15 +3362,15 @@ class Source:
         """Couples the attenuator to LEVel for Power.
         Parameters:
         enable: True to enable auto-coupling, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:POW:ATT:AUTO {scpi_value}")
 
     def get_source_power_attenuation_auto(self) -> bool:
         """Returns True if auto-coupling of attenuator to LEVel is enabled for Power, False if disabled."""
         response = self.instrument.query(":SOUR:POW:ATT:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power attenuation auto state: '{response}'")
@@ -3379,15 +3379,15 @@ class Source:
         """Controls whether the ALC loop controls the output level for Power.
         Parameters:
         enable: True to enable ALC, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:POW:ALC:STATE {scpi_value}")
 
     def get_source_power_alc_state(self) -> bool:
         """Returns True if the ALC loop controls the output level for Power, False if not."""
         response = self.instrument.query(":SOUR:POW:ALC:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power ALC state: '{response}'")
@@ -3397,9 +3397,9 @@ class Source:
         Parameters:
         search_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets SEARch to ON and then OFF."""
         normalized_state = search_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3410,9 +3410,9 @@ class Source:
     def get_source_power_alc_search(self) -> str:
         """Returns the search state for Power ALC ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:POW:ALC:SEAR?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3463,9 +3463,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3476,9 +3476,9 @@ class Source:
     def get_source_power_alc_bandwidth_auto(self) -> str:
         """Returns the auto state of the ALC bandwidth for Power ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:POW:ALC:BAND:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3672,15 +3672,15 @@ class Source:
         """Controls whether the LIMit is enabled for Power.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:POW:LIM:STATE {scpi_value}")
 
     def get_source_power_limit_state(self) -> bool:
         """Returns True if the LIMit is enabled for Power, False if disabled."""
         response = self.instrument.query(":SOUR:POW:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power limit state: '{response}'")
@@ -3742,15 +3742,15 @@ class Source:
         """Controls whether the output protection circuit is enabled for Power.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:POW:PROT:STATE {scpi_value}")
 
     def get_source_power_protection_state(self) -> bool:
         """Returns True if the output protection circuit is enabled for Power, False if disabled."""
         response = self.instrument.query(":SOUR:POW:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power protection state: '{response}'")
@@ -3759,9 +3759,9 @@ class Source:
         """Returns a 1 if the protection circuit is tripped for Power and a 0 if it is untripped.
         Notes: Query only."""
         response = self.instrument.query(":SOUR:POW:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for power protection tripped status: '{response}'")
@@ -3790,9 +3790,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -3803,9 +3803,9 @@ class Source:
     def get_source_power_range_auto(self) -> str:
         """Returns the auto state of the Power range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:POW:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -3828,15 +3828,15 @@ class Source:
         """Determines whether amplitude is measured/output in absolute or relative mode for Power.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:POW:REF:STATE {scpi_value}")
 
     def get_source_power_reference_state(self) -> bool:
         """Returns True if amplitude is measured/output in relative mode for Power, False for absolute mode."""
         response = self.instrument.query(":SOUR:POW:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power reference state: '{response}'")
@@ -3874,15 +3874,15 @@ class Source:
         """Provides a mechanism to prevent the SPAN from being changed implicitly by the defined coupling between STARt, STOP, CENTer and SPAN for Power.
         Parameters:
         enable: True to hold SPAN, False to allow changes."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:POW:SPAN:HOLD {scpi_value}")
 
     def get_source_power_span_hold(self) -> bool:
         """Returns True if SPAN is held for Power, False if not."""
         response = self.instrument.query(":SOUR:POW:SPAN:HOLD?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for power span hold state: '{response}'")
@@ -4102,15 +4102,15 @@ class Source:
         """Turns Pulse Modulation ON or OFF.
         Parameters:
         enable: True to turn PULse Modulation ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:PULM:STATE {scpi_value}")
 
     def get_source_pulm_state(self) -> bool:
         """Returns True if Pulse Modulation is ON, False if OFF."""
         response = self.instrument.query(":SOUR:PULM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for PULM state: '{response}'")
@@ -4201,15 +4201,15 @@ class Source:
         """Sets the double pulse mode to ON or OFF.
         Parameters:
         enable: True to enable double pulse mode, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:PULS:DOUB:STATE {scpi_value}")
 
     def get_source_pulse_double_state(self) -> bool:
         """Returns True if the double pulse mode is ON, False if OFF."""
         response = self.instrument.query(":SOUR:PULS:DOUB:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for pulse double state: '{response}'")
@@ -4232,15 +4232,15 @@ class Source:
         """Sets the transition mode to ON or OFF.
         Parameters:
         enable: True to enable transition times, False to set to minimum."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:PULS:TRAN:STATE {scpi_value}")
 
     def get_source_pulse_transition_state(self) -> bool:
         """Returns True if the transition mode is ON, False if OFF."""
         response = self.instrument.query(":SOUR:PULS:TRAN:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for pulse transition state: '{response}'")
@@ -4279,9 +4279,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -4292,9 +4292,9 @@ class Source:
     def get_source_pulse_transition_trailing_auto(self) -> str:
         """Returns the auto state of the trailing transition time for Pulse ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:PULS:TRAN:TRA:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -4529,15 +4529,15 @@ class Source:
         """Controls whether the output protection circuit is enabled.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:RES:PROT:STATE {scpi_value}")
 
     def get_source_resistance_protection_state(self) -> bool:
         """Returns True if the output protection circuit is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:RES:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for resistance protection state: '{response}'")
@@ -4546,9 +4546,9 @@ class Source:
         """Returns a 1 if the protection circuit is tripped and a 0 if it is untripped.
         Notes: Query only."""
         response = self.instrument.query(":SOUR:RES:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for resistance protection tripped status: '{response}'")
@@ -4605,15 +4605,15 @@ class Source:
         """Provides a mechanism to prevent the SPAN from being changed implicitly by the defined coupling between STARt, STOP, CENTer and SPAN for Resistance.
         Parameters:
         enable: True to hold SPAN, False to allow changes."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:RES:SPAN:HOLD {scpi_value}")
 
     def get_source_resistance_span_hold(self) -> bool:
         """Returns True if SPAN is held for Resistance, False if not."""
         response = self.instrument.query(":SOUR:RES:SPAN:HOLD?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for resistance span hold state: '{response}'")
@@ -4732,15 +4732,15 @@ class Source:
         """Determines whether RESistance is in absolute or relative mode.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:RES:REF:STATE {scpi_value}")
 
     def get_source_resistance_reference_state(self) -> bool:
         """Returns True if Resistance is in relative mode, False for absolute mode."""
         response = self.instrument.query(":SOUR:RES:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for resistance reference state: '{response}'")
@@ -4764,9 +4764,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -4777,9 +4777,9 @@ class Source:
     def get_source_resistance_range_auto(self) -> str:
         """Returns the auto state of the Resistance range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:RES:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -4842,9 +4842,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -4855,9 +4855,9 @@ class Source:
     def get_source_rocsillator_source_auto(self) -> str:
         """Returns the auto state of the reference oscillator source ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:ROSC::SOUR:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -4936,9 +4936,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -4949,9 +4949,9 @@ class Source:
     def get_source_sweep_time_auto(self) -> str:
         """Returns the auto state of the sweep time ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:SWE:TIME:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -4990,9 +4990,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -5003,9 +5003,9 @@ class Source:
     def get_source_sweep_dwell_auto(self) -> str:
         """Returns the auto state of the sweep dwell time ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:SWE:DWEL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -5251,15 +5251,15 @@ class Source:
         """Enables or disables the high temperature protection mechanism.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:TEMP:PROT:HIGH:STATE {scpi_value}")
 
     def get_source_temperature_protection_high_state(self) -> bool:
         """Returns True if the high temperature protection mechanism is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:TEMP:PROT:HIGH:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for temperature protection high state: '{response}'")
@@ -5282,9 +5282,9 @@ class Source:
         """Returns a 1 if the high temperature protection circuit is tripped and a 0 if it is untripped.
         Notes: Query only."""
         response = self.instrument.query(":SOUR:TEMP:PROT:HIGH:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for temperature protection high tripped status: '{response}'")
@@ -5312,15 +5312,15 @@ class Source:
         """Enables or disables the low temperature protection mechanism.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:TEMP:PROT:LOW:STATE {scpi_value}")
 
     def get_source_temperature_protection_low_state(self) -> bool:
         """Returns True if the low temperature protection mechanism is enabled, False if disabled."""
         response = self.instrument.query(":SOUR:TEMP:PROT:LOW:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for temperature protection low state: '{response}'")
@@ -5344,9 +5344,9 @@ class Source:
         """This query returns a 1 if the protection circuit is tripped and a 0 if it is untripped.
         Notes: Query only."""
         response = self.instrument.query(":SOUR:TEMP:PROT:LOW:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for temperature protection low tripped status: '{response}'")
@@ -5398,15 +5398,15 @@ class Source:
         """Couples the attenuator to LEVel for Voltage.
         Parameters:
         enable: True to enable auto-coupling, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:VOLT:ATT:AUTO {scpi_value}")
 
     def get_source_voltage_attenuation_auto(self) -> bool:
         """Returns True if auto-coupling of attenuator to LEVel is enabled for Voltage, False if disabled."""
         response = self.instrument.query(":SOUR:VOLT:ATT:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage attenuation auto state: '{response}'")
@@ -5415,15 +5415,15 @@ class Source:
         """Controls whether the ALC loop controls the output level for Voltage.
         Parameters:
         enable: True to enable ALC, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:VOLT:ALC:STATE {scpi_value}")
 
     def get_source_voltage_alc_state(self) -> bool:
         """Returns True if the ALC loop controls the output level for Voltage, False if not."""
         response = self.instrument.query(":SOUR:VOLT:ALC:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage ALC state: '{response}'")
@@ -5433,9 +5433,9 @@ class Source:
         Parameters:
         search_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets SEARch to ON and then OFF."""
         normalized_state = search_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -5446,9 +5446,9 @@ class Source:
     def get_source_voltage_alc_search(self) -> str:
         """Returns the search state for Voltage ALC ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:VOLT:ALC:SEAR?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -5499,9 +5499,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -5512,9 +5512,9 @@ class Source:
     def get_source_voltage_alc_bandwidth_auto(self) -> str:
         """Returns the auto state of the ALC bandwidth for Voltage ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:VOLT:ALC:BAND:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -5553,9 +5553,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -5566,9 +5566,9 @@ class Source:
     def get_source_voltage_level_immediate_amplitude_auto(self) -> str:
         """Returns the auto state of the voltage level immediate amplitude ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:VOLT:LEV:IMM:AMPL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -5733,15 +5733,15 @@ class Source:
         """Controls whether the LIMit is enabled for Voltage.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:VOLT:LIM:STATE {scpi_value}")
 
     def get_source_voltage_limit_state(self) -> bool:
         """Returns True if the LIMit is enabled for Voltage, False if disabled."""
         response = self.instrument.query(":SOUR:VOLT:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage limit state: '{response}'")
@@ -5803,15 +5803,15 @@ class Source:
         """Controls whether the output protection circuit is enabled for Voltage.
         Parameters:
         enable: True to enable, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:VOLT:PROT:STATE {scpi_value}")
 
     def get_source_voltage_protection_state(self) -> bool:
         """Returns True if the output protection circuit is enabled for Voltage, False if disabled."""
         response = self.instrument.query(":SOUR:VOLT:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage protection state: '{response}'")
@@ -5820,9 +5820,9 @@ class Source:
         """Returns a 1 if the protection circuit is tripped for Voltage and a 0 if it is untripped.
         Notes: Query only."""
         response = self.instrument.query(":SOUR:VOLT:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for voltage protection tripped status: '{response}'")
@@ -5851,9 +5851,9 @@ class Source:
         Parameters:
         auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -5864,9 +5864,9 @@ class Source:
     def get_source_voltage_range_auto(self) -> str:
         """Returns the auto state of the Voltage range ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":SOUR:VOLT:RANG:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -5890,15 +5890,15 @@ class Source:
         """Determines whether amplitude is measured/output in absolute or relative mode for Voltage.
         Parameters:
         enable: True to reference to the value set in REFerence, False for absolute mode."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:VOLT:REF:STATE {scpi_value}")
 
     def get_source_voltage_reference_state(self) -> bool:
         """Returns True if amplitude is measured/output in relative mode for Voltage, False for absolute mode."""
         response = self.instrument.query(":SOUR:VOLT:REF:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage reference state: '{response}'")
@@ -5935,15 +5935,15 @@ class Source:
         """Provides a mechanism to prevent the SPAN from being changed implicitly by the defined coupling between STARt, STOP, CENTer and SPAN for Voltage.
         Parameters:
         enable: True to hold SPAN, False to allow changes."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SOUR:VOLT:SPAN:HOLD {scpi_value}")
 
     def get_source_voltage_span_hold(self) -> bool:
         """Returns True if SPAN is held for Voltage, False if not."""
         response = self.instrument.query(":SOUR:VOLT:SPAN:HOLD?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for voltage span hold state: '{response}'")

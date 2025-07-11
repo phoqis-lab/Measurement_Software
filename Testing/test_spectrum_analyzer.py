@@ -1,11 +1,11 @@
 import unittest
-from Instruments import SignalHoundSpectrumAnalyzer
+from Instruments import spectrum_analyzer_signal_hound
 
 class TestSpectrumAnalyzer(unittest.TestCase):
     
     def setup(self):
         #TODO insert connection
-        self.sa = SignalHoundSpectrumAnalyzer.SpectrumAnalyzer(None)
+        self.sa = spectrum_analyzer_signal_hound.SpectrumAnalyzer(None)
     # --- Display Tests ---
     """def test_is_spike_hidden(self):
         self.mock_instrument.query.return_value = '1'

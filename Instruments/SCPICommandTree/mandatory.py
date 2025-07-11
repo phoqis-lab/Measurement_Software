@@ -133,3 +133,36 @@ class Mandatory():
         The subsequent command can only be carried out after the current command has been executed.
         """
         self.instrument.write("*WAI")
+    
+    #Required commands
+    def get_system_error(self) -> str:
+        """
+        Queries the next error from the error queue, returning its code and message.
+        Notes: Query only.
+        """
+        response = self.instrument.query(":SYST:ERR:NEXT?").strip()
+        return response
+    
+    def get_system_version(self) -> str:
+        """
+        Returns the SCPI version supported by the instrument.
+        Notes: Query only.
+        """
+        response = self.instrument.query(":SYST:VERS?").strip()
+        return response
+    
+    def set_status_operation_enable(self, value: int):
+        """
+        Sets the enable mask for the OPERation register.
+        :param value: The integer value of the enable mask (range: 0 through 65535).
+        
+        """
+        #TODO: Fix value to be boolean?
+        self._set_status_enable(":STAT:OPER:ENAB", value)
+
+    def get_status_operation_enable(self) -> int:
+        """
+        Returns the contents of the enable mask for the OPERation register.
+        
+        """
+        return self._get_status_enable(":STAT:OPER:ENAB?")

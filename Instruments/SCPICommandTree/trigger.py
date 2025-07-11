@@ -77,7 +77,7 @@ class Trigger:
         :param sequence_number: Optional. The numeric suffix (sequence number) for which to set MGRules.
         Notes: At *RST, the value is OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         if sequence_number is not None:
             self.instrument.write(f":ARM:SEQ{sequence_number}:DEF:MGR {scpi_value}")
         else:
@@ -93,7 +93,7 @@ class Trigger:
             response = self.instrument.query(f":ARM:SEQ{sequence_number}:DEF:MGR?").strip()
         else:
             response = self.instrument.query(":ARM:SEQ:DEF:MGR?").strip()
-        return response == "1"
+        return response == 1
 
     
     def set_arm_sequence_layer_count(self, value: int, sequence_number: int = None, layer_number: int = None):
@@ -234,8 +234,8 @@ class Trigger:
             path += f":LAY{layer_number}"
         response = self.instrument.query(f"{path}:DEL:AUTO?").strip().upper()
         # Convert 1/0 to ON/OFF for consistency with setter
-        if response == "1": return "ON"
-        if response == "0": return "OFF"
+        if response == 1: return "ON"
+        if response == 0: return "OFF"
         return response
 
     
@@ -329,7 +329,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
@@ -350,7 +350,7 @@ class Trigger:
         if layer_number is not None:
             path += f":LAY{layer_number}"
         response = self.instrument.query(f"{path}:FILT:HPAS:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     def set_arm_sequence_layer_filter_lpass_frequency(self, value: float, sequence_number: int = None, layer_number: int = None):
         """
@@ -393,7 +393,7 @@ class Trigger:
         :param layer_number: Optional. The numeric suffix for LAYer.
         Notes: At *RST, this value is device-dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         path = ":ARM"
         if sequence_number is not None:
             path += f":SEQ{sequence_number}"
@@ -414,7 +414,7 @@ class Trigger:
         if layer_number is not None:
             path += f":LAY{layer_number}"
         response = self.instrument.query(f"{path}:FILT:LPAS:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     
     def set_arm_sequence_layer_hysteresis(self, value: float, sequence_number: int = None, layer_number: int = None):
@@ -534,8 +534,8 @@ class Trigger:
             path += f":LAY{layer_number}"
         response = self.instrument.query(f"{path}:LEV:AUTO?").strip().upper()
         # Convert 1/0 to ON/OFF for consistency with setter
-        if response == "1": return "ON"
-        if response == "0": return "OFF"
+        if response == 1: return "ON"
+        if response == 0: return "OFF"
         return response
 
     
@@ -1066,7 +1066,7 @@ class Trigger:
         :param enable: True for continuous initiation, False to remain in IDLE until IMMediate.
         Notes: At *RST, this value is set to OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f"INIT:CONT {scpi_value}")
 
     def get_initiate_continuous(self) -> bool:
@@ -1075,7 +1075,7 @@ class Trigger:
         :return: True if continuous initiation, False otherwise.
         """
         response = self.instrument.query("INIT:CONT?").strip()
-        return response == "1"
+        return response == 1
 
     def set_initiate_continuous_all(self, enable: bool):
         """
@@ -1083,7 +1083,7 @@ class Trigger:
         :param enable: True to continuously initiate all sequences, False otherwise.
         Notes: At *RST, this value is set to OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f"INIT:CONT:ALL {scpi_value}")
 
     def get_initiate_continuous_all(self) -> bool:
@@ -1092,7 +1092,7 @@ class Trigger:
         :return: True if all sequences are continuously initiated, False otherwise.
         """
         response = self.instrument.query("INIT:CONT:ALL?").strip()
-        return response == "1"
+        return response == 1
 
     
     def set_initiate_continuous_name(self, sequence_name: str, enable: bool):
@@ -1102,7 +1102,7 @@ class Trigger:
         :param enable: True for continuous initiation, False otherwise.
         Notes: At *RST, this value is set to OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f"INIT:CONT:NAME '{sequence_name}',{scpi_value}")
 
     def get_initiate_continuous_name(self, sequence_name: str) -> bool:
@@ -1112,7 +1112,7 @@ class Trigger:
         :return: True if continuously initiated, False otherwise.
         """
         response = self.instrument.query(f"INIT:CONT:NAME? '{sequence_name}'").strip()
-        return response == "1"
+        return response == 1
 
     def set_initiate_continuous_sequence(self, sequence_number: int, enable: bool):
         """
@@ -1121,7 +1121,7 @@ class Trigger:
         :param enable: True for continuous initiation, False otherwise.
         Notes: If NAME is implemented, this command shall also be implemented. At *RST, this value is set to OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f"INIT:CONT:SEQ{sequence_number} {scpi_value}")
 
     def get_initiate_continuous_sequence(self, sequence_number: int) -> bool:
@@ -1131,7 +1131,7 @@ class Trigger:
         :return: True if continuously initiated, False otherwise.
         """
         response = self.instrument.query(f"INIT:CONT:SEQ{sequence_number}?").strip()
-        return response == "1"
+        return response == 1
 
     def initiate_immediate(self):
         """
@@ -1201,7 +1201,7 @@ class Trigger:
         :param enable: True to enable the function, False to disable it.
         Notes: At *RST, the value of this parameter is OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":TRIG:SEQ:ATR:STATE {scpi_value}")
 
     def get_trigger_sequence_atrigger_state(self) -> bool:
@@ -1210,7 +1210,7 @@ class Trigger:
         :return: True if enabled, False if disabled.
         """
         response = self.instrument.query(":TRIG:SEQ:ATR:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     
     def set_trigger_sequence_count(self, value: int):
@@ -1293,7 +1293,7 @@ class Trigger:
         :param sequence_number: Optional. The numeric suffix (sequence number) for which to set MGRules.
         Notes: At *RST, the value of this parameter is OFF.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         if sequence_number is not None:
             self.instrument.write(f":TRIG:SEQ{sequence_number}:DEF:MGR {scpi_value}")
         else:
@@ -1309,7 +1309,7 @@ class Trigger:
             response = self.instrument.query(f":TRIG:SEQ{sequence_number}:DEF:MGR?").strip()
         else:
             response = self.instrument.query(":TRIG:SEQ:DEF:MGR?").strip()
-        return response == "1"
+        return response == 1
 
     def set_trigger_sequence_delay(self, value: float, seq:bool = None):
         """
@@ -1356,8 +1356,8 @@ class Trigger:
         :return: The auto-delay state ("ON", "OFF", or "ONCE").
         """
         response = self.instrument.query(":TRIG:SEQ:DEL:AUTO?").strip().upper()
-        if response == "1": return "ON"
-        if response == "0": return "OFF"
+        if response == 1: return "ON"
+        if response == 0: return "OFF"
         return response
 
     def trigger_sequence_ecl(self):
@@ -1413,7 +1413,7 @@ class Trigger:
         :param enable: True to turn ON, False to turn OFF.
         Notes: At *RST, this value is device-dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":TRIG:SEQ:FILT:HPAS:STATE {scpi_value}")
 
     def get_trigger_sequence_filter_hpass_state(self) -> bool:
@@ -1422,7 +1422,7 @@ class Trigger:
         :return: True if ON, False if OFF.
         """
         response = self.instrument.query(f":TRIG:SEQ:FILT:HPAS:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     def set_trigger_sequence_filter_lpass_frequency(self, value: float):
         """
@@ -1449,7 +1449,7 @@ class Trigger:
         :param enable: True to turn ON, False to turn OFF.
         Notes: At *RST, this value is device-dependent.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":TRIG:SEQ:FILT:LPAS:STATE {scpi_value}")
 
     def get_trigger_sequence_filter_lpass_state(self) -> bool:
@@ -1458,7 +1458,7 @@ class Trigger:
         :return: True if ON, False if OFF.
         """
         response = self.instrument.query(f":TRIG:SEQ:FILT:LPAS:STATE?").strip()
-        return response == "1"
+        return response == 1
 
     
     def set_trigger_sequence_holdoff(self, value: float, seq: int = None):
@@ -1554,8 +1554,8 @@ class Trigger:
         :return: The auto-level state ("ON", "OFF", or "ONCE").
         """
         response = self.instrument.query(f":TRIG:SEQ:LEV:AUTO?").strip().upper()
-        if response == "1": return "ON"
-        if response == "0": return "OFF"
+        if response == 1: return "ON"
+        if response == 0: return "OFF"
         return response
 
     

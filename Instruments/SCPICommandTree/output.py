@@ -36,9 +36,9 @@ class Output():
         Parameters:
         auto_state: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE')."""
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -49,9 +49,9 @@ class Output():
     def get_output_filter_auto(self) -> str:
         """Returns whether the system automatically determines the best filter characteristic ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":OUTP:FILT:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -61,15 +61,15 @@ class Output():
         """Selects a user provided filter. When STATE is ON the filter is placed in the signal path.
         Parameters:
         enable: True to enable the external filter, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:FILT:EXT:STATE {scpi_value}")
 
     def get_output_filter_external_state(self) -> bool:
         """Returns True if the external filter is enabled, False if disabled."""
         response = self.instrument.query(":OUTP:FILT:EXT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for output filter external state: '{response}'")
@@ -92,15 +92,15 @@ class Output():
         """Turns the high pass filter ON and OFF.
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:FILT:HPAS:STATE {scpi_value}")
 
     def get_output_filter_hpass_state(self) -> bool:
         """Returns True if the high pass filter is ON, False if OFF."""
         response = self.instrument.query(":OUTP:FILT:HPAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for output filter high pass state: '{response}'")
@@ -147,15 +147,15 @@ class Output():
         """Turns the low pass filter ON and OFF.
         Parameters:
         enable: True to turn the filter ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:FILT:LPAS:STATE {scpi_value}")
 
     def get_output_filter_lpass_state(self) -> bool:
         """Returns True if the low pass filter is ON, False if OFF."""
         response = self.instrument.query(":OUTP:FILT:LPAS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for output filter low pass state: '{response}'")
@@ -333,15 +333,15 @@ class Output():
         """Controls whether the X-axis angle limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:POS:X:ANG:LIM:STATE {scpi_value}")
 
     def get_output_position_x_angle_limit_state(self) -> bool:
         """Returns True if the X-axis angle limit is enabled, False if not."""
         response = self.instrument.query(":OUTP:POS:X:ANG:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for X-axis angle limit state: '{response}'")
@@ -435,15 +435,15 @@ class Output():
         """Controls whether the X-axis linear distance limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:POS:X:DIST:LIM:STATE {scpi_value}")
 
     def get_output_position_x_distance_limit_state(self) -> bool:
         """Returns True if the X-axis linear distance limit is enabled, False if not."""
         response = self.instrument.query(":OUTP:POS:X:DIST:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for X-axis distance limit state: '{response}'")
@@ -538,15 +538,15 @@ class Output():
         """Controls whether the Y-axis angle limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:POS:Y:ANG:LIM:STATE {scpi_value}")
 
     def get_output_position_y_angle_limit_state(self) -> bool:
         """Returns True if the Y-axis angle limit is enabled, False if not."""
         response = self.instrument.query(":OUTP:POS:Y:ANG:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Y-axis angle limit state: '{response}'")
@@ -640,15 +640,15 @@ class Output():
         """Controls whether the Y-axis linear distance limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:POS:Y:DIST:LIM:STATE {scpi_value}")
 
     def get_output_position_y_distance_limit_state(self) -> bool:
         """Returns True if the Y-axis linear distance limit is enabled, False if not."""
         response = self.instrument.query(":OUTP:POS:Y:DIST:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Y-axis distance limit state: '{response}'")
@@ -742,15 +742,15 @@ class Output():
         """Controls whether the Z-axis angle limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:POS:Z:ANG:LIM:STATE {scpi_value}")
 
     def get_output_position_z_angle_limit_state(self) -> bool:
         """Returns True if the Z-axis angle limit is enabled, False if not."""
         response = self.instrument.query(":OUTP:POS:Z:ANG:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Z-axis angle limit state: '{response}'")
@@ -844,15 +844,15 @@ class Output():
         """Controls whether the Z-axis linear distance limit is enabled.
         Parameters:
         enable: True to enable the limit, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:POS:Z:DIST:LIM:STATE {scpi_value}")
 
     def get_output_position_z_distance_limit_state(self) -> bool:
         """Returns True if the Z-axis linear distance limit is enabled, False if not."""
         response = self.instrument.query(":OUTP:POS:Z:DIST:LIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Z-axis distance limit state: '{response}'")
@@ -903,15 +903,15 @@ class Output():
         """Controls whether the output protection circuit is enabled.
         Parameters:
         enable: True to enable protection, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:PROT:STATE {scpi_value}")
 
     def get_output_protection_state(self) -> bool:
         """Returns True if the output protection circuit is enabled, False if not."""
         response = self.instrument.query(":OUTP:PROT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for output protection state: '{response}'")
@@ -920,9 +920,9 @@ class Output():
         """Returns True if the protection circuit is tripped, False if untripped.
         Notes: Query only."""
         response = self.instrument.query(":OUTP:PROT:TRIP?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for output protection tripped status: '{response}'")
@@ -936,15 +936,15 @@ class Output():
         """Selects whether or not the device outputs a signal on its ROSCillator port.
         Parameters:
         enable: True to output a signal, False to not output."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:ROSC:STATE {scpi_value}")
 
     def get_output_roscillator_state(self) -> bool:
         """Returns True if the device outputs a signal on its ROSCillator port, False if not."""
         response = self.instrument.query(":OUTP:ROSC:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for output roscillator state: '{response}'")
@@ -960,15 +960,15 @@ class Output():
         Parameters:
         trigger_line: The trigger line (e.g., 'TTLTrg0', 'ECLTrg1').
         level: True for logical level 1, False for logical level 0."""
-        scpi_value = "1" if level else "0"
+        scpi_value = 1 if level else 0
         self.instrument.write(f":OUTP:{trigger_line}:LEVel {scpi_value}")
 
     def get_output_ttl_ecl_trigger_level(self, trigger_line: str) -> bool:
         """Returns the logical level of the selected TTLTrg or ECLTrg line (True for 1, False for 0)."""
         response = self.instrument.query(f":OUTP:{trigger_line}:LEVel?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for {trigger_line} level: '{response}'")
@@ -1046,15 +1046,15 @@ class Output():
         Parameters:
         trigger_line: The trigger line (e.g., 'TTLTrg0', 'ECLTrg1').
         enable: True to drive the trigger line, False to not drive."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:{trigger_line}:STATE {scpi_value}")
 
     def get_output_ttl_ecl_trigger_state(self, trigger_line: str) -> bool:
         """Returns True if the VXI module drives the VXI backplane trigger line, False if not."""
         response = self.instrument.query(f":OUTP:{trigger_line}:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for {trigger_line} state: '{response}'")
@@ -1075,15 +1075,15 @@ class Output():
         """Controls whether the output terminals are open or closed.
         Parameters:
         enable: True to close terminals, False for maximum isolation."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":OUTP:STATE {scpi_value}")
 
     def get_output_state(self) -> bool:
         """Returns True if the output terminals are closed, False if open."""
         response = self.instrument.query(":OUTP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for output state: '{response}'")

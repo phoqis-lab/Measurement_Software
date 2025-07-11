@@ -5,15 +5,15 @@ class Display():
         """Controls ALL of the annotation information.
         Parameters:
         enable: True to enable all annotations, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:ANN:ALL {scpi_value}")
 
     def get_display_annotation_all(self) -> bool:
         """Returns True if all annotation information is controlled (enabled), False if disabled."""
         response = self.instrument.query(":DISP:ANN:ALL?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for display annotation all state: '{response}'")
@@ -22,15 +22,15 @@ class Display():
         """Controls the amplitude annotation information.
         Parameters:
         enable: True to enable amplitude annotation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:ANN:AMPL {scpi_value}")
 
     def get_display_annotation_amplitude(self) -> bool:
         """Returns True if amplitude annotation information is enabled, False if disabled."""
         response = self.instrument.query(":DISP:ANN:AMPL?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for display annotation amplitude state: '{response}'")
@@ -39,15 +39,15 @@ class Display():
         """Controls the frequency annotation information.
         Parameters:
         enable: True to enable frequency annotation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:ANN:FREQ {scpi_value}")
 
     def get_display_annotation_frequency(self) -> bool:
         """Returns True if frequency annotation information is enabled, False if disabled."""
         response = self.instrument.query(":DISP:ANN:FREQ?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for display annotation frequency state: '{response}'")
@@ -131,15 +131,15 @@ class Display():
         """Controls whether the whole display is visible.
         Parameters:
         enable: True to enable the display, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:ENAB {scpi_value}")
 
     def get_display_enable(self) -> bool:
         """Returns True if the whole display is visible, False if not."""
         response = self.instrument.query(":DISP:ENAB?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for display enable state: '{response}'")
@@ -160,15 +160,15 @@ class Display():
         """Turns the current menu page ON or OFF.
         Parameters:
         enable: True to turn the menu ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:MENU:STATE {scpi_value}")
 
     def get_display_menu_state(self) -> bool:
         """Returns True if the current menu page is ON, False if OFF."""
         response = self.instrument.query(":DISP:MENU:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for display menu state: '{response}'")
@@ -387,15 +387,15 @@ class Display():
         """Controls whether the graphics is visible or not.
         Parameters:
         enable: True to make graphics visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:GRAP:STATE {scpi_value}")
 
     def get_display_window_graphics_state(self) -> bool:
         """Returns True if the graphics is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:GRAP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for window graphics state: '{response}'")
@@ -404,15 +404,15 @@ class Display():
         """Controls whether the window is visible or not.
         Parameters:
         enable: True to make the window visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:STATE {scpi_value}")
 
     def get_display_window_state(self) -> bool:
         """Returns True if the window is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for display window state: '{response}'")
@@ -421,15 +421,15 @@ class Display():
         """Allows the device to interpret ANSI Standard Terminal escape sequences when displaying TEXT:DATA.
         Parameters:
         enable: True to enable attribute interpretation, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TEXT:ATTR {scpi_value}")
 
     def get_display_window_text_attributes(self) -> bool:
         """Returns True if ANSI Standard Terminal escape sequence interpretation is enabled for text, False if disabled."""
         response = self.instrument.query(":DISP:WIND:TEXT:ATTR?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for window text attributes state: '{response}'")
@@ -540,15 +540,15 @@ class Display():
         """Controls whether the TEXT is visible or not.
         Parameters:
         enable: True to make text visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TEXT:STATE {scpi_value}")
 
     def get_display_window_text_state(self) -> bool:
         """Returns True if the TEXT is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:TEXT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for window text state: '{response}'")
@@ -583,15 +583,15 @@ class Display():
         """Determines if the AXIS (X and Y or R axis) is visible or not.
         Parameters:
         enable: True to make axis visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:GRAT:AXIS:STATE {scpi_value}")
 
     def get_display_window_trace_graticule_axis_state(self) -> bool:
         """Returns True if the AXIS is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:GRAT:AXIS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for trace graticule axis state: '{response}'")
@@ -600,15 +600,15 @@ class Display():
         """Determines if the FRAMe (perimeter boundary and markings) is visible or not.
         Parameters:
         enable: True to make frame visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:GRAT:FRAM:STATE {scpi_value}")
 
     def get_display_window_trace_graticule_frame_state(self) -> bool:
         """Returns True if the FRAMe is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:GRAT:FRAM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for trace graticule frame state: '{response}'")
@@ -617,15 +617,15 @@ class Display():
         """Couples the GRID subtree to FRAMe. Turning ON FRAMe, with AUTO set to ON, shall cause GRID to turn on also.
         Parameters:
         enable: True to enable auto-coupling of grid to frame, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:GRAT:GRID:AUTO {scpi_value}")
 
     def get_display_window_trace_graticule_grid_auto(self) -> bool:
         """Returns True if the GRID is auto-coupled to FRAMe, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:GRAT:GRID:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for trace graticule grid auto state: '{response}'")
@@ -634,15 +634,15 @@ class Display():
         """Determines if the GRID provides constant lines of X, Y or R with respect to the TRACe.
         Parameters:
         enable: True to make grid visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:GRAT:GRID:STATE {scpi_value}")
 
     def get_display_window_trace_graticule_grid_state(self) -> bool:
         """Returns True if the GRID is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:GRAT:GRID:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for trace graticule grid state: '{response}'")
@@ -665,15 +665,15 @@ class Display():
         """When AUTO is set to ON, the persistence is determined by the device.
         Parameters:
         enable: True to enable auto persistence, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:PERS:AUTO {scpi_value}")
 
     def get_display_window_trace_persistence_auto(self) -> bool:
         """Returns True if persistence is automatically determined by the device, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:PERS:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for trace persistence auto state: '{response}'")
@@ -682,15 +682,15 @@ class Display():
         """Controls whether the TRACE and related information is visible or not.
         Parameters:
         enable: True to make trace visible, False to hide."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:STATE {scpi_value}")
 
     def get_display_window_trace_state(self) -> bool:
         """Returns True if the TRACE and related information is visible, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for trace state: '{response}'")
@@ -712,9 +712,9 @@ class Display():
         Parameters:
         auto_mode: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE')."""
         normalized_mode = auto_mode.upper()
-        if normalized_mode in {"1", "ON"}:
+        if normalized_mode in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_mode in {"0", "OFF"}:
+        elif normalized_mode in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_mode == "ONCE":
             scpi_value = "ONCE"
@@ -725,9 +725,9 @@ class Display():
     def get_display_window_trace_x_scale_auto(self) -> str:
         """Returns the auto-scaling setting for the X-axis ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":DISP:WIND:TRAC:X:SCAL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -829,15 +829,15 @@ class Display():
         """Turns on/off a line which is positioned on the graticule at the current Reference POSition.
         Parameters:
         enable: True to turn RLINE ON, False to turn OFF."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:Y:RLINE {scpi_value}")
 
     def get_display_window_trace_y_rline(self) -> bool:
         """Returns True if the RLINE is ON, False if OFF."""
         response = self.instrument.query(":DISP:WIND:TRAC:Y:RLINE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Y-axis RLINE state: '{response}'")
@@ -848,9 +848,9 @@ class Display():
         Parameters:
         auto_mode: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE')."""
         normalized_mode = auto_mode.upper()
-        if normalized_mode in {"1", "ON"}:
+        if normalized_mode in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_mode in {"0", "OFF"}:
+        elif normalized_mode in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_mode == "ONCE":
             scpi_value = "ONCE"
@@ -861,9 +861,9 @@ class Display():
     def get_display_window_trace_y_scale_auto(self) -> str:
         """Returns the auto-scaling setting for the Y-axis ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -914,15 +914,15 @@ class Display():
         """Causes the display to automatically choose a reference level to best display the particular data.
         Parameters:
         enable: True to enable auto reference level, False to disable."""
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:WIND:TRAC:Y:SCAL:RLEVel:AUTO {scpi_value}")
 
     def get_display_window_trace_y_scale_rlevel_auto(self) -> bool:
         """Returns True if the display automatically chooses a reference level, False if not."""
         response = self.instrument.query(":DISP:WIND:TRAC:Y:SCAL:RLEVel:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for Y-axis reference level auto state: '{response}'")
@@ -998,9 +998,9 @@ class Display():
         Parameters:
         auto_mode: AUTO|ONCE (Boolean equivalent for AUTO, or 'ONCE')."""
         normalized_mode = auto_mode.upper()
-        if normalized_mode in {"1", "ON"}:
+        if normalized_mode in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_mode in {"0", "OFF"}:
+        elif normalized_mode in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_mode == "ONCE":
             scpi_value = "ONCE"
@@ -1011,9 +1011,9 @@ class Display():
     def get_display_window_trace_r_scale_auto(self) -> str:
         """Returns the auto-scaling setting for the R-axis ('ON', 'OFF', or 'ONCE')."""
         response = self.instrument.query(":DISP:WIND:TRAC:R:SCAL:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()

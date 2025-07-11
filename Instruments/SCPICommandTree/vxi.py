@@ -516,7 +516,7 @@ class VXI:
         :param boolean_field: Selects whether the END bit is set in the command.
         :param byte_value: Byte value (0 to 255 inclusive).
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= byte_value <= 255):
             raise ValueError("byte_value must be between 0 and 255.")
         self.instrument.write(f":VXI:WSPR:COMM:BAV {scpi_bool},{byte_value}")
@@ -527,7 +527,7 @@ class VXI:
         :param boolean_field: Selects whether the Top_level bit is set in the command.
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         self.instrument.write(f":VXI:WSPR:COMM:BNO {scpi_bool}")
 
     def vxi_wsprotocol_command_brq(self):
@@ -544,7 +544,7 @@ class VXI:
         :param event_number: Event number (0 to 127 inclusive).
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= event_number <= 127):
             raise ValueError("event_number must be between 0 and 127.")
         self.instrument.write(f":VXI:WSPR:COMM:CEV {scpi_bool},{event_number}")
@@ -685,7 +685,7 @@ class VXI:
         :param modid_value: MODID 6-0 field (0 to 127 inclusive).
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= modid_value <= 127):
             raise ValueError("MODID 6-0 value must be between 0 and 127.")
         self.instrument.write(f":VXI:WSPR:COMM:SLMOD {scpi_bool},{modid_value}")
@@ -703,7 +703,7 @@ class VXI:
         :param modid_value: MODID 12-7 field (0 to 63 inclusive).
         Notes: The response can be read with VXI:WSPRotocol:RESPonse?.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= modid_value <= 63):
             raise ValueError("MODID 12-7 value must be between 0 and 63.")
         self.instrument.write(f":VXI:WSPR:COMM:SUMOD {scpi_bool},{modid_value}")
@@ -828,7 +828,7 @@ class VXI:
         :param boolean_field: Selects whether the Top_level bit is set in the command.
         :return: The response to the command as an integer.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         response = self.instrument.query(f":VXI:WSPR:QUER:BNO? {scpi_bool}").strip()
         try:
             return int(response)
@@ -854,7 +854,7 @@ class VXI:
         :param event_number: Event number (0 to 127 inclusive).
         :return: The response to the command as an integer.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= event_number <= 127):
             raise ValueError("event_number must be between 0 and 127.")
         response = self.instrument.query(f":VXI:WSPR:QUER:CEV? {scpi_bool},{event_number}").strip()
@@ -1016,7 +1016,7 @@ class VXI:
         :param modid_value: MODID 6-0 field (0 to 127 inclusive).
         :return: The response to the command as an integer.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= modid_value <= 127):
             raise ValueError("MODID 6-0 value must be between 0 and 127.")
         response = self.instrument.query(f":VXI:WSPR:QUER:SLMOD? {scpi_bool},{modid_value}").strip()
@@ -1032,7 +1032,7 @@ class VXI:
         :param modid_value: MODID 12-7 field (0 to 63 inclusive).
         :return: The response to the command as an integer.
         """
-        scpi_bool = "1" if boolean_field else "0"
+        scpi_bool = 1 if boolean_field else 0
         if not (0 <= modid_value <= 63):
             raise ValueError("MODID 12-7 value must be between 0 and 63.")
         response = self.instrument.query(f":VXI:WSPR:QUER:SUMOD? {scpi_bool},{modid_value}").strip()

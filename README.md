@@ -10,3 +10,5 @@ TO DOS:
 - double check what is overlap vs sequential
 
   How to set up on New Computer: VISA and PyVisa
+
+  Write about sequential versus overlap commans

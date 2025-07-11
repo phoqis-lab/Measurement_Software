@@ -33,7 +33,7 @@ class System:
         the active state with the one stored in the register specified in ALTernate.
         :param enable: True to enable alternate state mode, False to disable.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:ALT:STATE {scpi_value}")
 
     def get_system_alternate_state(self) -> bool:
@@ -41,9 +41,9 @@ class System:
         Returns True if the alternate state mode is enabled, False if disabled.
         """
         response = self.instrument.query(":SYST:ALT:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for system alternate state: '{response}'")
@@ -102,7 +102,7 @@ class System:
         the :SYSTem:BEEPer:IMMediate command, shall cause an audible beep to be emitted.
         :param enable: True to enable beeper, False to disable.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:BEEP:STATE {scpi_value}")
 
     def get_system_beeper_state(self) -> bool:
@@ -110,9 +110,9 @@ class System:
         Returns True if the beeper is enabled, False if disabled.
         """
         response = self.instrument.query(":SYST:BEEP:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for system beeper state: '{response}'")
@@ -407,7 +407,7 @@ class System:
         When CHECK ON is selected, the parity shall be checked in accordance with the selected PARity:TYPE.
         :param enable: True to enable parity check, False to disable.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:COMM:SER:REC:PAR:CHEC {scpi_value}")
 
     def get_system_communicate_serial_receive_parity_check(self) -> bool:
@@ -415,9 +415,9 @@ class System:
         Returns True if parity check is enabled for the serial receive channel, False if disabled.
         """
         response = self.instrument.query(":SYST:COMM:SER:REC:PAR:CHEC?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for serial receive parity check state: '{response}'")
@@ -466,7 +466,7 @@ class System:
         Couples the TRANsmit parameter values to the RECeive parameter values when AUTO ON is selected.
         :param enable: True to enable auto-coupling, False to disable.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:COMM:SER:TRAN:AUTO {scpi_value}")
 
     def get_system_communicate_serial_transmit_auto(self) -> bool:
@@ -474,9 +474,9 @@ class System:
         Returns True if auto-coupling is enabled for serial transmit parameters, False if disabled.
         """
         response = self.instrument.query(":SYST:COMM:SER:TRAN:AUTO?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for serial transmit auto state: '{response}'")
@@ -793,13 +793,7 @@ class System:
         response = self.instrument.query(":SYST:ERR:CODE:ALL?").strip()
         return response
 
-    def get_system_error(self) -> str:
-        """
-        Queries the next error from the error queue, returning its code and message.
-        Notes: Query only.
-        """
-        response = self.instrument.query(":SYST:ERR:NEXT?").strip()
-        return response
+
 
     def get_system_error_count(self) -> int:
         """
@@ -888,7 +882,7 @@ class System:
         Locks or unlocks the front panel keyboard.
         :param enable: True to lock the keyboard, False to unlock.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:KLOCK {scpi_value}")
 
     def get_system_klock(self) -> bool:
@@ -896,9 +890,9 @@ class System:
         Returns True if the front panel keyboard is locked, False if unlocked.
         """
         response = self.instrument.query(":SYST:KLOCK?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for system KLOCK state: '{response}'")
@@ -942,9 +936,9 @@ class System:
         :param auto_state: Boolean (ON|OFF) or 'ONCE'. Selecting 'ONCE' sets AUTO to ON and then OFF.
         """
         normalized_state = auto_state.upper()
-        if normalized_state in {"1", "ON"}:
+        if normalized_state in {1, "ON"}:
             scpi_value = "ON"
-        elif normalized_state in {"0", "OFF"}:
+        elif normalized_state in {0, "OFF"}:
             scpi_value = "OFF"
         elif normalized_state == "ONCE":
             scpi_value = "ONCE"
@@ -957,9 +951,9 @@ class System:
         Returns the auto state of the line frequency.
         """
         response = self.instrument.query(":SYST:LFR:AUTO?").strip()
-        if response == "1":
+        if response == 1:
             return "ON"
-        elif response == "0":
+        elif response == 0:
             return "OFF"
         else:
             return response.upper()
@@ -989,9 +983,9 @@ class System:
         Notes: Query only.
         """
         response = self.instrument.query(":SYST:LOCK:REQ?").strip()
-        if response == "1":
+        if response == 1:
             return True
-        elif response == "0":
+        elif response == 0:
             return False
         else:
             raise ValueError(f"Unexpected response for system LOCK request (not boolean): '{response}'")
@@ -1019,9 +1013,9 @@ class System:
         Notes: Query only.
         """
         response = self.instrument.query(":SYST:PASS:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for system password state: '{response}'")
@@ -1049,7 +1043,7 @@ class System:
         :param enable: True to enable, False to disable.
         Notes: Event; no query.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:SEC:IMM {scpi_value}")
 
     def set_system_security_state(self, enable: bool):
@@ -1057,7 +1051,7 @@ class System:
         Enables or disables security functions.
         :param enable: True to enable, False to disable.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:SEC:STATE {scpi_value}")
 
     def get_system_security_state(self) -> bool:
@@ -1065,9 +1059,9 @@ class System:
         Returns True if security functions are enabled, False if disabled.
         """
         response = self.instrument.query(":SYST:SEC:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for system security state: '{response}'")
@@ -1134,7 +1128,7 @@ class System:
         Enables or disables the system timer.
         :param enable: True to enable, False to disable.
         """
-        scpi_value = "1" if enable else "0"
+        scpi_value = 1 if enable else 0
         self.instrument.write(f":SYST:TIM:STATE {scpi_value}")
 
     def get_system_timer_state(self) -> bool:
@@ -1142,9 +1136,9 @@ class System:
         Returns True if the system timer is enabled, False if disabled.
         """
         response = self.instrument.query(":SYST:TIM:STATE?").strip()
-        if response == "1" or response.upper() == "ON":
+        if response == 1 or response.upper() == "ON":
             return True
-        elif response == "0" or response.upper() == "OFF":
+        elif response == 0 or response.upper() == "OFF":
             return False
         else:
             raise ValueError(f"Unexpected response for system TIMer state: '{response}'")
@@ -1177,16 +1171,6 @@ class System:
                 raise ValueError("Unexpected time zone format.")
         except ValueError:
             raise ValueError(f"Unexpected response for system TZONE (not numeric or invalid format): '{response}'")
-
-    
-    def get_system_version(self) -> str:
-        """
-        Returns the SCPI version supported by the instrument.
-        Notes: Query only.
-        """
-        response = self.instrument.query(":SYST:VERS?").strip()
-        return response
-
 
     
     def get_system_error_next(self) -> tuple[int, str, str, str]:
