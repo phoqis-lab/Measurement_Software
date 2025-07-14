@@ -1,6 +1,4 @@
-from rigol_ds1000z import Rigol_DS1000Z
-from rigol_ds1000z import process_display, process_waveform
-from rigol_ds1000z import process_display, process_waveform
+
 from time import sleep
 from time import sleep
 from Instruments.SCPICommandTree import mandatory
