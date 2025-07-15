@@ -2118,3 +2118,238 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         """
         response = self.instrument.query(f":SENS:PEAK:TABL:AMPL:DELT? {peak_index}")
         return response
+    
+    def set_decimate_type(self, decimate_type: str):
+        """
+        Selects the decimation type for sweep recording using shortened SCPI.
+        Parameters:
+        decimate_type (str): The decimation type. Must be 'TIME' or 'COUNT'.
+        """
+        valid_types = {"TIME", "COUNT"}
+        decimate_type_upper = decimate_type.upper()
+        if decimate_type_upper not in valid_types:
+            raise ValueError(f"Invalid decimation type: '{decimate_type}'. Must be 'TIME' or 'COUNT'.")
+        self.instrument.write(f":SENS:REC:SWE:DEC:TYPE {decimate_type_upper}")
+
+    def get_decimate_type(self) -> str:
+        """
+        Queries the decimation type for sweep recording using shortened SCPI.
+        Returns:
+        str: The decimation type ('TIME' or 'COUNT').
+        """
+        response = self.instrument.query(":SENS:REC:SWE:DEC:TYPE?")
+        return response.strip().upper()
+
+    def set_decimate_time(self, time_seconds: float):
+        """
+        Specifies the amount of time by which to decimate using shortened SCPI.
+        Parameters:
+        time_seconds (float): The decimation time in seconds.
+        """
+        self.instrument.write(f":SENS:REC:SWE:DEC:TIME {time_seconds}")
+
+    def get_decimate_time(self) -> float:
+        """
+        Queries the decimation time for sweep recording using shortened SCPI.
+        Returns:
+        float: The decimation time in seconds.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:DEC:TIME?")
+        return float(response)
+
+    def set_decimate_count(self, count: int):
+        """
+        Specifies the number of sweeps by which to decimate using shortened SCPI.
+        Parameters:
+        count (int): The number of sweeps.
+        """
+        self.instrument.write(f":SENS:REC:SWE:DEC:COUNt {count}")
+
+    def get_decimate_count(self) -> int:
+        """
+        Queries the decimation count for sweep recording using shortened SCPI.
+        Returns:
+        int: The decimation count.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:DEC:COUNt?")
+        return int(response)
+
+    def set_decimate_detector(self, detector_type: str):
+        """
+        Selects the decimation detector using shortened SCPI.
+        Parameters:
+        detector_type (str): The detector type. Must be 'AVERAGE' or 'MAX'.
+        """
+        valid_types = {"AVERAGE", "MAX"}
+        detector_type_upper = detector_type.upper()
+        if detector_type_upper not in valid_types:
+            raise ValueError(f"Invalid detector type: '{detector_type}'. Must be 'AVERAGE' or 'MAX'.")
+        self.instrument.write(f":SENS:REC:SWE:DEC:DETector {detector_type_upper}")
+
+    def get_decimate_detector(self) -> str:
+        """
+        Queries the decimation detector for sweep recording using shortened SCPI.
+        Returns:
+        str: The detector type ('AVERAGE' or 'MAX').
+        """
+        response = self.instrument.query(":SENS:REC:SWE:DEC:DETector?")
+        return response.strip().upper()
+
+    def enable_channelizer(self, enable: bool):
+        """
+        Toggles decimation in frequency with the channelizer using shortened SCPI.
+        Parameters:
+        enable (bool): True to enable, False to disable.
+        """
+        # Use integer 1 for ON, 0 for OFF
+        self.instrument.write(f":SENS:REC:SWE:CHAN:STATe {1 if enable else 0}")
+
+    def is_channelizer_enabled(self) -> bool:
+        """
+        Queries if the channelizer is enabled for sweep recording using shortened SCPI.
+        Returns:
+        bool: True if enabled, False otherwise.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:STATe?")
+        return int(response) == 1
+
+    def set_channelizer_center_frequency(self, frequency_hz: float):
+        """
+        Specifies the center frequency of the channelizer using shortened SCPI.
+        Parameters:
+        frequency_hz (float): The center frequency in Hz.
+        """
+        self.instrument.write(f":SENS:REC:SWE:CHAN:CENTer {frequency_hz}")
+
+    def get_channelizer_center_frequency(self) -> float:
+        """
+        Queries the center frequency of the channelizer using shortened SCPI.
+        Returns:
+        float: The center frequency in Hz.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:CENTer?")
+        return float(response)
+
+    def set_channelizer_spacing(self, spacing_hz: float):
+        """
+        Specifies the channel width for the channelizer using shortened SCPI.
+        Parameters:
+        spacing_hz (float): The channel width in Hz.
+        """
+        self.instrument.write(f":SENS:REC:SWE:CHAN:SPACing {spacing_hz}")
+
+    def get_channelizer_spacing(self) -> float:
+        """
+        Queries the channel width for the channelizer using shortened SCPI.
+        Returns:
+        float: The channel width in Hz.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:SPACing?")
+        return float(response)
+
+    def set_channelizer_units(self, units: str):
+        """
+        Selects the output units of the channel power measurement using shortened SCPI.
+        Parameters:
+        units (str): The units. Must be 'DBM' or 'DBMHZ'.
+        """
+        valid_units = {"DBM", "DBMHZ"}
+        units_upper = units.upper()
+        if units_upper not in valid_units:
+            raise ValueError(f"Invalid units: '{units}'. Must be 'DBM' or 'DBMHZ'.")
+        self.instrument.write(f":SENS:REC:SWE:CHAN:UNITS {units_upper}")
+
+    def get_channelizer_units(self) -> str:
+        """
+        Queries the output units of the channel power measurement using shortened SCPI.
+        Returns:
+        str: The units ('DBM' or 'DBMHZ').
+        """
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:UNITS?")
+        return response.strip().upper()
+
+    def get_recording_progress(self) -> float:
+        """
+        Returns the progress of the current decimation in time as a floating point
+        percentage between 0 and 100 using shortened SCPI.
+        Returns:
+        float: The progress percentage.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:PROGress?")
+        return float(response)
+
+    def get_sweep_count(self) -> int:
+        """
+        Returns the integer number of sweeps saved so far using shortened SCPI.
+        Returns:
+        int: The number of sweeps saved.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:COUNt?")
+        return int(response)
+
+    def get_file_size(self) -> float:
+        """
+        Returns the size of the recording file in bytes as a floating point number using shortened SCPI.
+        Returns:
+        float: The file size in bytes.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:FILE:SIZE?")
+        return float(response)
+
+    def set_file_prefix(self, prefix: str):
+        """
+        Specifies the file prefix for recordings using shortened SCPI.
+        Parameters:
+        prefix (str): The file prefix string.
+        """
+        self.instrument.write(f":SENS:REC:SWE:FILE:PREfix '{prefix}'")
+
+    def get_file_prefix(self) -> str:
+        """
+        Queries the file prefix for recordings using shortened SCPI.
+        Returns:
+        str: The file prefix string.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:FILE:PREfix?")
+        return response.strip().strip("'") # Remove potential quotes from response
+
+    def set_file_directory(self, directory_path: str):
+        """
+        Specifies the directory in which to save recordings using shortened SCPI.
+        If the specified directory does not exist, then no change is made.
+        Parameters:
+        directory_path (str): The directory path string.
+        """
+        self.instrument.write(f":SENS:REC:SWE:FILE:DIRectory '{directory_path}'")
+
+    def get_file_directory(self) -> str:
+        """
+        Queries the directory in which recordings are saved using shortened SCPI.
+        Returns:
+        str: The directory path string.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:FILE:DIRectory?")
+        return response.strip().strip("'") # Remove potential quotes from response
+
+    def start_recording(self):
+        """
+        Starts sweep recording using shortened SCPI.
+        """
+        self.instrument.write(":SENS:REC:SWE:STARt")
+
+    def stop_recording(self):
+        """
+        Stops sweep recording using shortened SCPI.
+        """
+        self.instrument.write(":SENS:REC:SWE:STOP")
+
+    def is_recording_active(self) -> bool:
+        """
+        Queries if the instrument is actively recording using shortened SCPI.
+        Returns:
+        bool: True if actively recording, False otherwise.
+        """
+        response = self.instrument.query(":SENS:REC:SWE:STATus?")
+        # The document says "Returns true if actively recording."
+        # Assuming '1' for true, '0' for false based on other boolean queries.
+        return int(response) == 1
