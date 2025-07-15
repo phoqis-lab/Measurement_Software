@@ -156,14 +156,14 @@ class Display():
         response = self.instrument.query(":DISP:MENU:NAME?").strip().strip("'\"") # Remove potential quotes
         return response
 
-    def set_display_menu_state(self, enable: bool):
+    def enable_menu_page(self, enable: bool):
         """Turns the current menu page ON or OFF.
         Parameters:
         enable: True to turn the menu ON, False to turn OFF."""
         scpi_value = 1 if enable else 0
         self.instrument.write(f":DISP:MENU:STATE {scpi_value}")
 
-    def get_display_menu_state(self) -> bool:
+    def is_menu_page_enabled(self) -> bool:
         """Returns True if the current menu page is ON, False if OFF."""
         response = self.instrument.query(":DISP:MENU:STATE?").strip()
         if response == 1 or response.upper() == "ON":
