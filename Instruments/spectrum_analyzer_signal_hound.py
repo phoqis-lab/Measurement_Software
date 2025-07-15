@@ -17,6 +17,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         if not 1 <= table_num <= 8:
             raise ValueError("Path loss table number must be an integer between 1 and 8.")
     #Display
+    #Test
     '''SPIKE pplication display controls.'''
     def is_spike_hidden(self):
         #TODO: Test that :DATA unneeded
