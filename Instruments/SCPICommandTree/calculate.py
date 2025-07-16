@@ -16,13 +16,13 @@ class Calculate():
             if once:
                 self.instrument.write(f":CALC:AVER:COUNT:AUTO ONCE")
             else:
-                self.instrument.write(f":CALC:AVER:COUNT:AUTO 1") # SCPI '1' for ON
+                self.instrument.write(f":CALC:AVER:COUNT:AUTO 1") # SCPI 1 for ON
         else:
             self.instrument.write(f":CALC:AVER:COUNT {count}")
 
     def get_count_of_results_in_average(self):
         """Returns the current average count and auto-count setting.
-        Returns: A tuple containing (current_count: int, auto_setting: str ('1', '0', or 'ONCE'))"""
+        Returns: A tuple containing (current_count: int, auto_setting: str (1, 0, or 'ONCE'))"""
         auto_response = self.instrument.query(f":CALC:AVER:COUNT:AUTO?").strip()
         count_response = self.instrument.query(f":CALC:AVER:COUNT?").strip()
         

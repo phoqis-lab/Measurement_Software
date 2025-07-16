@@ -1166,33 +1166,27 @@ class Trigger:
         """
         self.instrument.write(f"INIT:IMM:SEQ{sequence_number}")
 
-    def set_initiate_poflag(self, flag_mode: str):
+    def include_poflag(self, flag_mode: bool):
         """
         Allows the Pending-Operation flag associated with the initiation of a trigger sequence
         to be included or excluded from the No-Operation-Pending flag set.
-        :param flag_mode: "INCLude" or "EXCLude".
+        :param flag_mode: True to include
         Notes: At *RST, the value of this parameter is INCLude.
         """
-        valid_modes = {"INC", "INCLUDE", "EXC", "EXCLUDE"}
-        mode_upper = flag_mode.upper()
-        if mode_upper not in valid_modes:
-            raise ValueError(f"Invalid flag_mode: '{flag_mode}'. Must be 'INCLude' or 'EXCLude'.")
-
-        if mode_upper.startswith("INC"): scpi_mode = "INC"
-        elif mode_upper.startswith("EXC"): scpi_mode = "EXC"
-        else: scpi_mode = mode_upper
+        if flag_mode:
+            scpi_mode = "INC"
+        else:
+            scpi_mode = "EXC"
 
         self.instrument.write(f"INIT:POFL {scpi_mode}")
 
-    def get_initiate_poflag(self) -> str:
+    def is_poflag_included(self) -> str:
         """
         Queries the Pending-Operation flag setting.
         :return: The flag mode ("INCLude" or "EXCLude").
         """
         response = self.instrument.query("INIT:POFL?").strip().upper()
-        if response.startswith("INC"): return "INCLude"
-        if response.startswith("EXC"): return "EXCLude"
-        return response
+        return response.startswith("INC")
 
     
     def set_trigger_sequence_atrigger_state(self, enable: bool):
@@ -1356,9 +1350,7 @@ class Trigger:
         :return: The auto-delay state ("ON", "OFF", or "ONCE").
         """
         response = self.instrument.query(":TRIG:SEQ:DEL:AUTO?").strip().upper()
-        if response == 1: return "ON"
-        if response == 0: return "OFF"
-        return response
+        return response == 1
 
     def trigger_sequence_ecl(self):
         """
