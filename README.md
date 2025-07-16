@@ -1,3 +1,11 @@
+Measurement Software
+
+This is a python package used to control several different type of lab measurement instruments. It's allows a user to create
+
+#VNA
+#Signal Generator
+#Tracking Generator
+
 - Wrap all SCPI commands in python functions in generalized instrument class (almost done)
 - DO DIagnositc commands for each instrument
 TO DOS:

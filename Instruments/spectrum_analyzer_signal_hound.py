@@ -352,7 +352,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         """
         Determines the current measurement mode.
         params: mode (str): The desired measurement mode. Allowed values are:
-                      'SA', 'RTSA', 'ZS', 'HARMonics', 'NA', 'PNoise', 'DDEMod',
+                      'SA', 'RTSA', 'ZS', 'HARMonics', 'NA', 'PN', 'DDEMod',
                       'EMI', 'ADEMod', 'IH', 'SEMask', 'NFIGure', 'WLAN', 'BLE', 'LTE'.
         """
         if mode.upper() in self.allowed_modes:
@@ -397,7 +397,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
     def is_continuous_measurement_enabled(self):
         """
         Queries the current status of continuous measurement operation.
-        Returns '1' if ON, '0' if OFF.
+        Returns 1 if ON, 0 if OFF.
         """
         comm = ":INIT:CONT?"
         status = self.instrument.query(comm)
@@ -428,7 +428,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         """
         Queries if limit line testing is enabled for a specific limit line.
         params: line_num (int): The limit line number to check (1-6).
-        Returns '1' if enabled, '0' if disabled.
+        Returns 1 if enabled, 0 if disabled.
         """
         comm = ":CALC:LLINE"+str(line_num)+":STAT?"
         status = self.instrument.query(comm)
@@ -621,7 +621,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         """
         Queries if the limit line is visible on the graticule.
         params: line_num (int): The limit line number (1-6).
-        Returns: str: '1' if visible, '0' if hidden.
+        Returns: str: 1 if visible, 0 if hidden.
         """
         self._validate_line_num(line_num)
         comm = f":CALC:LLINE{line_num}:DISP:STATe?"
@@ -646,7 +646,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         """
         Queries if the limit line pass/fail result is visible on the graticule.
         params: line_num (int): The limit line number (1-6).
-        Returns: str: '1' if visible, '0' if hidden.
+        Returns: str: 1 if visible, 0 if hidden.
         """
         self._validate_line_num(line_num)
         comm = f":CALC:LLINE{line_num}:DISP:RES:STAT?"
@@ -768,7 +768,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         self._validate_pathloss_table_num(table_num)
         comm = f":SENS:CORR:PATH{table_num}:STAT?"
         status = self.instrument.query(comm)
-        return (status == '1')
+        return (status == 1)
 
     def set_path_loss_table_description(self, table_num, description):
         """
@@ -861,7 +861,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         allowed_sources = ['INTERNAL', 'EXTERNAL', 'OUTPUT', 'INT', 'EXT', 'OUT']
         source_upper = source.upper()
         if source_upper in allowed_sources:
-            comm = f":SENSE:ROSCILLATOR:SOURCE {source_upper}"
+            comm = f":SENS:ROSCILLATOR:SOURCE {source_upper}"
             self.instrument.write(comm)
         else:
             print(f"Invalid source: '{source}'. Allowed values are: {', '.join(allowed_sources)}")
@@ -871,7 +871,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the current reference oscillator source of the spectrum analyzer.
         Returns: str: The current reference source ('INTERNAL', 'EXTERNAL', 'OUTPUT').
         """
-        comm = ":SENSE:ROSCILLATOR:SOURCE?"
+        comm = ":SENS:ROSCILLATOR:SOURCE?"
         source = self.instrument.query(comm)
         return source
 
@@ -883,14 +883,14 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         step_size_hz: The step size in Hz (numeric value).
         """
-        self.instrument.write(f"SENSE:FREQ:CENT:STEP {step_size_hz}")
+        self.instrument.write(f"SENS:FREQ:CENT:STEP {step_size_hz}")
 
     def get_sense_frequency_center_step(self) -> float:
         """
         Queries the center frequency step size in Hz.
         Returns: The step size in Hz (numeric value).
         """
-        response = self.instrument.query("SENSE:FREQ:CENT:STEP?").strip()
+        response = self.instrument.query("SENS:FREQ:CENT:STEP?").strip()
         try:
             return float(response)
         except ValueError:
@@ -909,9 +909,9 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         direction (str): 'UP' or 'DOWN' to adjust the reference level incrementally.
         """
         if direction:
-            comm = f":SENSE:POWER:RF:RLEVEL {amplitude} {direction.upper()}"
+            comm = f":SENS:POWER:RF:RLEVEL {amplitude} {direction.upper()}"
         else:
-            comm = f":SENSE:POWER:RF:RLEVEL {amplitude}"
+            comm = f":SENS:POWER:RF:RLEVEL {amplitude}"
         self.instrument.write(comm)
 
     def get_rf_reference_level(self) -> float:
@@ -919,7 +919,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the current RF reference level in dBm.
         Returns: float: The reference level in dBm.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:RLEVEL?").strip()
+        response = self.instrument.query(":SENS:POWER:RF:RLEVEL?").strip()
         try:
             return float(response)
         except ValueError:
@@ -930,7 +930,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the current amplitude unit used to express the RF reference level.
         Returns: str: The amplitude unit (e.g., 'dBm').
         """
-        return self.instrument.query(":SENSE:POWER:RF:RLEVEL:UNIT?").strip()
+        return self.instrument.query(":SENS:POWER:RF:RLEVEL:UNIT?").strip()
 
     def set_rf_reference_level_offset(self, offset: float):
         """
@@ -938,7 +938,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         offset (float): The offset value in dB.
         """
-        comm = f":SENSE:POWER:RF:RLEVEL:OFFSET {offset}"
+        comm = f":SENS:POWER:RF:RLEVEL:OFFSET {offset}"
         self.instrument.write(comm)
 
     def get_rf_reference_level_offset(self) -> float:
@@ -946,7 +946,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the RF reference level offset in dB.
         Returns: float: The offset value in dB.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:RLEVEL:OFFSET?").strip()
+        response = self.instrument.query(":SENS:POWER:RF:RLEVEL:OFFSET?").strip()
         try:
             return float(response)
         except ValueError:
@@ -958,7 +958,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         division (float): The division value in dB.
         """
-        comm = f":SENSE:POWER:RF:PDIVISION {division}"
+        comm = f":SENS:POWER:RF:PDIVISION {division}"
         self.instrument.write(comm)
 
     def get_rf_plot_division(self) -> float:
@@ -966,7 +966,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the plot vertical division as dB.
         Returns: float: The division value in dB.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:PDIVISION?").strip()
+        response = self.instrument.query(":SENS:POWER:RF:PDIVISION?").strip()
         try:
             return float(response)
         except ValueError:
@@ -978,7 +978,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         attenuation (int): The attenuation index.
         """
-        comm = f":SENSE:POWER:RF:ATTENUATION {attenuation}"
+        comm = f":SENS:POWER:RF:ATTENUATION {attenuation}"
         self.instrument.write(comm)
 
     def get_rf_attenuation(self) -> int:
@@ -986,7 +986,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the RF attenuation index.
         Returns: int: The attenuation index.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:ATTENUATION?").strip()
+        response = self.instrument.query(":SENS:POWER:RF:ATTENUATION?").strip()
         try:
             return int(response)
         except ValueError:
@@ -998,7 +998,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable automatic attenuation, False to disable.
         """
-        comm = f":SENSE:POWER:RF:ATTENUATION:AUTO {'1' if enable else '0'}"
+        comm = f":SENS:POWER:RF:ATTENUATION:AUTO {1 if enable else 0}"
         self.instrument.write(comm)
 
     def get_rf_attenuation_auto(self) -> bool:
@@ -1006,8 +1006,8 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries if automatic RF attenuation is enabled.
         Returns: bool: True if enabled, False if disabled.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:ATTENUATION:AUTO?").strip()
-        return response == '1'
+        response = self.instrument.query(":SENS:POWER:RF:ATTENUATION:AUTO?").strip()
+        return response == 1
 
     def set_rf_gain(self, gain: int):
         """
@@ -1015,14 +1015,14 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         gain (int): The gain index.
         """
-        comm = f":SENSE:POWER:RF:GAIN {gain}"
+        comm = f":SENS:POWER:RF:GAIN {gain}"
         self.instrument.write(comm)
     def get_rf_gain(self) -> int:
         """
         Queries the RF gain index.
         Returns: int: The gain index.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:GAIN?").strip()
+        response = self.instrument.query(":SENS:POWER:RF:GAIN?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1034,7 +1034,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable automatic gain, False to disable.
         """
-        comm = f":SENSE:POWER:RF:GAIN:AUTO {'1' if enable else '0'}"
+        comm = f":SENS:POWER:RF:GAIN:AUTO {1 if enable else 0}"
         self.instrument.write(comm)
 
     def get_rf_gain_auto(self) -> bool:
@@ -1042,8 +1042,8 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries if automatic RF gain is enabled.
         Returns: bool: True if enabled, False if disabled.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:GAIN:AUTO?").strip()
-        return response == '1'
+        response = self.instrument.query(":SENS:POWER:RF:GAIN:AUTO?").strip()
+        return response == 1
 
     def set_rf_preamp(self, preamp: int):
         """
@@ -1051,7 +1051,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         preamp (int): The preamp index.
         """
-        comm = f":SENSE:POWER:RF:PREAMP {preamp}"
+        comm = f":SENS:POWER:RF:PREAMP {preamp}"
         self.instrument.write(comm)
 
     def get_rf_preamp(self) -> int:
@@ -1059,7 +1059,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries the RF preamp index.
         Returns: int: The preamp index.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:PREAMP?").strip()
+        response = self.instrument.query(":SENS:POWER:RF:PREAMP?").strip()
         try:
             return int(response)
         except ValueError:
@@ -1071,7 +1071,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable automatic preamp, False to disable.
         """
-        comm = f":SENSE:POWER:RF:PREAMP:AUTO {'1' if enable else '0'}"
+        comm = f":SENS:POWER:RF:PREAMP:AUTO {1 if enable else 0}"
         self.instrument.write(comm)
 
     def get_rf_preamp_auto(self) -> bool:
@@ -1079,8 +1079,8 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries if automatic RF preamp is enabled.
         Returns: bool: True if enabled, False if disabled.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:PREAMP:AUTO?").strip()
-        return response == '1'
+        response = self.instrument.query(":SENS:POWER:RF:PREAMP:AUTO?").strip()
+        return response == 1
 
     def set_rf_spur_reject(self, enable: bool):
         """
@@ -1088,7 +1088,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable spur rejection, False to disable.
         """
-        comm = f":SENSE:POWER:RF:SPURREJECT {'1' if enable else '0'}"
+        comm = f":SENS:POWER:RF:SPURREJECT {1 if enable else 0}"
         self.instrument.write(comm)
 
     def get_rf_spur_reject(self) -> bool:
@@ -1096,8 +1096,8 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Queries if RF spur rejection is enabled.
         Returns: bool: True if enabled, False if disabled.
         """
-        response = self.instrument.query(":SENSE:POWER:RF:SPURREJECT?").strip()
-        return response == '1'
+        response = self.instrument.query(":SENS:POWER:RF:SPURREJECT?").strip()
+        return response == 1
 #Bandwidth
     """These commands control the FFT processing for the receivers. 
     These settings are highly coupled with the frequency range and sweep time."""
@@ -1114,7 +1114,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
             raise ValueError(f"Invalid shape type: '{shape_type}'. Must be 'FLATTOP', 'NUTTALL', or 'GAUSSIAN'.")
         
 
-        self.instrument.write(f"SENSE:BAND:SHAP {shape_type}")
+        self.instrument.write(f"SENS:BAND:SHAP {shape_type}")
 
     def get_sense_bandwidth_shape(self) -> str:
         """
@@ -1122,7 +1122,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         str: The shape type ('FLATTOP', 'NUTTALL', or 'GAUSSIAN').
         """
-        response = self.instrument.query("SENSE:BAND:SHAP?").strip()
+        response = self.instrument.query("SENS:BAND:SHAP?").strip()
         return response
 #Sweep Controls
     """The sweep commands control additional FFT settings of the receiver."""
@@ -1138,7 +1138,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
             raise ValueError(f"Invalid detector function type: '{function_type}'. Must be 'AVERAGE', 'MINMAX', 'MIN', or 'MAX'.")
         
 
-        self.instrument.write(f"SENSE:SWE:DET:FUNC {function_upper}")
+        self.instrument.write(f"SENS:SWE:DET:FUNC {function_upper}")
 
     def get_sweep_detector_function(self) -> str:
         """
@@ -1146,7 +1146,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         str: The detector function type ('AVERAGE', 'MINMAX', 'MIN', or 'MAX').
         """
-        response = self.instrument.query("SENSE:SWE:DET:FUNC?").strip().upper()
+        response = self.instrument.query("SENS:SWE:DET:FUNC?").strip().upper()
         if response.startswith("AVER"):
             return "AVERAGE"
         elif response.startswith("MINM"):
@@ -1169,7 +1169,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
             raise ValueError(f"Invalid detector units type: '{units_type}'. Must be 'POWER', 'SAMPLE', 'VOLTAGE', or 'LOG'.")
         
 
-        self.instrument.write(f"SENSE:SWE:DET:UNIT {units_upper}")
+        self.instrument.write(f"SENS:SWE:DET:UNIT {units_upper}")
 
     def get_sweep_detector_units(self) -> str:
         """
@@ -1177,7 +1177,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         str: The detector units type ('POWER', 'SAMPLE', 'VOLTAGE', or 'LOG').
         """
-        response = self.instrument.query("SENSE:SWE:DET:UNIT?").strip().upper()
+        response = self.instrument.query("SENS:SWE:DET:UNIT?").strip().upper()
         return response
 #Trace Controls
     def select_trace(self, trace_index: int):
@@ -1248,7 +1248,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable updates, False to disable.
         """
-        self.instrument.write(f":TRAC:UPD {'1' if enable else '0'}")
+        self.instrument.write(f":TRAC:UPD {1 if enable else 0}")
 
     def get_trace_update_state(self) -> bool:
         """
@@ -1257,7 +1257,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if updates are enabled, False otherwise.
         """
         response = self.instrument.query(":TRAC:UPD?")
-        return response == '1'
+        return response == 1
 
     def set_trace_display_state(self, enable: bool):
         """
@@ -1265,7 +1265,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to display the trace, False to hide it.
         """
-        self.instrument.write(f":TRAC:DISP {'1' if enable else '0'}")
+        self.instrument.write(f":TRAC:DISP {1 if enable else 0}")
 
     def is_trace_display_visible(self) -> bool:
         """
@@ -1274,7 +1274,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if the trace is displayed, False if hidden.
         """
         response = self.instrument.query(":TRAC:DISP?")
-        return response == '1'
+        return response == 1
 
     def clear_trace(self):
         """
@@ -1334,7 +1334,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to turn the marker on, False to turn it off.
         """
-        self.instrument.write(f":CALC:MARK:STAT {'1' if enable else '0'}")
+        self.instrument.write(f":CALC:MARK:STAT {1 if enable else 0}")
 
     def is_marker_visible(self) -> bool:
         """
@@ -1343,7 +1343,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if the marker is on, False if it is off.
         """
         response = self.instrument.query(":CALC:MARK:STAT?")
-        return response == '1'
+        return response == 1
 
     def set_marker_trace(self, trace_index: int):
         """
@@ -1389,7 +1389,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable updates, False to disable.
         """
-        self.instrument.write(f":CALC:MARK:UPD {'1' if enable else '0'}")
+        self.instrument.write(f":CALC:MARK:UPD {1 if enable else 0}")
 
     def is_marker_update_enabled(self) -> bool:
         """
@@ -1398,7 +1398,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if updates are enabled, False otherwise.
         """
         response = self.instrument.query(":CALC:MARK:UPD?")
-        return response == '1'
+        return response == 1
 
     def enable_marker_delta(self, enable: bool):
         """
@@ -1406,7 +1406,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable delta mode, False to disable.
         """
-        self.instrument.write(f":CALC:MARK:DELT {'1' if enable else '0'}")
+        self.instrument.write(f":CALC:MARK:DELT {1 if enable else 0}")
 
     def is_marker_delta_enabled(self) -> bool:
         """
@@ -1415,7 +1415,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if delta mode is enabled, False otherwise.
         """
         response = self.instrument.query(":CALC:MARK:DELT?")
-        return response == '1'
+        return response == 1
 
     def enable_marker_peak_track(self, enable: bool):
         """
@@ -1423,7 +1423,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable peak tracking, False to disable.
         """
-        self.instrument.write(f":CALC:MARK:PKTR {'1' if enable else '0'}")
+        self.instrument.write(f":CALC:MARK:PKTR {1 if enable else 0}")
 
     def is_marker_peak_track_enabled(self) -> bool:
         """
@@ -1432,7 +1432,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if peak tracking is enabled, False otherwise.
         """
         response = self.instrument.query(":CALC:MARK:PKTR?")
-        return response == '1'
+        return response == 1
 
     def set_marker_position(self, frequency_hz: float):
         """
@@ -1532,7 +1532,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable trace math, False to disable.
         """
-        self.instrument.write(f":CALC:MATH:STAT {'1' if enable else '0'}")
+        self.instrument.write(f":CALC:MATH:STAT {1 if enable else 0}")
 
     def is_trace_math_enabled(self) -> bool:
         """
@@ -1541,7 +1541,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if enabled, False otherwise.
         """
         response = self.instrument.query(":CALC:MATH:STAT?")
-        return response == '1'
+        return response == 1
 
     def set_trace_math_first_operand(self, trace_index: int):
         """
@@ -1648,7 +1648,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable channel power measurement, False to disable.
         """
-        self.instrument.write(f":SENS:CHP:STAT {'1' if enable else '0'}")
+        self.instrument.write(f":SENS:CHP:STAT {1 if enable else 0}")
 
     def is_channel_power_enabled(self) -> bool:
         """
@@ -1657,7 +1657,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if enabled, False otherwise.
         """
         response = self.instrument.query(":SENS:CHP:STAT?")
-        return response == '1'
+        return response == 1
 
     def set_channel_power_trace(self, trace_index: int):
         """
@@ -1704,7 +1704,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         """
         if not (1 <= channel_index <= 5):
             raise ValueError("Invalid adjacent channel index. Must be between 1 and 5.")
-        self.instrument.write(f":SENS:CHP:CHAN:STAT {channel_index},{'1' if enable else '0'}")
+        self.instrument.write(f":SENS:CHP:CHAN:STAT {channel_index},{1 if enable else 0}")
 
     def is_adjacent_channel_power_enabled(self, channel_index: int) -> bool:
         """
@@ -1717,7 +1717,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         if not (1 <= channel_index <= 5):
             raise ValueError("Invalid adjacent channel index. Must be between 1 and 5.")
         response = self.instrument.query(f":SENS:CHP:CHAN:STAT? {channel_index}")
-        return response == '1'
+        return response == 1
 
     def set_adjacent_channel_offset(self, channel_index: int, offset_hz: float):
         """
@@ -1821,7 +1821,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable, False to disable.
         """
-        self.instrument.write(f":SENS:OBW:STAT {'1' if enable else '0'}")
+        self.instrument.write(f":SENS:OBW:STAT {1 if enable else 0}")
 
     def is_occupied_bandwidth_enabled(self) -> bool:
         """
@@ -1830,7 +1830,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if enabled, False otherwise.
         """
         response = self.instrument.query(":SENS:OBW:STAT?")
-        return response == '1'
+        return response == 1
 
     def set_occupied_bandwidth_trace(self, trace_index: int):
         """
@@ -1903,7 +1903,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable, False to disable.
         """
-        self.instrument.write(f":SENS:IMD:STAT {'1' if enable else '0'}")
+        self.instrument.write(f":SENS:IMD:STAT {1 if enable else 0}")
 
     def is_intermodulation_distortion_enabled(self) -> bool:
         """
@@ -1912,7 +1912,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if enabled, False otherwise.
         """
         response = self.instrument.query(":SENS:IMD:STAT?")
-        return response == '1'
+        return response == 1
 
     def get_intermodulation_frequency(self, product: str) -> float:
         """
@@ -1966,7 +1966,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         enable (bool): True to enable, False to disable.
         """
-        self.instrument.write(f":SENS:PEAK:TABL:STAT {'1' if enable else '0'}")
+        self.instrument.write(f":SENS:PEAK:TABL:STAT {1 if enable else 0}")
 
     def is_peak_table_enabled(self) -> bool:
         """
@@ -1975,7 +1975,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         bool: True if enabled, False otherwise.
         """
         response = self.instrument.query(":SENS:PEAK:TABL:STATe?")
-        return response == '1'
+        return response == 1
 
     def set_peak_table_trace(self, trace_index: int):
         """
@@ -2171,7 +2171,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         int: The decimation count.
         """
-        response = self.instrument.query(":SENS:REC:SWE:DEC:COUNt?")
+        response = self.instrument.query(":SENS:REC:SWE:DEC:COUN?")
         return int(response)
 
     def set_decimate_detector(self, detector_type: str):
@@ -2192,7 +2192,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         str: The detector type ('AVERAGE' or 'MAX').
         """
-        response = self.instrument.query(":SENS:REC:SWE:DEC:DETector?")
+        response = self.instrument.query(":SENS:REC:SWE:DEC:DET?")
         return response.strip().upper()
 
     def enable_channelizer(self, enable: bool):
@@ -2210,7 +2210,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         bool: True if enabled, False otherwise.
         """
-        response = self.instrument.query(":SENS:REC:SWE:CHAN:STATe?")
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:STAT?")
         return int(response) == 1
 
     def set_channelizer_center_frequency(self, frequency_hz: float):
@@ -2227,7 +2227,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         float: The center frequency in Hz.
         """
-        response = self.instrument.query(":SENS:REC:SWE:CHAN:CENTer?")
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:CENT?")
         return float(response)
 
     def set_channelizer_spacing(self, spacing_hz: float):
@@ -2244,7 +2244,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         float: The channel width in Hz.
         """
-        response = self.instrument.query(":SENS:REC:SWE:CHAN:SPACing?")
+        response = self.instrument.query(":SENS:REC:SWE:CHAN:SPAC?")
         return float(response)
 
     def set_channelizer_units(self, units: str):
@@ -2275,7 +2275,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         float: The progress percentage.
         """
-        response = self.instrument.query(":SENS:REC:SWE:PROGress?")
+        response = self.instrument.query(":SENS:REC:SWE:PROG?")
         return float(response)
 
     def get_sweep_count(self) -> int:
@@ -2284,7 +2284,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         int: The number of sweeps saved.
         """
-        response = self.instrument.query(":SENS:REC:SWE:COUNt?")
+        response = self.instrument.query(":SENS:REC:SWE:COUN?")
         return int(response)
 
     def get_file_size(self) -> float:
@@ -2302,7 +2302,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         prefix (str): The file prefix string.
         """
-        self.instrument.write(f":SENS:REC:SWE:FILE:PREfix '{prefix}'")
+        self.instrument.write(f":SENS:REC:SWE:FILE:PRE '{prefix}'")
 
     def get_file_prefix(self) -> str:
         """
@@ -2310,7 +2310,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         str: The file prefix string.
         """
-        response = self.instrument.query(":SENS:REC:SWE:FILE:PREfix?")
+        response = self.instrument.query(":SENS:REC:SWE:FILE:PRE?")
         return response.strip().strip("'") # Remove potential quotes from response
 
     def set_file_directory(self, directory_path: str):
@@ -2320,7 +2320,7 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Parameters:
         directory_path (str): The directory path string.
         """
-        self.instrument.write(f":SENS:REC:SWE:FILE:DIRectory '{directory_path}'")
+        self.instrument.write(f":SENS:REC:SWE:FILE:DIR '{directory_path}'")
 
     def get_file_directory(self) -> str:
         """
@@ -2328,14 +2328,14 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         str: The directory path string.
         """
-        response = self.instrument.query(":SENS:REC:SWE:FILE:DIRectory?")
+        response = self.instrument.query(":SENS:REC:SWE:FILE:DIR?")
         return response.strip().strip("'") # Remove potential quotes from response
 
     def start_recording(self):
         """
         Starts sweep recording using shortened SCPI.
         """
-        self.instrument.write(":SENS:REC:SWE:STARt")
+        self.instrument.write(":SENS:REC:SWE:STAR")
 
     def stop_recording(self):
         """
@@ -2349,7 +2349,3669 @@ class SpectrumAnalyzer(mandatory.Mandatory):
         Returns:
         bool: True if actively recording, False otherwise.
         """
-        response = self.instrument.query(":SENS:REC:SWE:STATus?")
+        response = self.instrument.query(":SENS:REC:SWE:STAT?")
         # The document says "Returns true if actively recording."
-        # Assuming '1' for true, '0' for false based on other boolean queries.
+        # Assuming 1 for true, 0 for false based on other boolean queries.
         return int(response) == 1
+    
+    # --- Zero-Span Capture Settings ---
+
+def set_zero_span_reference_level(self, amplitude_dbm: float):
+    """
+    Sets the reference level for zero-span capture.
+    Parameters:
+    amplitude_dbm (float): The reference level in dBm.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:RLEV {amplitude_dbm}")
+
+def get_zero_span_reference_level(self) -> float:
+    """
+    Queries the current reference level for zero-span capture.
+    Returns:
+    float: The reference level in dBm.
+    """
+    response = self.instrument.query(":SENS:ZS:CAP:RLEV?")
+    return float(response)
+
+def set_zero_span_center_frequency(self, frequency_hz: float):
+    """
+    Sets the center frequency for zero-span capture.
+    Parameters:
+    frequency_hz (float): The center frequency in Hz.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:CENT {frequency_hz}")
+
+def get_zero_span_center_frequency(self, limit: str = None) -> float:
+    """
+    Queries the current center frequency for zero-span capture.
+    Optionally pass 'MIN' or 'MAX' to query limits.
+    Parameters:
+    limit (str): 'MIN' or 'MAX' (optional).
+    Returns:
+    float: The center frequency in Hz.
+    """
+    if limit:
+        limit_upper = limit.upper()
+        if limit_upper not in {"MIN", "MAX"}:
+            raise ValueError("limit must be 'MIN' or 'MAX'")
+        response = self.instrument.query(f":SENS:ZS:CAP:CENT? {limit_upper}")
+    else:
+        response = self.instrument.query(":SENS:ZS:CAP:CENT?")
+    return float(response)
+
+def set_zero_span_center_step(self, step_hz: float):
+    """
+    Sets the step amount the center frequency changes by for zero-span capture.
+    Parameters:
+    step_hz (float): The step size in Hz.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:CENT:STEP {step_hz}")
+
+def get_zero_span_center_step(self) -> float:
+    """
+    Queries the center frequency step size for zero-span capture.
+    Returns:
+    float: The step size in Hz.
+    """
+    response = self.instrument.query(":SENS:ZS:CAP:CENT:STEP?")
+    return float(response)
+
+def set_zero_span_sample_rate(self, sample_rate_hz: float):
+    """
+    Sets the sample rate for zero-span capture.
+    Parameters:
+    sample_rate_hz (float): The sample rate in Hz.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:SRATE {sample_rate_hz}")
+
+def get_zero_span_sample_rate(self) -> float:
+    """
+    Queries the sample rate for zero-span capture.
+    Returns:
+    float: The sample rate in Hz.
+    """
+    response = self.instrument.query(":SENS:ZS:CAP:SRATE?")
+    return float(response)
+
+def set_zero_span_if_bandwidth(self, bandwidth_hz: float):
+    """
+    Sets the IF bandwidth for zero-span capture.
+    Parameters:
+    bandwidth_hz (float): The IF bandwidth in Hz.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:IFBW {bandwidth_hz}")
+
+def get_zero_span_if_bandwidth(self) -> float:
+    """
+    Queries the IF bandwidth for zero-span capture.
+    Returns:
+    float: The IF bandwidth in Hz.
+    """
+    response = self.instrument.query(":SENS:ZS:CAP:IFBW?")
+    return float(response)
+
+def enable_zero_span_if_bandwidth_auto(self, enable: bool):
+    """
+    Enables or disables automatic IF bandwidth selection for zero-span capture.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:IFBW:AUTO {1 if enable else 0}")
+
+def is_zero_span_if_bandwidth_auto_enabled(self) -> bool:
+    """
+    Queries if automatic IF bandwidth selection is enabled for zero-span capture.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":SENS:ZS:CAP:IFBW:AUTO?")
+    return int(response) == 1
+
+def set_zero_span_sweep_time(self, sweep_time_s: float):
+    """
+    Sets the sweep time for zero-span capture.
+    Parameters:
+    sweep_time_s (float): The sweep time in seconds.
+    """
+    self.instrument.write(f":SENS:ZS:CAP:SWEEP:TIME {sweep_time_s}")
+
+def get_zero_span_sweep_time(self) -> float:
+    """
+    Queries the sweep time for zero-span capture.
+    Returns:
+    float: The sweep time in seconds.
+    """
+    response = self.instrument.query(":SENS:ZS:CAP:SWEEP:TIME?")
+    return float(response)
+
+# --- Zero-Span Trigger Settings ---
+
+def set_zero_span_trigger_source(self, source: str):
+    """
+    Sets the trigger source for zero-span mode.
+    Parameters:
+    source (str): Allowed values are 'IMMEDIATE', 'IF', 'EXTERNAL', 'FMT'.
+    """
+    valid_sources = {"IMMEDIATE", "IF", "EXTERNAL", "FMT"}
+    source_upper = source.upper()
+    if source_upper not in valid_sources:
+        raise ValueError(f"Invalid trigger source: '{source}'. Must be one of {valid_sources}.")
+    self.instrument.write(f":TRIG:ZS:SOUR {source_upper}")
+
+def get_zero_span_trigger_source(self) -> str:
+    """
+    Queries the trigger source for zero-span mode.
+    Returns:
+    str: The trigger source.
+    """
+    response = self.instrument.query(":TRIG:ZS:SOUR?")
+    return response.strip().upper()
+
+def set_zero_span_trigger_slope(self, slope: str):
+    """
+    Sets the trigger slope for zero-span mode.
+    Parameters:
+    slope (str): Allowed values are 'POSITIVE', 'NEGATIVE'.
+    """
+    valid_slopes = {"POSITIVE", "NEGATIVE", "POS", "NEG"}
+    slope_upper = slope.upper()
+    if slope_upper not in valid_slopes:
+        raise ValueError(f"Invalid trigger slope: '{slope}'. Must be 'POSITIVE' or 'NEGATIVE'.")
+    self.instrument.write(f":TRIG:ZS:SLOP {slope_upper}")
+
+def get_zero_span_trigger_slope(self) -> str:
+    """
+    Queries the trigger slope for zero-span mode.
+    Returns:
+    str: The trigger slope.
+    """
+    response = self.instrument.query(":TRIG:ZS:SLOP?")
+    return response.strip().upper()
+
+def set_zero_span_trigger_if_level(self, amplitude_dbm: float):
+    """
+    Sets the trigger level for IF trigger in zero-span mode.
+    Parameters:
+    amplitude_dbm (float): The trigger level in dBm.
+    """
+    self.instrument.write(f":TRIG:ZS:IF:LEV {amplitude_dbm}")
+
+def get_zero_span_trigger_if_level(self) -> float:
+    """
+    Queries the trigger level for IF trigger in zero-span mode.
+    Returns:
+    float: The trigger level in dBm.
+    """
+    response = self.instrument.query(":TRIG:ZS:IF:LEV?")
+    return float(response)
+
+def set_zero_span_trigger_position(self, position_percent: float):
+    """
+    Sets the trigger delay (position) for zero-span mode.
+    Parameters:
+    position_percent (float): The percentage of samples before the trigger.
+    """
+    self.instrument.write(f":TRIG:ZS:POS {position_percent}")
+
+def get_zero_span_trigger_position(self) -> float:
+    """
+    Queries the trigger delay (position) for zero-span mode.
+    Returns:
+    float: The percentage of samples before the trigger.
+    """
+    response = self.instrument.query(":TRIG:ZS:POS?")
+    return float(response)
+
+# --- Fetch Zero-Span Results ---
+
+def fetch_zero_span_iq_data(self) -> str:
+    """
+    Fetches I/Q data from zero-span capture in ASCII or binary format.
+    Returns:
+    str: The I/Q data as a comma-separated string (ASCII) or binary data.
+    """
+    return self.instrument.query(":FETC:ZS? 1")
+
+def fetch_zero_span_data_length(self) -> int:
+    """
+    Fetches the length (number of complex I/Q points) of zero-span capture data.
+    Returns:
+    int: The number of complex I/Q points.
+    """
+    response = self.instrument.query(":FETC:ZS? 2")
+    return int(response)
+
+def fetch_zero_span_average_power(self) -> float:
+    """
+    Fetches the average power as reported on the AM vs Time plot for zero-span capture.
+    Returns:
+    float: The average power in dBm.
+    """
+    response = self.instrument.query(":FETC:ZS? 10")
+    return float(response)
+
+# --- Scalar Network Analysis (SNA) Sweep Configuration ---
+
+def set_sna_sweep_points(self, points: int):
+    """
+    Specifies the suggested sweep size for Scalar Network Analysis.
+    Parameters:
+    points (int): The number of sweep points.
+    """
+    self.instrument.write(f":SENS:NA:SWE:POIN {points}")
+
+def get_sna_sweep_points(self) -> int:
+    """
+    Queries the suggested sweep size for Scalar Network Analysis.
+    Returns:
+    int: The number of sweep points.
+    """
+    response = self.instrument.query(":SENS:NA:SWE:POIN?")
+    return int(response)
+
+def set_sna_sweep_type(self, sweep_type: str):
+    """
+    Specifies whether an active or passive device is being measured.
+    Parameters:
+    sweep_type (str): Allowed values are 'PASSIVE', 'ACTIVE'.
+    """
+    valid_types = {"PASSIVE", "ACTIVE"}
+    sweep_type_upper = sweep_type.upper()
+    if sweep_type_upper not in valid_types:
+        raise ValueError(f"Invalid sweep type: '{sweep_type}'. Must be 'PASSIVE' or 'ACTIVE'.")
+    self.instrument.write(f":SENS:NA:SWE:TYPE {sweep_type_upper}")
+
+def get_sna_sweep_type(self) -> str:
+    """
+    Queries whether an active or passive device is being measured.
+    Returns:
+    str: The sweep type ('PASSIVE' or 'ACTIVE').
+    """
+    response = self.instrument.query(":SENS:NA:SWE:TYPE?")
+    return response.strip().upper()
+
+def enable_sna_high_range(self, enable: bool):
+    """
+    Enables or disables high range optimization for SNA sweep.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":SENS:NA:SWE:HRAN {1 if enable else 0}")
+
+def is_sna_high_range_enabled(self) -> bool:
+    """
+    Queries if high range optimization is enabled for SNA sweep.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":SENS:NA:SWE:HRAN?")
+    return response == 1
+
+def set_sna_view_scale(self, scale_type: str):
+    """
+    Specifies the view scale for SNA. Allowed values: 'LOG', 'VSWR'.
+    Parameters:
+    scale_type (str): The scale type.
+    """
+    valid_types = {"LOG", "VSWR"}
+    scale_type_upper = scale_type.upper()
+    if scale_type_upper not in valid_types:
+        raise ValueError(f"Invalid scale type: '{scale_type}'. Must be 'LOG' or 'VSWR'.")
+    self.instrument.write(f":SENS:NA:VIEW:SCAL {scale_type_upper}")
+
+def get_sna_view_scale(self) -> str:
+    """
+    Queries the view scale for SNA.
+    Returns:
+    str: The scale type ('LOG' or 'VSWR').
+    """
+    response = self.instrument.query(":SENS:NA:VIEW:SCAL?")
+    return response.strip().upper()
+
+def set_sna_view_reference_level(self, ref_level: float):
+    """
+    Specifies the plot reference level for SNA.
+    Parameters:
+    ref_level (float): The reference level as a double.
+    """
+    self.instrument.write(f":SENS:NA:VIEW:RLEV {ref_level}")
+
+def get_sna_view_reference_level(self) -> float:
+    """
+    Queries the plot reference level for SNA.
+    Returns:
+    float: The reference level.
+    """
+    response = self.instrument.query(":SENS:NA:VIEW:RLEV?")
+    return float(response)
+
+def set_sna_view_division(self, division: float):
+    """
+    Specifies the plot division height for SNA.
+    Parameters:
+    division (float): The division height as a double.
+    """
+    self.instrument.write(f":SENS:NA:VIEW:DIV {division}")
+
+def get_sna_view_division(self) -> float:
+    """
+    Queries the plot division height for SNA.
+    Returns:
+    float: The division height.
+    """
+    response = self.instrument.query(":SENS:NA:VIEW:DIV?")
+    return float(response)
+
+def store_sna_thru(self):
+    """
+    Stores the thru correction for SNA.
+    """
+    self.instrument.write(":SENS:CORR:NA:STOR:THRU")
+
+def store_sna_thru_high(self):
+    """
+    Stores the high thru correction for SNA.
+    """
+    self.instrument.write(":SENS:CORR:NA:STOR:THRU:HIGH")
+
+def is_sna_thru_active(self) -> bool:
+    """
+    Queries if the thru correction is active for SNA.
+    Returns:
+    bool: True if active, False otherwise.
+    """
+    response = self.instrument.query(":SENS:CORR:NA:STOR:THRU:ACT?")
+    return response == 1
+
+# --- Phase Noise Measurement Controls ---
+
+def enable_phase_noise_carrier_search(self, enable: bool):
+    """
+    Enables or disables the signal search functionality for phase noise measurement.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":SENS:PN:CARR:SEAR:STAT {1 if enable else 0}")
+
+def is_phase_noise_carrier_search_enabled(self) -> bool:
+    """
+    Queries if the signal search functionality is enabled for phase noise measurement.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:SEAR:STAT?")
+    return int(response) == 1
+
+def set_phase_noise_carrier_search_start(self, frequency_hz: float):
+    """
+    Sets the signal search start frequency for phase noise measurement.
+    Parameters:
+    frequency_hz (float): The start frequency in Hz.
+    """
+    self.instrument.write(f":SENS:PN:CARR:SEAR:STAR {frequency_hz}")
+
+def get_phase_noise_carrier_search_start(self) -> float:
+    """
+    Queries the signal search start frequency for phase noise measurement.
+    Returns:
+    float: The start frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:SEAR:STAR?")
+    return float(response)
+
+def set_phase_noise_carrier_search_stop(self, frequency_hz: float):
+    """
+    Sets the signal search stop frequency for phase noise measurement.
+    Parameters:
+    frequency_hz (float): The stop frequency in Hz.
+    """
+    self.instrument.write(f":SENS:PN:CARR:SEAR:STOP {frequency_hz}")
+
+def get_phase_noise_carrier_search_stop(self) -> float:
+    """
+    Queries the signal search stop frequency for phase noise measurement.
+    Returns:
+    float: The stop frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:SEAR:STOP?")
+    return float(response)
+
+def perform_phase_noise_carrier_search(self):
+    """
+    Forces a new signal search for phase noise measurement.
+    """
+    self.instrument.write(":SENS:PN:CARR:SEAR:PERF")
+
+def set_phase_noise_carrier_threshold_min(self, amplitude_dbm: float):
+    """
+    Specifies the minimum amplitude required in dBm for a signal to be detected as a carrier.
+    Parameters:
+    amplitude_dbm (float): The minimum amplitude in dBm.
+    """
+    self.instrument.write(f":SENS:PN:CARR:THR:MIN {amplitude_dbm}")
+
+def get_phase_noise_carrier_threshold_min(self) -> float:
+    """
+    Queries the minimum amplitude required for carrier detection.
+    Returns:
+    float: The minimum amplitude in dBm.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:THR:MIN?")
+    return float(response)
+
+def is_phase_noise_carrier_valid(self) -> bool:
+    """
+    Returns whether a carrier was detected in phase noise measurement.
+    Returns:
+    bool: True if detected, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:VAL?")
+    return int(response) == 1
+
+def get_phase_noise_carrier_frequency(self) -> float:
+    """
+    Returns the detected frequency of the carrier in Hz.
+    Returns:
+    float: The frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:FREQ?")
+    return float(response)
+
+def get_phase_noise_carrier_amplitude(self) -> float:
+    """
+    Returns the detected amplitude of the carrier as dBm.
+    Returns:
+    float: The amplitude in dBm.
+    """
+    response = self.instrument.query(":SENS:PN:CARR:AMPL?")
+    return float(response)
+
+def set_phase_noise_view_reference_level(self, ref_level: float):
+    """
+    Specifies the plot reference level as dBc/Hz for phase noise measurement.
+    Parameters:
+    ref_level (float): The reference level.
+    """
+    self.instrument.write(f":SENS:PN:VIEW:RLEV {ref_level}")
+
+def get_phase_noise_view_reference_level(self) -> float:
+    """
+    Queries the plot reference level for phase noise measurement.
+    Returns:
+    float: The reference level.
+    """
+    response = self.instrument.query(":SENS:PN:VIEW:RLEV?")
+    return float(response)
+
+def set_phase_noise_view_division(self, division: float):
+    """
+    Specifies the plot division height for phase noise measurement.
+    Parameters:
+    division (float): The division height.
+    """
+    self.instrument.write(f":SENS:PN:VIEW:DIV {division}")
+
+def get_phase_noise_view_division(self) -> float:
+    """
+    Queries the plot division height for phase noise measurement.
+    Returns:
+    float: The division height.
+    """
+    response = self.instrument.query(":SENS:PN:VIEW:DIV?")
+    return float(response)
+
+def set_phase_noise_view_num_divisions(self, num_divisions: int):
+    """
+    Specifies the number of divisions on the phase noise plot.
+    Parameters:
+    num_divisions (int): The number of divisions.
+    """
+    self.instrument.write(f":SENS:PN:VIEW:PNUMDIV {num_divisions}")
+
+def get_phase_noise_view_num_divisions(self) -> int:
+    """
+    Queries the number of divisions on the phase noise plot.
+    Returns:
+    int: The number of divisions.
+    """
+    response = self.instrument.query(":SENS:PN:VIEW:PNUMDIV?")
+    return int(response)
+
+def set_phase_noise_frequency_center(self, frequency_hz: float):
+    """
+    Specifies the carrier search frequency window for phase noise measurement.
+    Parameters:
+    frequency_hz (float): The center frequency in Hz.
+    """
+    self.instrument.write(f":SENS:PN:FREQ:CENT {frequency_hz}")
+
+def get_phase_noise_frequency_center(self) -> float:
+    """
+    Queries the carrier search frequency window for phase noise measurement.
+    Returns:
+    float: The center frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:PN:FREQ:CENT?")
+    return float(response)
+
+def set_phase_noise_frequency_offset_start(self, offset_hz: float):
+    """
+    Specifies the start frequency of the phase noise sweep as an offset from the detected carrier center frequency.
+    Parameters:
+    offset_hz (float): The start offset in Hz.
+    """
+    self.instrument.write(f":SENS:PN:FREQ:OFFS:STAR {offset_hz}")
+
+def get_phase_noise_frequency_offset_start(self) -> float:
+    """
+    Queries the start frequency offset for phase noise sweep.
+    Returns:
+    float: The start offset in Hz.
+    """
+    response = self.instrument.query(":SENS:PN:FREQ:OFFS:STAR?")
+    return float(response)
+
+def set_phase_noise_frequency_offset_stop(self, offset_hz: float):
+    """
+    Specifies the stop frequency of the phase noise sweep as an offset from the detected carrier center frequency.
+    Parameters:
+    offset_hz (float): The stop offset in Hz.
+    """
+    self.instrument.write(f":SENS:PN:FREQ:OFFS:STOP {offset_hz}")
+
+def get_phase_noise_frequency_offset_stop(self) -> float:
+    """
+    Queries the stop frequency offset for phase noise sweep.
+    Returns:
+    float: The stop offset in Hz.
+    """
+    response = self.instrument.query(":SENS:PN:FREQ:OFFS:STOP?")
+    return float(response)
+
+def enable_phase_noise_peak_track(self, enable: bool):
+    """
+    Enables or disables peak tracking for phase noise measurement.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":SENS:PN:PKTR {1 if enable else 0}")
+
+def is_phase_noise_peak_track_enabled(self) -> bool:
+    """
+    Queries if peak tracking is enabled for phase noise measurement.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:PKTR?")
+    return int(response) == 1
+
+def set_phase_noise_type(self, noise_type: str):
+    """
+    Sets the measurement type for phase noise: 'PN' (Phase Noise), 'PNPAM' (Phase+AM Noise), or 'AM' (AM Noise).
+    Parameters:
+    noise_type (str): Allowed values are 'PN', 'PNPAM', 'AM'.
+    """
+    valid_types = {"PN", "PNPAM", "AM"}
+    noise_type_upper = noise_type.upper()
+    if noise_type_upper not in valid_types:
+        raise ValueError(f"Invalid phase noise type: '{noise_type}'. Must be 'PN', 'PNPAM', or 'AM'.")
+    self.instrument.write(f":SENS:PN:TYPE {noise_type_upper}")
+
+def get_phase_noise_type(self) -> str:
+    """
+    Queries the measurement type for phase noise.
+    Returns:
+    str: The measurement type ('PN', 'PNPAM', or 'AM').
+    """
+    response = self.instrument.query(":SENS:PN:TYPE?")
+    return response.strip().upper()
+
+# --- Phase Noise Cross Correlation Controls ---
+
+def is_phase_noise_xcorr_active(self) -> bool:
+    """
+    Returns true if cross correlation is enabled.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:STAT?")
+    return int(response) == 1
+
+def enable_phase_noise_xcorr(self, enable: bool):
+    """
+    Enables or disables cross correlation.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":SENS:PN:XCORR:STAT {1 if enable else 0}")
+
+def get_phase_noise_xcorr_reference(self) -> str:
+    """
+    Queries the timebase reference of the cross correlation measurement system.
+    Returns:
+    str: 'INTERNAL', 'EXTERNAL', or 'RF'
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:REF?")
+    return response.strip().upper()
+
+def set_phase_noise_xcorr_reference(self, reference: str):
+    """
+    Sets the timebase reference of the cross correlation measurement system.
+    Parameters:
+    reference (str): Allowed values are 'INTERNAL', 'EXTERNAL', 'RF'
+    """
+    valid_refs = {"INTERNAL", "EXTERNAL", "RF"}
+    ref_upper = reference.upper()
+    if ref_upper not in valid_refs:
+        raise ValueError(f"Invalid reference: '{reference}'. Must be one of {valid_refs}.")
+    self.instrument.write(f":SENS:PN:XCORR:REF {ref_upper}")
+
+def set_phase_noise_xcorr_factor(self, factor: int):
+    """
+    Sets the cross correlation factor.
+    Parameters:
+    factor (int): The cross correlation factor.
+    """
+    self.instrument.write(f":SENS:PN:XCORR:FACTOR {factor}")
+
+def get_phase_noise_xcorr_factor(self) -> int:
+    """
+    Queries the cross correlation factor.
+    Returns:
+    int: The cross correlation factor.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:FACTOR?")
+    return int(response)
+
+def restart_phase_noise_xcorr_measurement(self):
+    """
+    Restarts a cross correlation measurement.
+    """
+    self.instrument.write(":SENS:PN:XCORR:MEAS:RESTART")
+
+def get_phase_noise_xcorr_progress(self) -> int:
+    """
+    Tracks the progress of the cross correlation measurement.
+    Returns:
+    int: Progress value, -1 if not enabled.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:MEAS:PROGRESS?")
+    return int(response)
+
+def get_phase_noise_xcorr_device_list(self) -> list:
+    """
+    Returns a list of all SM devices that can be used as the second analyzer for cross correlation measurements.
+    Returns:
+    list: Device names.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:DEVICE:LIST?")
+    return [d.strip() for d in response.split(',')]
+
+def get_phase_noise_xcorr_device_count(self) -> int:
+    """
+    Returns the number of SM devices available for cross correlation.
+    Returns:
+    int: Device count.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:DEVICE:COUNT?")
+    return int(response)
+
+def get_phase_noise_xcorr_device_current(self) -> str:
+    """
+    Returns the name of the second analyzer, if active.
+    Returns:
+    str: Device name.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:DEVICE:CURR?")
+    return response.strip()
+
+def connect_phase_noise_xcorr_device(self, device_name: str) -> bool:
+    """
+    Connects the second analyzer for cross correlation.
+    Parameters:
+    device_name (str): The device name.
+    Returns:
+    bool: True if successful, False otherwise.
+    """
+    response = self.instrument.query(f":SENS:PN:XCORR:DEVICE:CONNECT? {device_name}")
+    return int(response) == 1
+
+def disconnect_phase_noise_xcorr_device(self) -> bool:
+    """
+    Disconnects the second analyzer for cross correlation.
+    Returns:
+    bool: True if successful, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:XCORR:DEVICE:DISCONNECT?")
+    return int(response) == 1
+
+def show_phase_noise_xcorr_gain_indicator(self, enable: bool):
+    """
+    Show/hide the gain indicator for cross correlation.
+    Parameters:
+    enable (bool): True to show, False to hide.
+    """
+    self.instrument.write(f":DISP:PN:XCORR:GIN {1 if enable else 0}")
+
+def is_phase_noise_xcorr_gain_indicator_visible(self) -> bool:
+    """
+    Queries if the gain indicator is visible for cross correlation.
+    Returns:
+    bool: True if visible, False otherwise.
+    """
+    response = self.instrument.query(":DISP:PN:XCORR:GIN?")
+    return int(response) == 1
+
+def show_phase_noise_xcorr_count(self, enable: bool):
+    """
+    Show/hide the cross correlation counts.
+    Parameters:
+    enable (bool): True to show, False to hide.
+    """
+    self.instrument.write(f":DISP:PN:XCORR:COUNT {1 if enable else 0}")
+
+def is_phase_noise_xcorr_count_visible(self) -> bool:
+    """
+    Queries if the cross correlation counts are visible.
+    Returns:
+    bool: True if visible, False otherwise.
+    """
+    response = self.instrument.query(":DISP:PN:XCORR:COUNT?")
+    return int(response) == 1
+
+# --- Phase Noise VCO Controls ---
+
+def is_phase_noise_vco_active(self) -> bool:
+    """
+    Returns whether the PN400 is connected in the software.
+    Returns:
+    bool: True if connected, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:ACT?")
+    return int(response) == 1
+
+def connect_phase_noise_vco(self) -> bool:
+    """
+    Connects the PN400 and returns true if successful.
+    Returns:
+    bool: True if successful, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:CONNECT?")
+    return int(response) == 1
+
+def enable_phase_noise_vco_voltage(self, enable: bool):
+    """
+    Enable/disable the supply and tune output voltages.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:STAT {1 if enable else 0}")
+
+def is_phase_noise_vco_voltage_enabled(self) -> bool:
+    """
+    Queries if the supply and tune output voltages are enabled.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:STAT?")
+    return int(response) == 1
+
+def set_phase_noise_vco_voltage_supply_min(self, voltage: float):
+    """
+    Sets the minimum supply voltage for the VCO.
+    Parameters:
+    voltage (float): The minimum supply voltage.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:SUPP:MIN {voltage}")
+
+def get_phase_noise_vco_voltage_supply_min(self) -> float:
+    """
+    Queries the minimum supply voltage for the VCO.
+    Returns:
+    float: The minimum supply voltage.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:SUPP:MIN?")
+    return float(response)
+
+def set_phase_noise_vco_voltage_supply_max(self, voltage: float):
+    """
+    Sets the maximum supply voltage for the VCO.
+    Parameters:
+    voltage (float): The maximum supply voltage.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:SUPP:MAX {voltage}")
+
+def get_phase_noise_vco_voltage_supply_max(self) -> float:
+    """
+    Queries the maximum supply voltage for the VCO.
+    Returns:
+    float: The maximum supply voltage.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:SUPP:MAX?")
+    return float(response)
+
+def set_phase_noise_vco_voltage_supply(self, voltage: float):
+    """
+    Sets the supply voltage for the VCO.
+    Parameters:
+    voltage (float): The supply voltage.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:SUPP {voltage}")
+
+def get_phase_noise_vco_voltage_supply(self) -> float:
+    """
+    Queries the supply voltage for the VCO.
+    Returns:
+    float: The supply voltage.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:SUPP?")
+    return float(response)
+
+def set_phase_noise_vco_voltage_tune_min(self, voltage: float):
+    """
+    Sets the minimum tune voltage for the VCO.
+    Parameters:
+    voltage (float): The minimum tune voltage.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:TUNE:MIN {voltage}")
+
+def get_phase_noise_vco_voltage_tune_min(self) -> float:
+    """
+    Queries the minimum tune voltage for the VCO.
+    Returns:
+    float: The minimum tune voltage.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:TUNE:MIN?")
+    return float(response)
+
+def set_phase_noise_vco_voltage_tune_max(self, voltage: float):
+    """
+    Sets the maximum tune voltage for the VCO.
+    Parameters:
+    voltage (float): The maximum tune voltage.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:TUNE:MAX {voltage}")
+
+def get_phase_noise_vco_voltage_tune_max(self) -> float:
+    """
+    Queries the maximum tune voltage for the VCO.
+    Returns:
+    float: The maximum tune voltage.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:TUNE:MAX?")
+    return float(response)
+
+def set_phase_noise_vco_voltage_tune(self, voltage: float):
+    """
+    Sets the tune voltage for the VCO.
+    Parameters:
+    voltage (float): The tune voltage.
+    """
+    self.instrument.write(f":SENS:PN:VCO:VOLT:TUNE {voltage}")
+
+def get_phase_noise_vco_voltage_tune(self) -> float:
+    """
+    Queries the tune voltage for the VCO.
+    Returns:
+    float: The tune voltage.
+    """
+    response = self.instrument.query(":SENS:PN:VCO:VOLT:TUNE?")
+    return float(response)
+
+# --- Phase Noise Trace Controls ---
+
+def select_phase_noise_trace(self, trace_index: int):
+    """
+    Specifies the active trace index for phase noise measurements.
+    Parameters:
+    trace_index (int): Trace index (1-6).
+    """
+    if not (1 <= trace_index <= 6):
+        raise ValueError("Trace index must be between 1 and 6.")
+    self.instrument.write(f":TRAC:PN:SEL {trace_index}")
+
+def get_selected_phase_noise_trace(self) -> int:
+    """
+    Queries the active trace index for phase noise measurements.
+    Returns:
+    int: Trace index (1-6).
+    """
+    response = self.instrument.query(":TRAC:PN:SEL?")
+    return int(response)
+
+def set_phase_noise_trace_type(self, trace_type: str):
+    """
+    Specifies the trace type for phase noise measurements.
+    Parameters:
+    trace_type (str): Allowed values: 'OFF', 'NORMAL', 'AVERAGE', 'REFERENCE', 'MINHOLD', 'MAXHOLD'
+    """
+    valid_types = {"OFF", "NORMAL", "AVERAGE", "REFERENCE", "MINHOLD", "MAXHOLD"}
+    trace_type_upper = trace_type.upper()
+    if trace_type_upper not in valid_types:
+        raise ValueError(f"Invalid trace type: '{trace_type}'. Must be one of {valid_types}.")
+    self.instrument.write(f":TRAC:PN:TYPE {trace_type_upper}")
+
+def get_phase_noise_trace_type(self) -> str:
+    """
+    Queries the trace type for phase noise measurements.
+    Returns:
+    str: Trace type.
+    """
+    response = self.instrument.query(":TRAC:PN:TYPE?")
+    return response.strip().upper()
+
+def set_phase_noise_trace_average_count(self, count: int):
+    """
+    Specifies the number of sweeps to average for phase noise trace.
+    Parameters:
+    count (int): Number of sweeps.
+    """
+    self.instrument.write(f":TRAC:PN:AVER:COUN {count}")
+
+def get_phase_noise_trace_average_count(self) -> int:
+    """
+    Queries the number of sweeps averaged for phase noise trace.
+    Returns:
+    int: Number of sweeps.
+    """
+    response = self.instrument.query(":TRAC:PN:AVER:COUN?")
+    return int(response)
+
+def enable_phase_noise_trace_update(self, enable: bool):
+    """
+    Specifies if the trace updates when a new sweep is acquired.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":TRAC:PN:UPD {1 if enable else 0}")
+
+def is_phase_noise_trace_update_enabled(self) -> bool:
+    """
+    Queries if the trace updates when a new sweep is acquired.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":TRAC:PN:UPD?")
+    return int(response) == 1
+
+def enable_phase_noise_trace_hide(self, enable: bool):
+    """
+    Hides or shows the trace.
+    Parameters:
+    enable (bool): True to hide, False to show.
+    """
+    self.instrument.write(f":TRAC:PN:HIDE {1 if enable else 0}")
+
+def is_phase_noise_trace_hidden(self) -> bool:
+    """
+    Queries if the trace is hidden.
+    Returns:
+    bool: True if hidden, False otherwise.
+    """
+    response = self.instrument.query(":TRAC:PN:HIDE?")
+    return int(response) == 1
+
+def enable_phase_noise_trace_smoothing(self, enable: bool):
+    """
+    Enables or disables smoothing for phase noise trace.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":TRAC:PN:SMOOTH {1 if enable else 0}")
+
+def is_phase_noise_trace_smoothing_enabled(self) -> bool:
+    """
+    Queries if smoothing is enabled for phase noise trace.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":TRAC:PN:SMOOTH?")
+    return int(response) == 1
+
+def set_phase_noise_trace_smoothing_aperture(self, aperture: float):
+    """
+    Specifies the smoothing aperture as a percentage.
+    Parameters:
+    aperture (float): Smoothing aperture (%).
+    """
+    self.instrument.write(f":TRAC:PN:SMOOTH:APER {aperture}")
+
+def get_phase_noise_trace_smoothing_aperture(self) -> float:
+    """
+    Queries the smoothing aperture for phase noise trace.
+    Returns:
+    float: Smoothing aperture (%).
+    """
+    response = self.instrument.query(":TRAC:PN:SMOOTH:APER?")
+    return float(response)
+
+def enable_phase_noise_trace_spur_reject(self, enable: bool):
+    """
+    Enables or disables trace spur rejection.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":TRAC:PN:SPUR {1 if enable else 0}")
+
+def is_phase_noise_trace_spur_reject_enabled(self) -> bool:
+    """
+    Queries if trace spur rejection is enabled.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":TRAC:PN:SPUR?")
+    return int(response) == 1
+
+def set_phase_noise_trace_spur_reject_threshold(self, threshold_db: float):
+    """
+    Specifies the spur reject threshold in dB.
+    Parameters:
+    threshold_db (float): Spur reject threshold in dB.
+    """
+    self.instrument.write(f":TRAC:PN:SPUR:THR {threshold_db}")
+
+def get_phase_noise_trace_spur_reject_threshold(self) -> float:
+    """
+    Queries the spur reject threshold in dB.
+    Returns:
+    float: Spur reject threshold in dB.
+    """
+    response = self.instrument.query(":TRAC:PN:SPUR:THR?")
+    return float(response)
+
+def set_phase_noise_trace_offset(self, offset_db: float):
+    """
+    Specifies an offset in dB for the trace.
+    Parameters:
+    offset_db (float): Offset in dB.
+    """
+    self.instrument.write(f":TRAC:PN:OFFS {offset_db}")
+
+def get_phase_noise_trace_offset(self) -> float:
+    """
+    Queries the offset in dB for the trace.
+    Returns:
+    float: Offset in dB.
+    """
+    response = self.instrument.query(":TRAC:PN:OFFS?")
+    return float(response)
+
+def move_phase_noise_trace_to(self, trace_index: int):
+    """
+    Moves the current trace to the selected trace. The selected trace type will be set to reference.
+    Parameters:
+    trace_index (int): Trace index (1-6).
+    """
+    if not (1 <= trace_index <= 6):
+        raise ValueError("Trace index must be between 1 and 6.")
+    self.instrument.write(f":TRAC:PN:TO {trace_index}")
+
+def clear_phase_noise_trace(self):
+    """
+    Clears the current average accumulation for phase noise trace.
+    """
+    self.instrument.write(":TRAC:PN:CLEAR")
+
+def get_phase_noise_trace_data_y(self) -> list:
+    """
+    Returns the trace data amplitudes for phase noise.
+    Returns:
+    list: Amplitude values.
+    """
+    response = self.instrument.query(":TRAC:PN:DATA:Y?")
+    return [float(val) for val in response.split(',') if val.strip()]
+
+def get_phase_noise_trace_data_x(self) -> list:
+    """
+    Returns the trace data frequencies for phase noise.
+    Returns:
+    list: Frequency values.
+    """
+    response = self.instrument.query(":TRAC:PN:DATA:X?")
+    return [float(val) for val in response.split(',') if val.strip()]
+
+# --- Phase Noise Marker Controls ---
+
+def select_phase_noise_marker(self, marker_index: int):
+    """
+    Specifies the active marker index for phase noise measurements.
+    Parameters:
+    marker_index (int): Marker index (1-6).
+    """
+    if not (1 <= marker_index <= 6):
+        raise ValueError("Marker index must be between 1 and 6.")
+    self.instrument.write(f":CALC:PN:MARK:SEL {marker_index}")
+
+def get_selected_phase_noise_marker(self) -> int:
+    """
+    Queries the active marker index for phase noise measurements.
+    Returns:
+    int: Marker index (1-6).
+    """
+    response = self.instrument.query(":CALC:PN:MARK:SEL?")
+    return int(response)
+
+def enable_phase_noise_marker(self, enable: bool):
+    """
+    Enables or disables the marker for phase noise measurements.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":CALC:PN:MARK:STAT {1 if enable else 0}")
+
+def is_phase_noise_marker_enabled(self) -> bool:
+    """
+    Queries if the marker is enabled for phase noise measurements.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":CALC:PN:MARK:STAT?")
+    return int(response) == 1
+
+def set_phase_noise_marker_trace(self, trace_index: int):
+    """
+    Selects which trace the marker is placed on for phase noise measurements.
+    Parameters:
+    trace_index (int): Trace index (1-3).
+    """
+    if not (1 <= trace_index <= 3):
+        raise ValueError("Trace index must be between 1 and 3.")
+    self.instrument.write(f":CALC:PN:MARK:TRAC {trace_index}")
+
+def get_phase_noise_marker_trace(self) -> int:
+    """
+    Queries which trace the marker is placed on for phase noise measurements.
+    Returns:
+    int: Trace index (1-3).
+    """
+    response = self.instrument.query(":CALC:PN:MARK:TRAC?")
+    return int(response)
+
+def enable_phase_noise_marker_delta(self, enable: bool):
+    """
+    Enables or disables the delta marker for phase noise measurements.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":CALC:PN:MARK:DELT {1 if enable else 0}")
+
+def is_phase_noise_marker_delta_enabled(self) -> bool:
+    """
+    Queries if the delta marker is enabled for phase noise measurements.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":CALC:PN:MARK:DELT?")
+    return int(response) == 1
+
+def set_phase_noise_marker_frequency(self, offset_hz: float):
+    """
+    Sets the marker frequency as an offset from the carrier frequency for phase noise measurements.
+    Parameters:
+    offset_hz (float): Frequency offset in Hz.
+    """
+    self.instrument.write(f":CALC:PN:MARK:X {offset_hz}")
+
+def get_phase_noise_marker_frequency(self) -> float:
+    """
+    Queries the marker frequency as an offset from the carrier for phase noise measurements.
+    Returns:
+    float: Frequency offset in Hz.
+    """
+    response = self.instrument.query(":CALC:PN:MARK:X?")
+    return float(response)
+
+def get_phase_noise_marker_amplitude(self) -> float:
+    """
+    Queries the amplitude of the marker for phase noise measurements.
+    Returns:
+    float: Amplitude in dBc/Hz.
+    """
+    response = self.instrument.query(":CALC:PN:MARK:Y?")
+    return float(response)
+
+# --- Phase Noise Jitter Controls ---
+
+def enable_phase_noise_jitter(self, enable: bool):
+    """
+    Enables or disables the jitter measurement for phase noise.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":CALC:PN:JITT:STAT {1 if enable else 0}")
+
+def is_phase_noise_jitter_enabled(self) -> bool:
+    """
+    Queries if the jitter measurement is enabled for phase noise.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":CALC:PN:JITT:STAT?")
+    return int(response) == 1
+
+def set_phase_noise_jitter_trace(self, trace_index: int):
+    """
+    Specifies the target trace of the jitter measurement for phase noise.
+    Parameters:
+    trace_index (int): Trace index (1-3).
+    """
+    if not (1 <= trace_index <= 3):
+        raise ValueError("Trace index must be between 1 and 3.")
+    self.instrument.write(f":CALC:PN:JITT:TRAC {trace_index}")
+
+def get_phase_noise_jitter_trace(self) -> int:
+    """
+    Queries the target trace of the jitter measurement for phase noise.
+    Returns:
+    int: Trace index (1-3).
+    """
+    response = self.instrument.query(":CALC:PN:JITT:TRAC?")
+    return int(response)
+
+def set_phase_noise_jitter_start(self, offset_hz: float):
+    """
+    Specifies the start frequency of the jitter measurement as an offset from the carrier frequency.
+    Parameters:
+    offset_hz (float): Start offset in Hz.
+    """
+    self.instrument.write(f":CALC:PN:JITT:STAR {offset_hz}")
+
+def get_phase_noise_jitter_start(self) -> float:
+    """
+    Queries the start frequency of the jitter measurement as an offset from the carrier frequency.
+    Returns:
+    float: Start offset in Hz.
+    """
+    response = self.instrument.query(":CALC:PN:JITT:STAR?")
+    return float(response)
+
+def set_phase_noise_jitter_stop(self, offset_hz: float):
+    """
+    Specifies the stop frequency of the jitter measurement as an offset from the carrier frequency.
+    Parameters:
+    offset_hz (float): Stop offset in Hz.
+    """
+    self.instrument.write(f":CALC:PN:JITT:STOP {offset_hz}")
+
+def get_phase_noise_jitter_stop(self) -> float:
+    """
+    Queries the stop frequency of the jitter measurement as an offset from the carrier frequency.
+    Returns:
+    float: Stop offset in Hz.
+    """
+    response = self.instrument.query(":CALC:PN:JITT:STOP?")
+    return float(response)
+
+def get_phase_noise_jitter_rms(self) -> float:
+    """
+    Queries the RMS jitter of the measurement in seconds.
+    Returns:
+    float: RMS jitter in seconds.
+    """
+    response = self.instrument.query(":CALC:PN:JITT:RMS?")
+    return float(response)
+
+def get_phase_noise_jitter_phase(self) -> float:
+    """
+    Queries the phase jitter of the measurement in radians.
+    Returns:
+    float: Phase jitter in radians.
+    """
+    response = self.instrument.query(":CALC:PN:JITT:PHASE?")
+
+# --- Harmonics Measurement Controls ---
+
+def set_harmonics_number(self, number: int):
+    self.instrument.write(f":SENS:HARM:NUMB {number}")
+
+def get_harmonics_number(self) -> int:
+    response = self.instrument.query(":SENS:HARM:NUMB?")
+    return int(response)
+
+def enable_harmonics_tracking(self, enable: bool):
+    self.instrument.write(f":SENS:HARM:TRACK {1 if enable else 0}")
+
+def is_harmonics_tracking_enabled(self) -> bool:
+    response = self.instrument.query(":SENS:HARM:TRACK?")
+    return int(response) == 1
+
+def set_harmonics_mode(self, mode: str):
+    valid_modes = {"PEAK", "CHPOWER"}
+    mode_upper = mode.upper()
+    if mode_upper not in valid_modes:
+        raise ValueError(f"Invalid harmonics mode: '{mode}'. Must be 'PEAK' or 'CHPOWER'.")
+    self.instrument.write(f":SENS:HARM:MODE {mode_upper}")
+
+def get_harmonics_mode(self) -> str:
+    response = self.instrument.query(":SENS:HARM:MODE?")
+    return response.strip().upper()
+
+def set_harmonics_fundamental_frequency(self, frequency_hz: float):
+    self.instrument.write(f":SENS:HARM:FREQ:FUND {frequency_hz}")
+
+def get_harmonics_fundamental_frequency(self) -> float:
+    response = self.instrument.query(":SENS:HARM:FREQ:FUND?")
+    return float(response)
+
+def set_harmonics_frequency_step(self, step_hz: float):
+    self.instrument.write(f":SENS:HARM:FREQ:STEP {step_hz}")
+
+def get_harmonics_frequency_step(self) -> float:
+    response = self.instrument.query(":SENS:HARM:FREQ:STEP?")
+    return float(response)
+
+def set_harmonics_frequency_span(self, span_hz: float):
+    self.instrument.write(f":SENS:HARM:FREQ:SPAN {span_hz}")
+
+def get_harmonics_frequency_span(self) -> float:
+    response = self.instrument.query(":SENS:HARM:FREQ:SPAN?")
+    return float(response)
+
+def set_harmonics_bandwidth_resolution(self, rbw_hz: float):
+    self.instrument.write(f":SENS:HARM:BAND:RES {rbw_hz}")
+
+def get_harmonics_bandwidth_resolution(self) -> float:
+    response = self.instrument.query(":SENS:HARM:BAND:RES?")
+    return float(response)
+
+def set_harmonics_bandwidth_video(self, vbw_hz: float):
+    self.instrument.write(f":SENS:HARM:BAND:VID {vbw_hz}")
+
+def get_harmonics_bandwidth_video(self) -> float:
+    response = self.instrument.query(":SENS:HARM:BAND:VID?")
+    return float(response)
+
+def set_harmonics_power_reference_level(self, ref_level_dbm: float):
+    self.instrument.write(f":SENS:HARM:POW:RF:RLEV {ref_level_dbm}")
+
+def get_harmonics_power_reference_level(self) -> float:
+    response = self.instrument.query(":SENS:HARM:POW:RF:RLEV?")
+    return float(response)
+
+def set_harmonics_view_reference_level(self, ref_level_dbm: float):
+    self.instrument.write(f":SENS:HARM:VIEW:RLEV {ref_level_dbm}")
+
+def get_harmonics_view_reference_level(self) -> float:
+    response = self.instrument.query(":SENS:HARM:VIEW:RLEV?")
+    return float(response)
+
+def set_harmonics_view_division(self, division_db: float):
+    self.instrument.write(f":SENS:HARM:VIEW:PDIV {division_db}")
+
+def get_harmonics_view_division(self) -> float:
+    response = self.instrument.query(":SENS:HARM:VIEW:PDIV?")
+    return float(response)
+
+def set_harmonics_trace_type(self, trace_type: str):
+    valid_types = {"WRITE", "MAXHOLD"}
+    trace_type_upper = trace_type.upper()
+    if trace_type_upper not in valid_types:
+        raise ValueError(f"Invalid trace type: '{trace_type}'. Must be 'WRITE' or 'MAXHOLD'.")
+    self.instrument.write(f":SENS:HARM:TRAC:TYPE {trace_type_upper}")
+
+def get_harmonics_trace_type(self) -> str:
+    response = self.instrument.query(":SENS:HARM:TRAC:TYPE?")
+    return response.strip().upper()
+
+# --- Harmonics Fetch Results ---
+
+def fetch_harmonics_frequency(self, harmonic_index: int) -> float:
+    response = self.instrument.query(f":SENS:FETC:HARM:FREQ? {harmonic_index}")
+    return float(response)
+
+def fetch_harmonics_amplitude(self, harmonic_index: int) -> float:
+    response = self.instrument.query(f":SENS:FETC:HARM:AMPL? {harmonic_index}")
+    return float(response)
+
+def fetch_harmonics_distortion(self) -> float:
+    response = self.instrument.query(":SENS:FETC:HARM:DIST?")
+    return float(response)
+
+# --- Analog Demodulation Controls ---
+
+def set_ademod_center_frequency(self, frequency_hz: float):
+    self.instrument.write(f":SENS:ADEMOD:FREQ:CENT {frequency_hz}")
+
+def get_ademod_center_frequency(self) -> float:
+    response = self.instrument.query(":SENS:ADEMOD:FREQ:CENT?")
+    return float(response)
+
+def set_ademod_center_frequency_step(self, step_hz: float):
+    self.instrument.write(f":SENS:ADEMOD:FREQ:CENT:STEP {step_hz}")
+
+def get_ademod_center_frequency_step(self) -> float:
+    response = self.instrument.query(":SENS:ADEMOD:FREQ:CENT:STEP?")
+    return float(response)
+
+def set_ademod_power_reference_level(self, ref_level_dbm: float):
+    self.instrument.write(f":SENS:ADEMOD:POW:RF:RLEV {ref_level_dbm}")
+
+def get_ademod_power_reference_level(self) -> float:
+    response = self.instrument.query(":SENS:ADEMOD:POW:RF:RLEV?")
+    return float(response)
+
+def set_ademod_low_pass_filter(self, cutoff_hz: float):
+    self.instrument.write(f":SENS:ADEMOD:LPF {cutoff_hz}")
+
+def get_ademod_low_pass_filter(self) -> float:
+    response = self.instrument.query(":SENS:ADEMOD:LPF?")
+    return float(response)
+
+# --- Analog Demodulation Fetch Results ---
+
+def fetch_ademod_am_metrics(self, metrics: list) -> list:
+    metrics_str = ",".join(str(m) for m in metrics)
+    response = self.instrument.query(f":SENS:FETC:ADEMOD:AM? {metrics_str}")
+    return [float(val) for val in response.split(',') if val.strip()]
+
+def fetch_ademod_fm_metrics(self, metrics: list) -> list:
+    metrics_str = ",".join(str(m) for m in metrics)
+    response = self.instrument.query(f":SENS:FETC:ADEMOD:FM? {metrics_str}")
+    return [float(val) for val in response.split(',') if val.strip()]
+
+# --- Digital Demodulation Controls ---
+
+def set_ddemod_center_frequency(self, frequency_hz: float):
+    self.instrument.write(f":SENS:DDEMOD:FREQ:CENT {frequency_hz}")
+
+def get_ddemod_center_frequency(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:FREQ:CENT?")
+    return float(response)
+
+def set_ddemod_center_frequency_step(self, step_hz: float):
+    self.instrument.write(f":SENS:DDEMOD:FREQ:CENT:STEP {step_hz}")
+
+def get_ddemod_center_frequency_step(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:FREQ:CENT:STEP?")
+    return float(response)
+
+def set_ddemod_power_reference_level(self, ref_level_dbm: float):
+    self.instrument.write(f":SENS:DDEMOD:POW:RF:RLEV {ref_level_dbm}")
+
+def get_ddemod_power_reference_level(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:POW:RF:RLEV?")
+    return float(response)
+
+def set_ddemod_sample_rate(self, sample_rate_hz: float):
+    self.instrument.write(f":SENS:DDEMOD:SRAT {sample_rate_hz}")
+
+def get_ddemod_sample_rate(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:SRAT?")
+    return float(response)
+
+def set_ddemod_modulation(self, modulation: str):
+    valid_modulations = {
+        "BPSK", "DBPSK", "QPSK", "DQPSK", "OQPSK", "PI4QPSK", "8PSK", "D8PSK",
+        "QAM16", "QAM32", "QAM64", "QAM256", "QAM1024", "FSK2", "FSK4", "FSK8", "FSK16", "ASK2", "CUSTOM"
+    }
+    modulation_upper = modulation.upper()
+    if modulation_upper not in valid_modulations:
+        raise ValueError(f"Invalid modulation type: '{modulation}'. Must be one of {valid_modulations}.")
+    self.instrument.write(f":SENS:DDEMOD:MOD {modulation_upper}")
+
+def get_ddemod_modulation(self) -> str:
+    response = self.instrument.query(":SENS:DDEMOD:MOD?")
+    return response.strip().upper()
+
+def set_ddemod_rlength(self, rlength: int):
+    self.instrument.write(f":SENS:DDEMOD:RLEN {rlength}")
+
+def get_ddemod_rlength(self) -> int:
+    response = self.instrument.query(":SENS:DDEMOD:RLEN?")
+    return int(response)
+
+def set_ddemod_filter(self, filter_type: str):
+    valid_filters = {"NYQUIST", "RNYQUIST", "GAUSSIAN", "RECTANGLE"}
+    filter_upper = filter_type.upper()
+    if filter_upper not in valid_filters:
+        raise ValueError(f"Invalid filter type: '{filter_type}'. Must be one of {valid_filters}.")
+    self.instrument.write(f":SENS:DDEMOD:FILT {filter_upper}")
+
+def get_ddemod_filter(self) -> str:
+    response = self.instrument.query(":SENS:DDEMOD:FILT?")
+    return response.strip().upper()
+
+def set_ddemod_filter_abt(self, abt_value: float):
+    self.instrument.write(f":SENS:DDEMOD:FILT:ABT {abt_value}")
+
+def get_ddemod_filter_abt(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:FILT:ABT?")
+    return float(response)
+
+def enable_ddemod_ifbw_auto(self, enable: bool):
+    self.instrument.write(f":SENS:DDEMOD:IFBW:AUTO {1 if enable else 0}")
+
+def is_ddemod_ifbw_auto_enabled(self) -> bool:
+    response = self.instrument.query(":SENS:DDEMOD:IFBW:AUTO?")
+    return int(response) == 1
+
+def set_ddemod_ifbw(self, ifbw_hz: float):
+    self.instrument.write(f":SENS:DDEMOD:IFBW {ifbw_hz}")
+
+def get_ddemod_ifbw(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:IFBW?")
+    return float(response)
+
+def enable_ddemod_average(self, enable: bool):
+    self.instrument.write(f":SENS:DDEMOD:AVER {1 if enable else 0}")
+
+def is_ddemod_average_enabled(self) -> bool:
+    response = self.instrument.query(":SENS:DDEMOD:AVER?")
+    return int(response) == 1
+
+def set_ddemod_average_count(self, count: int):
+    self.instrument.write(f":SENS:DDEMOD:AVER:COUN {count}")
+
+def get_ddemod_average_count(self) -> int:
+    response = self.instrument.query(":SENS:DDEMOD:AVER:COUN?")
+    return int(response)
+
+def enable_ddemod_wce(self, enable: bool):
+    self.instrument.write(f":SENS:DDEMOD:WCE {1 if enable else 0}")
+
+def is_ddemod_wce_enabled(self) -> bool:
+    response = self.instrument.query(":SENS:DDEMOD:WCE?")
+    return int(response) == 1
+
+def set_ddemod_wce_range(self, range_hz: float):
+    self.instrument.write(f":SENS:DDEMOD:WCE:RANG {range_hz}")
+
+def get_ddemod_wce_range(self) -> float:
+    response = self.instrument.query(":SENS:DDEMOD:WCE:RANG?")
+    return float(response)
+# --- Digital Demodulation Custom Modulation Controls ---
+
+def is_ddemod_custom_iq_valid(self) -> bool:
+    """
+    Returns True if the custom constellation is valid.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:CUST:IQ:VAL?")
+    return int(response) == 1
+
+def get_ddemod_custom_iq_length(self) -> int:
+    """
+    Returns the number of symbols in the custom constellation.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:CUST:IQ:LENG?")
+    return int(response)
+
+def set_ddemod_custom_iq_data(self, iq_values: list):
+    """
+    Specifies the constellation symbols as IQ values (alternating I/Q floats).
+    """
+    iq_str = ",".join(str(v) for v in iq_values)
+    self.instrument.write(f":SENS:DDEMOD:CUST:IQ:DATA {iq_str}")
+
+def get_ddemod_custom_iq_data(self) -> list:
+    """
+    Returns the constellation symbols as a comma separated list of alternating IQ values.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:CUST:IQ:DATA?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- Digital Demodulation Trigger Controls ---
+
+def set_ddemod_trigger_source(self, source: str):
+    """
+    Sets the trigger source for digital demodulation.
+    Allowed values: 'IMMEDIATE', 'IF', 'EXTERNAL'
+    """
+    valid_sources = {"IMMEDIATE", "IF", "EXTERNAL"}
+    source_upper = source.upper()
+    if source_upper not in valid_sources:
+        raise ValueError(f"Invalid trigger source: '{source}'. Must be one of {valid_sources}.")
+    self.instrument.write(f":TRIG:DDEMOD:SOUR {source_upper}")
+
+def get_ddemod_trigger_source(self) -> str:
+    """
+    Queries the trigger source for digital demodulation.
+    """
+    response = self.instrument.query(":TRIG:DDEMOD:SOUR?")
+    return response.strip().upper()
+
+def set_ddemod_trigger_if_level(self, amplitude_dbm: float):
+    """
+    Sets the trigger level for IF trigger in digital demodulation.
+    """
+    self.instrument.write(f":TRIG:DDEMOD:IF:LEV {amplitude_dbm}")
+
+def get_ddemod_trigger_if_level(self) -> float:
+    """
+    Queries the trigger level for IF trigger in digital demodulation.
+    """
+    response = self.instrument.query(":TRIG:DDEMOD:IF:LEV?")
+    return float(response)
+
+def set_ddemod_trigger_delay(self, delay_symbols: int):
+    """
+    Sets the trigger delay (number of symbols after trigger to start measurement).
+    """
+    self.instrument.write(f":TRIG:DDEMOD:DELAY {delay_symbols}")
+
+def get_ddemod_trigger_delay(self) -> int:
+    """
+    Queries the trigger delay for digital demodulation.
+    """
+    response = self.instrument.query(":TRIG:DDEMOD:DELAY?")
+    return int(response)
+
+# --- Digital Demodulation Sync Search Controls ---
+
+def enable_ddemod_sync_search(self, enable: bool):
+    """
+    Enables or disables sync search.
+    """
+    self.instrument.write(f":SENS:DDEMOD:SYNC {1 if enable else 0}")
+
+def is_ddemod_sync_search_enabled(self) -> bool:
+    """
+    Queries if sync search is enabled.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:SYNC?")
+    return int(response) == 1
+
+def set_ddemod_sync_pattern(self, pattern: str):
+    """
+    Sets the sync search pattern (hex string).
+    """
+    self.instrument.write(f":SENS:DDEMOD:SYNC:SWOR:PATT {pattern.upper()}")
+
+def get_ddemod_sync_pattern(self) -> str:
+    """
+    Queries the sync search pattern.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:SYNC:SWOR:PATT?")
+    return response.strip().upper()
+
+def set_ddemod_sync_pattern_length(self, length: int):
+    """
+    Sets the length in symbols of the pattern trigger.
+    """
+    self.instrument.write(f":SENS:DDEMOD:SYNC:SWOR:LENG {length}")
+
+def get_ddemod_sync_pattern_length(self) -> int:
+    """
+    Queries the length in symbols of the pattern trigger.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:SYNC:SWOR:LENG?")
+    return int(response)
+
+def set_ddemod_sync_search_length(self, length: int):
+    """
+    Sets the search length for the pattern trigger.
+    """
+    self.instrument.write(f":SENS:DDEMOD:SYNC:SLEN {length}")
+
+def get_ddemod_sync_search_length(self) -> int:
+    """
+    Queries the search length for the pattern trigger.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:SYNC:SLEN?")
+    return int(response)
+
+def set_ddemod_sync_offset(self, offset: int):
+    """
+    Sets the offset from the beginning of a successful sync search.
+    """
+    self.instrument.write(f":SENS:DDEMOD:SYNC:OFFS {offset}")
+
+def get_ddemod_sync_offset(self) -> int:
+    """
+    Queries the offset from the beginning of a successful sync search.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:SYNC:OFFS?")
+    return int(response)
+
+# --- Digital Demodulation Compensation Controls ---
+
+def enable_ddemod_compensate_iq_inversion(self, enable: bool):
+    """
+    Enables or disables IQ inversion compensation.
+    """
+    self.instrument.write(f":SENS:DDEMOD:COMP:IQINV {1 if enable else 0}")
+
+def is_ddemod_compensate_iq_inversion_enabled(self) -> bool:
+    """
+    Queries if IQ inversion compensation is enabled.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:COMP:IQINV?")
+    return int(response) == 1
+
+def enable_ddemod_compensate_iq_offset(self, enable: bool):
+    """
+    Enables or disables IQ offset compensation.
+    """
+    self.instrument.write(f":SENS:DDEMOD:COMP:IQOFF {1 if enable else 0}")
+
+def is_ddemod_compensate_iq_offset_enabled(self) -> bool:
+    """
+    Queries if IQ offset compensation is enabled.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:COMP:IQOFF?")
+    return int(response) == 1
+
+def enable_ddemod_compensate_ad_droop(self, enable: bool):
+    """
+    Enables or disables amplitude droop compensation.
+    """
+    self.instrument.write(f":SENS:DDEMOD:COMP:ADR {1 if enable else 0}")
+
+def is_ddemod_compensate_ad_droop_enabled(self) -> bool:
+    """
+    Queries if amplitude droop compensation is enabled.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:COMP:ADR?")
+    return int(response) == 1
+
+# --- Digital Demodulation Equalization Controls ---
+
+def enable_ddemod_equalization(self, enable: bool):
+    """
+    Enables or disables adaptive equalization.
+    """
+    self.instrument.write(f":SENS:DDEMOD:EQU {1 if enable else 0}")
+
+def is_ddemod_equalization_enabled(self) -> bool:
+    """
+    Queries if adaptive equalization is enabled.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:EQU?")
+    return int(response) == 1
+
+def set_ddemod_equalization_length(self, length: int):
+    """
+    Sets the length of the equalization filter in symbols (must be odd).
+    """
+    self.instrument.write(f":SENS:DDEMOD:EQU:LENG {length}")
+
+def get_ddemod_equalization_length(self) -> int:
+    """
+    Queries the length of the equalization filter in symbols.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:EQU:LENG?")
+    return int(response)
+
+def set_ddemod_equalization_convergence(self, convergence: float):
+    """
+    Sets the adaptive rate for equalization.
+    """
+    self.instrument.write(f":SENS:DDEMOD:EQU:CONV {convergence}")
+
+def get_ddemod_equalization_convergence(self) -> float:
+    """
+    Queries the adaptive rate for equalization.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:EQU:CONV?")
+    return float(response)
+
+def enable_ddemod_equalization_hold(self, enable: bool):
+    """
+    Enables or disables hold for equalization.
+    """
+    self.instrument.write(f":SENS:DDEMOD:EQU:HOLD {1 if enable else 0}")
+
+def is_ddemod_equalization_hold_enabled(self) -> bool:
+    """
+    Queries if hold is enabled for equalization.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:EQU:HOLD?")
+    return int(response) == 1
+
+def reset_ddemod_equalization(self):
+    """
+    Resets the equalization filter to the unit impulse response.
+    """
+    self.instrument.write(":SENS:DDEMOD:EQU:RESET")
+
+# --- Digital Demodulation Trace Sweep Controls ---
+
+def get_ddemod_trace_sweep_xstart(self) -> float:
+    """
+    Gets the frequency value associated with the first sample in the returned data.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:TRAC:SWE:XSTAR?")
+    return float(response)
+
+def get_ddemod_trace_sweep_xincrement(self) -> float:
+    """
+    Gets the frequency spacing for the samples in the returned data.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:TRAC:SWE:XINC?")
+    return float(response)
+
+def get_ddemod_trace_sweep_points(self) -> int:
+    """
+    Gets the number of points returned by the DATA function.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:TRAC:SWE:POIN?")
+    return int(response)
+
+def get_ddemod_trace_sweep_data(self) -> list:
+    """
+    Gets the spectrum trace data.
+    """
+    response = self.instrument.query(":SENS:DDEMOD:TRAC:SWE:DATA?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- Digital Demodulation Fetch Results ---
+
+def fetch_ddemod_metrics(self, metrics: list) -> list:
+    """
+    Fetches digital demodulation metrics.
+    metrics: list of metric indices (see documentation for allowed values).
+    Returns: list of metric values in the order requested.
+    """
+    metrics_str = ",".join(str(m) for m in metrics)
+    response = self.instrument.query(f":FETC:DDEMOD? {metrics_str}")
+    return [float(val) for val in response.split(',') if val.strip()]
+
+def fetch_ddemod_constellation_length(self) -> int:
+    """
+    Returns the constellation result length.
+    """
+    response = self.instrument.query(":FETC:DDEMOD? 40")
+    return int(response)
+
+def fetch_ddemod_constellation_data(self) -> list:
+    """
+    Returns the constellation results (I/Q values or frequency samples).
+    """
+    response = self.instrument.query(":FETC:DDEMOD? 41")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- SEM (Spectrum Emission Mask) Frequency Controls ---
+
+def set_sem_center_frequency(self, frequency_hz: float):
+    """
+    Sets the center frequency for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:FREQ:CENT {frequency_hz}")
+
+def get_sem_center_frequency(self) -> float:
+    """
+    Queries the center frequency for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:FREQ:CENT?")
+    return float(response)
+
+def set_sem_center_frequency_step(self, step_hz: float):
+    """
+    Sets the center frequency step amount for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:FREQ:CENT:STEP {step_hz}")
+
+def get_sem_center_frequency_step(self) -> float:
+    """
+    Queries the center frequency step amount for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:FREQ:CENT:STEP?")
+    return float(response)
+
+def set_sem_span(self, span_hz: float):
+    """
+    Sets the sweep span for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:FREQ:SPAN {span_hz}")
+
+def get_sem_span(self) -> float:
+    """
+    Queries the sweep span for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:FREQ:SPAN?")
+    return float(response)
+
+# --- SEM Bandwidth Controls ---
+
+def set_sem_bandwidth_resolution(self, rbw_hz: float):
+    """
+    Sets the RBW for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:BAND:RES {rbw_hz}")
+
+def get_sem_bandwidth_resolution(self) -> float:
+    """
+    Queries the RBW for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:BAND:RES?")
+    return float(response)
+
+def enable_sem_bandwidth_resolution_auto(self, enable: bool):
+    """
+    Enables/disables auto RBW for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:BAND:RES:AUTO {1 if enable else 0}")
+
+def is_sem_bandwidth_resolution_auto_enabled(self) -> bool:
+    """
+    Queries if auto RBW is enabled for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:BAND:RES:AUTO?")
+    return int(response) == 1
+
+def set_sem_bandwidth_video(self, vbw_hz: float):
+    """
+    Sets the VBW for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:BAND:VID {vbw_hz}")
+
+def get_sem_bandwidth_video(self) -> float:
+    """
+    Queries the VBW for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:BAND:VID?")
+    return float(response)
+
+def enable_sem_bandwidth_video_auto(self, enable: bool):
+    """
+    Enables/disables auto VBW for SEM measurement.
+    """
+    self.instrument.write(f":SENS:SEMASK:BAND:VID:AUTO {1 if enable else 0}")
+
+def is_sem_bandwidth_video_auto_enabled(self) -> bool:
+    """
+    Queries if auto VBW is enabled for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:BAND:VID:AUTO?")
+    return int(response) == 1
+
+# --- SEM Amplitude Controls ---
+
+def set_sem_power_reference_level(self, ref_level_dbm: float):
+    """
+    Sets the reference level for SEM measurement.
+    """
+    self.instrument.write(f":SENS:POWER:RF:RLEV {ref_level_dbm}")
+
+def get_sem_power_reference_level(self) -> float:
+    """
+    Queries the reference level for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:POWER:RF:RLEV?")
+    return float(response)
+
+def set_sem_plot_division(self, division_db: float):
+    """
+    Sets the plot vertical division for SEM measurement.
+    """
+    self.instrument.write(f":SENS:POWER:RF:PDIV {division_db}")
+
+def get_sem_plot_division(self) -> float:
+    """
+    Queries the plot vertical division for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:POWER:RF:PDIV?")
+    return float(response)
+
+# --- SEM Detector / Trace Controls ---
+
+def set_sem_detector_function(self, function: str):
+    """
+    Sets the detector function for SEM measurement.
+    Allowed values: 'AVERAGE', 'MINMAX'
+    """
+    valid = {"AVERAGE", "MINMAX"}
+    func_upper = function.upper()
+    if func_upper not in valid:
+        raise ValueError("Invalid detector function.")
+    self.instrument.write(f":SENS:SEMASK:SWE:DET:FUNC {func_upper}")
+
+def get_sem_detector_function(self) -> str:
+    """
+    Queries the detector function for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:SWE:DET:FUNC?")
+    return response.strip().upper()
+
+def set_sem_detector_units(self, units: str):
+    """
+    Sets the detector units for SEM measurement.
+    Allowed values: 'POWER', 'SAMPLE', 'VOLTAGE', 'LOG'
+    """
+    valid = {"POWER", "SAMPLE", "VOLTAGE", "LOG"}
+    units_upper = units.upper()
+    if units_upper not in valid:
+        raise ValueError("Invalid detector units.")
+    self.instrument.write(f":SENS:SEMASK:SWE:DET:UNIT {units_upper}")
+
+def get_sem_detector_units(self) -> str:
+    """
+    Queries the detector units for SEM measurement.
+    """
+    response = self.instrument.query(":SENS:SEMASK:SWE:DET:UNIT?")
+    return response.strip().upper()
+
+def set_sem_trace_type(self, trace_type: str):
+    """
+    Sets the trace type for SEM measurement.
+    Allowed values: 'WRITE', 'MAXHOLD'
+    """
+    valid = {"WRITE", "MAXHOLD"}
+    trace_type_upper = trace_type.upper()
+    if trace_type_upper not in valid:
+        raise ValueError("Invalid trace type.")
+    self.instrument.write(f":TRAC:SEMASK:TYPE {trace_type_upper}")
+
+def get_sem_trace_type(self) -> str:
+    """
+    Queries the trace type for SEM measurement.
+    """
+    response = self.instrument.query(":TRAC:SEMASK:TYPE?")
+    return response.strip().upper()
+
+# --- SEM Reference Controls ---
+
+def set_sem_reference_type(self, ref_type: str):
+    """
+    Sets the reference type for SEM mask construction.
+    Allowed values: 'PSD', 'PEAK', 'DIRECT'
+    """
+    valid_types = {"PSD", "PEAK", "DIRECT"}
+    ref_type_upper = ref_type.upper()
+    if ref_type_upper not in valid_types:
+        raise ValueError(f"Invalid reference type: '{ref_type}'. Must be one of {valid_types}.")
+    self.instrument.write(f":SENS:SEMASK:REF:TYPE {ref_type_upper}")
+
+def get_sem_reference_type(self) -> str:
+    """
+    Queries the reference type for SEM mask construction.
+    Returns:
+    str: The reference type ('PSD', 'PEAK', 'DIRECT').
+    """
+    response = self.instrument.query(":SENS:SEMASK:REF:TYPE?")
+    return response.strip().upper()
+
+def set_sem_reference_bandwidth_mode(self, mode: str):
+    """
+    Sets the reference bandwidth mode for SEM mask.
+    Allowed values: 'AUTO', 'MANUAL'
+    """
+    valid_modes = {"AUTO", "MANUAL"}
+    mode_upper = mode.upper()
+    if mode_upper not in valid_modes:
+        raise ValueError(f"Invalid bandwidth mode: '{mode}'. Must be 'AUTO' or 'MANUAL'.")
+    self.instrument.write(f":SENS:SEMASK:REF:BAND:MODE {mode_upper}")
+
+def get_sem_reference_bandwidth_mode(self) -> str:
+    """
+    Queries the reference bandwidth mode for SEM mask.
+    Returns:
+    str: The bandwidth mode ('AUTO', 'MANUAL').
+    """
+    response = self.instrument.query(":SENS:SEMASK:REF:BAND:MODE?")
+    return response.strip().upper()
+
+def set_sem_reference_bandwidth(self, bandwidth_hz: float):
+    """
+    Sets the reference bandwidth for SEM mask.
+    Parameters:
+    bandwidth_hz (float): Reference bandwidth in Hz.
+    """
+    self.instrument.write(f":SENS:SEMASK:REF:BAND {bandwidth_hz}")
+
+def get_sem_reference_bandwidth(self) -> float:
+    """
+    Queries the reference bandwidth for SEM mask.
+    Returns:
+    float: Reference bandwidth in Hz.
+    """
+    response = self.instrument.query(":SENS:SEMASK:REF:BAND?")
+    return float(response)
+
+def set_sem_reference_level(self, level_dbm: float):
+    """
+    Sets the reference amplitude level for SEM mask.
+    Parameters:
+    level_dbm (float): Reference level in dBm.
+    """
+    self.instrument.write(f":SENS:SEMASK:REF:LEVEL {level_dbm}")
+
+def get_sem_reference_level(self) -> float:
+    """
+    Queries the reference amplitude level for SEM mask.
+    Returns:
+    float: Reference level in dBm.
+    """
+    response = self.instrument.query(":SENS:SEMASK:REF:LEVEL?")
+    return float(response)
+
+# --- SEM Offset Table Controls ---
+
+def set_sem_offset_data(self, offset_data: list):
+    """
+    Loads offset table data for SEM mask.
+    offset_data: list of tuples (enabled, startFreq, stopFreq, startLimit, stopLimit, mode)
+    """
+    flat = []
+    for entry in offset_data:
+        flat.extend(entry)
+    data_str = ",".join(str(x) for x in flat)
+    self.instrument.write(f":SENS:SEMASK:OFFS:DATA {data_str}")
+
+def get_sem_offset_data(self) -> list:
+    """
+    Queries the offset table data for SEM mask.
+    Returns a list of floats.
+    """
+    response = self.instrument.query(":SENS:SEMASK:OFFS:DATA?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- SEM Offset Table Measurement Results ---
+
+def get_sem_carrier_power(self) -> float:
+    """
+    Retrieves the current power used as the reference for the SEM mask.
+    Returns:
+    float: Carrier power in dBm.
+    """
+    response = self.instrument.query(":SENS:SEMASK:CARR:POW?")
+    return float(response)
+
+def is_sem_offset_fail(self) -> bool:
+    """
+    Returns True if the current mask fails, False if passes.
+    """
+    response = self.instrument.query(":SENS:SEMASK:OFFS:FAIL?")
+    return int(response) == 1
+
+def is_sem_offset_index_fail(self, index: int) -> bool:
+    """
+    Returns True if the specified offset fails, False if passes.
+    Parameters:
+    index (int): Offset index (1-16).
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:FAIL?")
+    return int(response) == 1
+
+def is_sem_offset_lower_fail(self, index: int) -> bool:
+    """
+    Returns True if lower range of specified offset fails, False if passes.
+    Parameters:
+    index (int): Offset index (1-16).
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:LOW:FAIL?")
+    return int(response) == 1
+
+def is_sem_offset_upper_fail(self, index: int) -> bool:
+    """
+    Returns True if upper range of specified offset fails, False if passes.
+    Parameters:
+    index (int): Offset index (1-16).
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:UPP:FAIL?")
+    return int(response) == 1
+
+def get_sem_offset_margin(self, index: int) -> float:
+    """
+    Retrieves worst margin (limit - peak) of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Margin value.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:MARG?")
+    return float(response)
+
+def get_sem_offset_margin_lower(self, index: int) -> float:
+    """
+    Retrieves margin (limit - peak) of lower range of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Margin value.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:MARG:LOW?")
+    return float(response)
+
+def get_sem_offset_margin_upper(self, index: int) -> float:
+    """
+    Retrieves margin (limit - peak) of upper range of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Margin value.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:MARG:UPP?")
+    return float(response)
+
+def get_sem_offset_peak_level_lower(self, index: int) -> float:
+    """
+    Retrieves peak level of lower range of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Peak level.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:PEAK:LEV:LOW?")
+    return float(response)
+
+def get_sem_offset_peak_level_upper(self, index: int) -> float:
+    """
+    Retrieves peak level of upper range of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Peak level.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:PEAK:LEV:UPP?")
+    return float(response)
+
+def get_sem_offset_peak_frequency_lower(self, index: int) -> float:
+    """
+    Retrieves frequency at peak of lower range of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Frequency in Hz.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:PEAK:FREQ:LOW?")
+    return float(response)
+
+def get_sem_offset_peak_frequency_upper(self, index: int) -> float:
+    """
+    Retrieves frequency at peak of upper range of specified offset.
+    Parameters:
+    index (int): Offset index (1-16).
+    Returns:
+    float: Frequency in Hz.
+    """
+    response = self.instrument.query(f":SENS:SEMASK:OFFS{index}:PEAK:FREQ:UPP?")
+    return float(response)
+
+# --- SEM Marker Controls ---
+
+def enable_sem_marker(self, enable: bool):
+    """
+    Turns the SEM marker on or off.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":CALC:SEMASK:MARK:STAT {1 if enable else 0}")
+
+def is_sem_marker_enabled(self) -> bool:
+    """
+    Queries if the SEM marker is enabled.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":CALC:SEMASK:MARK:STAT?")
+    return int(response) == 1
+
+def enable_sem_marker_delta(self, enable: bool):
+    """
+    Enables or disables the delta marker for SEM.
+    Parameters:
+    enable (bool): True to enable, False to disable.
+    """
+    self.instrument.write(f":CALC:SEMASK:MARK:DELT {1 if enable else 0}")
+
+def is_sem_marker_delta_enabled(self) -> bool:
+    """
+    Queries if the delta marker is enabled for SEM.
+    Returns:
+    bool: True if enabled, False otherwise.
+    """
+    response = self.instrument.query(":CALC:SEMASK:MARK:DELT?")
+    return int(response) == 1
+
+def set_sem_marker_frequency(self, frequency_hz: float):
+    """
+    Moves the SEM marker to the specified frequency.
+    Parameters:
+    frequency_hz (float): Frequency in Hz.
+    """
+    self.instrument.write(f":CALC:SEMASK:MARK:X {frequency_hz}")
+
+def get_sem_marker_frequency(self) -> float:
+    """
+    Retrieves the SEM marker position frequency in Hz.
+    Returns:
+    float: Frequency in Hz.
+    """
+    response = self.instrument.query(":CALC:SEMASK:MARK:X?")
+    return float(response)
+
+def get_sem_marker_amplitude(self) -> float:
+    """
+    Retrieves the SEM marker position amplitude.
+    Returns:
+    float: Amplitude value.
+    """
+    response = self.instrument.query(":CALC:SEMASK:MARK:Y?")
+    return float(response)
+
+def perform_sem_marker_peak_search(self):
+    """
+    Performs a peak search for the SEM marker.
+    """
+    self.instrument.write(":CALC:SEMASK:MARK:MAX")
+
+def perform_sem_marker_min_search(self):
+    """
+    Performs a minimum search for the SEM marker.
+    """
+    self.instrument.write(":CALC:SEMASK:MARK:MIN")
+
+def move_sem_marker_to_next(self):
+    """
+    Moves the SEM marker to the next graph on the plot.
+    """
+    self.instrument.write(":CALC:SEMASK:MARK:NEXT")
+
+def move_sem_marker_to_previous(self):
+    """
+    Moves the SEM marker to the previous graph on the plot.
+    """
+    self.instrument.write(":CALC:SEMASK:MARK:PREV")
+
+# --- Noise Figure Frequency List Controls ---
+
+def set_noise_figure_frequency_mode(self, mode: str):
+    """
+    Sets how the list of measurement frequencies is determined.
+    Allowed values: 'SWEPT', 'FIXED'
+    """
+    valid_modes = {"SWEPT", "FIXED"}
+    mode_upper = mode.upper()
+    if mode_upper not in valid_modes:
+        raise ValueError(f"Invalid frequency mode: '{mode}'. Must be 'SWEPT' or 'FIXED'.")
+    self.instrument.write(f":SENS:NFIG:FREQ:MODE {mode_upper}")
+
+def get_noise_figure_frequency_mode(self) -> str:
+    """
+    Queries how the list of measurement frequencies is determined.
+    Returns:
+    str: Frequency mode ('SWEPT' or 'FIXED').
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:MODE?")
+    return response.strip().upper()
+
+def set_noise_figure_frequency_start(self, frequency_hz: float):
+    """
+    Sets the measurement list start frequency in swept mode.
+    Parameters:
+    frequency_hz (float): Start frequency in Hz.
+    """
+    self.instrument.write(f":SENS:NFIG:FREQ:STAR {frequency_hz}")
+
+def get_noise_figure_frequency_start(self) -> float:
+    """
+    Queries the current measurement list start frequency in Hz.
+    Returns:
+    float: Start frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:STAR?")
+    return float(response)
+
+def set_noise_figure_frequency_stop(self, frequency_hz: float):
+    """
+    Sets the measurement list stop frequency in swept mode.
+    Parameters:
+    frequency_hz (float): Stop frequency in Hz.
+    """
+    self.instrument.write(f":SENS:NFIG:FREQ:STOP {frequency_hz}")
+
+def get_noise_figure_frequency_stop(self) -> float:
+    """
+    Queries the current measurement list stop frequency in Hz.
+    Returns:
+    float: Stop frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:STOP?")
+    return float(response)
+
+def set_noise_figure_frequency_center(self, frequency_hz: float):
+    """
+    Sets the measurement list center frequency in swept mode.
+    Parameters:
+    frequency_hz (float): Center frequency in Hz.
+    """
+    self.instrument.write(f":SENS:NFIG:FREQ:CENT {frequency_hz}")
+
+def get_noise_figure_frequency_center(self, limit: str = None) -> float:
+    """
+    Queries the current measurement list center frequency in Hz.
+    Optionally pass 'MIN' or 'MAX' to query limits.
+    Parameters:
+    limit (str): 'MIN' or 'MAX' (optional).
+    Returns:
+    float: Center frequency in Hz.
+    """
+    if limit:
+        limit_upper = limit.upper()
+        if limit_upper not in {"MIN", "MAX"}:
+            raise ValueError("limit must be 'MIN' or 'MAX'")
+        response = self.instrument.query(f":SENS:NFIG:FREQ:CENT? {limit_upper}")
+    else:
+        response = self.instrument.query(":SENS:NFIG:FREQ:CENT?")
+    return float(response)
+
+def set_noise_figure_frequency_span(self, span_hz: float):
+    """
+    Sets the measurement list span in swept mode.
+    Parameters:
+    span_hz (float): Span in Hz.
+    """
+    self.instrument.write(f":SENS:NFIG:FREQ:SPAN {span_hz}")
+
+def get_noise_figure_frequency_span(self) -> float:
+    """
+    Queries the measurement list span in Hz.
+    Returns:
+    float: Span in Hz.
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:SPAN?")
+    return float(response)
+
+def set_noise_figure_frequency_points(self, points: int):
+    """
+    Sets the number of measurement points distributed across the span in swept mode.
+    Parameters:
+    points (int): Number of points.
+    """
+    self.instrument.write(f":SENS:NFIG:FREQ:POIN {points}")
+
+def get_noise_figure_frequency_points(self) -> int:
+    """
+    Queries the number of measurement points.
+    Returns:
+    int: Number of points.
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:POIN?")
+    return int(response)
+
+def set_noise_figure_frequency_fixed(self, frequency_hz: float):
+    """
+    Sets the frequency of the measurement in fixed mode.
+    Parameters:
+    frequency_hz (float): Fixed frequency in Hz.
+    """
+    self.instrument.write(f":SENS:NFIG:FREQ:FIX {frequency_hz}")
+
+def get_noise_figure_frequency_fixed(self) -> float:
+    """
+    Queries the frequency of the measurement in fixed mode.
+    Returns:
+    float: Fixed frequency in Hz.
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:FIX?")
+    return float(response)
+
+def get_noise_figure_frequency_list_data(self) -> list:
+    """
+    Gets the list of measurement frequencies in Hz.
+    Returns:
+    list: List of frequencies in Hz.
+    """
+    response = self.instrument.query(":SENS:NFIG:FREQ:LIST:DATA?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- Noise Figure Measurement Controls ---
+
+def set_noise_figure_power_reference_level(self, ref_level_dbm: float):
+    """
+    Sets the reference level for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:POW:RF:RLEV {ref_level_dbm}")
+
+def get_noise_figure_power_reference_level(self) -> float:
+    """
+    Queries the reference level for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:POW:RF:RLEV?")
+    return float(response)
+
+def set_noise_figure_bandwidth_resolution(self, rbw_hz: float):
+    """
+    Sets the RBW for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:BAND:RES {rbw_hz}")
+
+def get_noise_figure_bandwidth_resolution(self) -> float:
+    """
+    Queries the RBW for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:BAND:RES?")
+    return float(response)
+
+def enable_noise_figure_bandwidth_resolution_auto(self, enable: bool):
+    """
+    Enables/disables auto RBW for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:BAND:RES:AUTO {1 if enable else 0}")
+
+def is_noise_figure_bandwidth_resolution_auto_enabled(self) -> bool:
+    """
+    Queries if auto RBW is enabled for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:BAND:RES:AUTO?")
+    return int(response) == 1
+
+def set_noise_figure_bandwidth_video(self, vbw_hz: float):
+    """
+    Sets the VBW for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:BAND:VID {vbw_hz}")
+
+def get_noise_figure_bandwidth_video(self) -> float:
+    """
+    Queries the VBW for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:BAND:VID?")
+    return float(response)
+
+def enable_noise_figure_bandwidth_video_auto(self, enable: bool):
+    """
+    Enables/disables auto VBW for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:BAND:VID:AUTO {1 if enable else 0}")
+
+def is_noise_figure_bandwidth_video_auto_enabled(self) -> bool:
+    """
+    Queries if auto VBW is enabled for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:BAND:VID:AUTO?")
+    return int(response) == 1
+
+def set_noise_figure_meas_span(self, span_hz: float):
+    """
+    Sets the span for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:MEAS:SPAN {span_hz}")
+
+def get_noise_figure_meas_span(self) -> float:
+    """
+    Queries the span for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:MEAS:SPAN?")
+    return float(response)
+
+def enable_noise_figure_averaging(self, enable: bool):
+    """
+    Enables/disables averaging for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:AVER {1 if enable else 0}")
+
+def is_noise_figure_averaging_enabled(self) -> bool:
+    """
+    Queries if averaging is enabled for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:AVER?")
+    return int(response) == 1
+
+def set_noise_figure_average_count(self, count: int):
+    """
+    Sets the number of sweeps to average for noise figure measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:AVER:COUN {count}")
+
+def get_noise_figure_average_count(self) -> int:
+    """
+    Queries the number of sweeps averaged for noise figure measurement.
+    """
+    response = self.instrument.query(":SENS:NFIG:AVER:COUN?")
+    return int(response)
+
+def set_noise_figure_cold_temperature(self, temp_kelvin: float):
+    """
+    Sets the room temperature for noise figure measurement (Kelvin).
+    """
+    self.instrument.write(f":SENS:NFIG:CORR:TCOLD:VAL {temp_kelvin}")
+
+def get_noise_figure_cold_temperature(self) -> float:
+    """
+    Queries the room temperature for noise figure measurement (Kelvin).
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:TCOLD:VAL?")
+    return float(response)
+
+def enable_noise_figure_alert(self, enable: bool):
+    """
+    Enables/disables alert beep on sweep completion.
+    """
+    self.instrument.write(f":SENS:NFIG:ALERT {1 if enable else 0}")
+
+def is_noise_figure_alert_enabled(self) -> bool:
+    """
+    Queries if alert beep is enabled on sweep completion.
+    """
+    response = self.instrument.query(":SENS:NFIG:ALERT?")
+    return int(response) == 1
+
+# --- Noise Figure ENR Table Controls ---
+
+def get_noise_figure_enr_table_count(self) -> int:
+    """
+    Queries the count of ENR tables.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:TABL:COUN?")
+    return int(response)
+
+def create_noise_figure_enr_table(self):
+    """
+    Creates a new ENR table.
+    """
+    self.instrument.write(":SENS:NFIG:CORR:ENR:TABL:NEW")
+
+def load_noise_figure_enr_table(self, table_id: int):
+    """
+    Loads an ENR table by ID.
+    """
+    self.instrument.write(f":SENS:NFIG:CORR:ENR:TABL:LOAD {table_id}")
+
+def get_noise_figure_enr_table_id(self) -> int:
+    """
+    Queries the ID of the currently loaded ENR table.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:TABL?")
+    return int(response)
+
+def set_noise_figure_enr_table_title(self, title: str):
+    """
+    Sets the title of the currently loaded ENR table.
+    """
+    self.instrument.write(f":SENS:NFIG:CORR:ENR:TABL:TITL {title}")
+
+def get_noise_figure_enr_table_title(self) -> str:
+    """
+    Queries the title of the loaded ENR table.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:TABL:TITL?")
+    return response.strip()
+
+def get_noise_figure_enr_table_points(self) -> int:
+    """
+    Queries the number of points in the loaded ENR table.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:TABL:POIN?")
+    return int(response)
+
+def set_noise_figure_enr_table_data(self, data: list):
+    """
+    Sets the (frequency, enr) points in the loaded ENR table.
+    data: list of tuples (frequency, enr)
+    """
+    flat = []
+    for entry in data:
+        flat.extend(entry)
+    data_str = ",".join(str(x) for x in flat)
+    self.instrument.write(f":SENS:NFIG:CORR:ENR:TABL:DATA {data_str}")
+
+def get_noise_figure_enr_table_data(self) -> list:
+    """
+    Gets the list of points in the loaded ENR table.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:TABL:DATA?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+def set_noise_figure_enr_calibration_table(self, table_id: int):
+    """
+    Specifies which ENR table will be used for calibration.
+    """
+    self.instrument.write(f":SENS:NFIG:CORR:ENR:CAL:TABL {table_id}")
+
+def get_noise_figure_enr_calibration_table(self) -> int:
+    """
+    Queries the calibration ENR table.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:CAL:TABL?")
+    return int(response)
+
+def set_noise_figure_enr_measurement_table(self, table_id: int):
+    """
+    Specifies which ENR table will be used for measurement.
+    """
+    self.instrument.write(f":SENS:NFIG:CORR:ENR:MEAS:TABL {table_id}")
+
+def get_noise_figure_enr_measurement_table(self) -> int:
+    """
+    Queries the measurement ENR table.
+    """
+    response = self.instrument.query(":SENS:NFIG:CORR:ENR:MEAS:TABL?")
+    return int(response)
+
+# --- Noise Figure Calibration and Measurement Controls ---
+
+def get_noise_figure_calibration_state(self) -> str:
+    """
+    Returns the current calibration state: 'UNCAL', 'SEMICAL', or 'CAL'.
+    """
+    response = self.instrument.query(":SENS:NFIG:CAL:STAT?")
+    return response.strip().upper()
+
+def initiate_noise_figure_calibration(self):
+    """
+    Begins the calibration process.
+    """
+    self.instrument.write(":SENS:NFIG:CAL:INIT")
+
+def initiate_noise_figure_measurement(self):
+    """
+    Begins the measurement process.
+    """
+    self.instrument.write(":SENS:NFIG:MEAS:INIT")
+
+def continue_noise_figure(self):
+    """
+    Continues calibration or measurement after the next action.
+    """
+    self.instrument.write(":SENS:NFIG:CONT")
+
+def abort_noise_figure(self):
+    """
+    Stops any calibration or measurement in progress.
+    """
+    self.instrument.write(":SENS:NFIG:ABOR")
+
+def get_noise_figure_next_action(self) -> str:
+    """
+    Queries the next action user needs to take before continuing measurement.
+    """
+    response = self.instrument.query(":STAT:NFIG:NEXT?")
+    return response.strip()
+
+def get_noise_figure_progress(self) -> float:
+    """
+    Queries the percentage progress of the current sweep.
+    """
+    response = self.instrument.query(":STAT:NFIG:PROG?")
+    return float(response)
+
+# --- Noise Figure Fetch Results ---
+
+def fetch_noise_figure(self) -> list:
+    """
+    Fetches the list of noise figure measurements for each point in the frequency list.
+    """
+    response = self.instrument.query(":FETC:NFIG?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+def fetch_noise_figure_gain(self) -> list:
+    """
+    Fetches the list of gain measurements for each point in the frequency list.
+    """
+    response = self.instrument.query(":FETC:NFIG:GAIN?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- BLE Measurement Controls ---
+
+def set_ble_measurement(self, meas_type: str):
+    """
+    Sets the active Bluetooth measurement type.
+    Allowed values: 'DEMOD', 'IBE'
+    """
+    valid_types = {"DEMOD", "IBE"}
+    meas_type_upper = meas_type.upper()
+    if meas_type_upper not in valid_types:
+        raise ValueError(f"Invalid BLE measurement type: '{meas_type}'. Must be 'DEMOD' or 'IBE'.")
+    self.instrument.write(f":SENS:BLE:MEAS {meas_type_upper}")
+
+def get_ble_measurement(self) -> str:
+    """
+    Queries the active Bluetooth measurement type.
+    """
+    response = self.instrument.query(":SENS:BLE:MEAS?")
+    return response.strip().upper()
+
+def set_ble_center_frequency(self, frequency_hz: float):
+    """
+    Sets the center frequency for BLE measurement.
+    """
+    self.instrument.write(f":SENS:BLE:FREQ:CENT {frequency_hz}")
+
+def get_ble_center_frequency(self) -> float:
+    """
+    Queries the center frequency for BLE measurement.
+    """
+    response = self.instrument.query(":SENS:BLE:FREQ:CENT?")
+    return float(response)
+
+def set_ble_center_frequency_step(self, step_hz: float):
+    """
+    Sets the center frequency step size for BLE measurement.
+    """
+    self.instrument.write(f":SENS:BLE:FREQ:CENT:STEP {step_hz}")
+
+def get_ble_center_frequency_step(self) -> float:
+    """
+    Queries the center frequency step size for BLE measurement.
+    """
+    response = self.instrument.query(":SENS:BLE:FREQ:CENT:STEP?")
+    return float(response)
+
+def set_ble_if_bandwidth(self, bandwidth_hz: float):
+    """
+    Sets the IF bandwidth for BLE measurement.
+    """
+    self.instrument.write(f":SENS:BLE:IFBW {bandwidth_hz}")
+
+def get_ble_if_bandwidth(self) -> float:
+    """
+    Queries the IF bandwidth for BLE measurement.
+    """
+    response = self.instrument.query(":SENS:BLE:IFBW?")
+    return float(response)
+
+def set_ble_channel_index(self, index: int):
+    """
+    Sets the BLE channel index.
+    """
+    self.instrument.write(f":SENS:BLE:CHAN:INDEX {index}")
+
+def get_ble_channel_index(self) -> int:
+    """
+    Queries the BLE channel index.
+    """
+    response = self.instrument.query(":SENS:BLE:CHAN:INDEX?")
+    return int(response)
+
+def enable_ble_channel_auto(self, enable: bool):
+    """
+    Enables/disables auto channel index for BLE measurement.
+    """
+    self.instrument.write(f":SENS:BLE:CHAN:AUTO {1 if enable else 0}")
+
+def is_ble_channel_auto_enabled(self) -> bool:
+    """
+    Queries if auto channel index is enabled for BLE measurement.
+    """
+    response = self.instrument.query(":SENS:BLE:CHAN:AUTO?")
+    return int(response) == 1
+
+def set_ble_power_reference_level(self, ref_level_dbm: float):
+    """
+    Sets the reference level for BLE measurement.
+    """
+    self.instrument.write(f":SENS:BLE:POW:RF:RLEV {ref_level_dbm}")
+
+def get_ble_power_reference_level(self) -> float:
+    """
+    Queries the reference level for BLE measurement.
+    """
+    response = self.instrument.query(":SENS:BLE:POW:RF:RLEV?")
+    return float(response)
+
+# --- BLE Trigger Controls ---
+
+def set_ble_trigger_search_length(self, time_s: float):
+    """
+    Sets the measurement capture length for BLE trigger.
+    """
+    self.instrument.write(f":TRIG:BLE:SLEN {time_s}")
+
+def get_ble_trigger_search_length(self) -> float:
+    """
+    Queries the measurement capture length for BLE trigger.
+    """
+    response = self.instrument.query(":TRIG:BLE:SLEN?")
+    return float(response)
+
+# --- BLE Fetch Results ---
+
+def fetch_ble_metrics(self, metrics: list) -> list:
+    """
+    Fetches BLE demodulation metrics.
+    metrics: list of metric indices.
+    Returns: list of metric values in the order requested.
+    """
+    metrics_str = ",".join(str(m) for m in metrics)
+    response = self.instrument.query(f":FETC:BLE {metrics_str}")
+    return [float(val) for val in response.split(',') if val.strip()]
+
+# --- WLAN Measurement Controls ---
+
+def set_wlan_standard(self, standard: str):
+    """
+    Sets the WLAN modulation standard.
+    Allowed values: 'BG', 'AG', 'N20', 'N40', 'AC20', 'AC40', 'AH'
+    """
+    valid_standards = {"BG", "AG", "N20", "N40", "AC20", "AC40", "AH"}
+    standard_upper = standard.upper()
+    if standard_upper not in valid_standards:
+        raise ValueError(f"Invalid WLAN standard: '{standard}'. Must be one of {valid_standards}.")
+    self.instrument.write(f":SENS:WLAN:STAN {standard_upper}")
+
+def get_wlan_standard(self) -> str:
+    """
+    Queries the WLAN modulation standard.
+    """
+    response = self.instrument.query(":SENS:WLAN:STAN?")
+    return response.strip().upper()
+
+def set_wlan_symbols_dsss(self, count: int):
+    """
+    Sets the number of DSSS symbols to demodulate/decode.
+    """
+    self.instrument.write(f":SENS:WLAN:SYMB:DSSS {count}")
+
+def get_wlan_symbols_dsss(self) -> int:
+    """
+    Queries the number of DSSS symbols to demodulate/decode.
+    """
+    response = self.instrument.query(":SENS:WLAN:SYMB:DSSS?")
+    return int(response)
+
+def enable_wlan_psdu_decode(self, enable: bool):
+    """
+    Enables/disables OFDM PSDU decoding for BCC encoded waveforms.
+    """
+    self.instrument.write(f":SENS:WLAN:PSDU:DEC {1 if enable else 0}")
+
+def is_wlan_psdu_decode_enabled(self) -> bool:
+    """
+    Queries if OFDM PSDU decoding is enabled.
+    """
+    response = self.instrument.query(":SENS:WLAN:PSDU:DEC?")
+    return int(response) == 1
+
+def set_wlan_symbol_offset(self, offset_percent: float):
+    """
+    Sets the GI timing offset between -100 and 0 (%).
+    """
+    self.instrument.write(f":SENS:WLAN:SYMB:OFFS {offset_percent}")
+
+def get_wlan_symbol_offset(self) -> float:
+    """
+    Queries the GI timing offset.
+    """
+    response = self.instrument.query(":SENS:WLAN:SYMB:OFFS?")
+    return float(response)
+
+def set_wlan_center_frequency(self, frequency_hz: float):
+    """
+    Sets the center frequency for WLAN measurement.
+    """
+    self.instrument.write(f":SENS:WLAN:FREQ:CENT {frequency_hz}")
+
+def get_wlan_center_frequency(self) -> float:
+    """
+    Queries the center frequency for WLAN measurement.
+    """
+    response = self.instrument.query(":SENS:WLAN:FREQ:CENT?")
+    return float(response)
+
+def set_wlan_center_frequency_step(self, step_hz: float):
+    """
+    Sets the center frequency step size for WLAN measurement.
+    """
+    self.instrument.write(f":SENS:WLAN:FREQ:CENT:STEP {step_hz}")
+
+def get_wlan_center_frequency_step(self) -> float:
+    """
+    Queries the center frequency step size for WLAN measurement.
+    """
+    response = self.instrument.query(":SENS:WLAN:FREQ:CENT:STEP?")
+    return float(response)
+
+def set_wlan_if_bandwidth(self, bandwidth_hz: float):
+    """
+    Sets the IF bandwidth for WLAN measurement.
+    """
+    self.instrument.write(f":SENS:WLAN:IFBW {bandwidth_hz}")
+
+def get_wlan_if_bandwidth(self) -> float:
+    """
+    Queries the IF bandwidth for WLAN measurement.
+    """
+    response = self.instrument.query(":SENS:WLAN:IFBW?")
+    return float(response)
+
+def set_wlan_power_reference_level(self, ref_level_dbm: float):
+    """
+    Sets the reference level for WLAN measurement.
+    """
+    self.instrument.write(f":SENS:WLAN:POW:RF:RLEV {ref_level_dbm}")
+
+def get_wlan_power_reference_level(self) -> float:
+    """
+    Queries the reference level for WLAN measurement.
+    """
+    response = self.instrument.query(":SENS:WLAN:POW:RF:RLEV?")
+    return float(response)
+
+# --- WLAN Trigger Controls ---
+
+def set_wlan_trigger_search_length(self, time_s: float):
+    """
+    Sets the measurement capture length for WLAN trigger.
+    """
+    self.instrument.write(f":TRIG:WLAN:SLEN {time_s}")
+
+def get_wlan_trigger_search_length(self) -> float:
+    """
+    Queries the measurement capture length for WLAN trigger.
+    """
+    response = self.instrument.query(":TRIG:WLAN:SLEN?")
+    return float(response)
+
+def set_wlan_trigger_if_threshold(self, threshold_db: float):
+    """
+    Sets the OFDM trigger threshold in dB.
+    """
+    self.instrument.write(f":TRIG:WLAN:IF:THR {threshold_db}")
+
+def get_wlan_trigger_if_threshold(self) -> float:
+    """
+    Queries the OFDM trigger threshold in dB.
+    """
+    response = self.instrument.query(":TRIG:WLAN:IF:THR?")
+    return float(response)
+
+def set_wlan_trigger_if_level(self, level_dbm: float):
+    """
+    Sets the DSSS video trigger level in dBm.
+    """
+    self.instrument.write(f":TRIG:WLAN:IF:LEV {level_dbm}")
+
+def get_wlan_trigger_if_level(self) -> float:
+    """
+    Queries the DSSS video trigger level in dBm.
+    """
+    response = self.instrument.query(":TRIG:WLAN:IF:LEV?")
+    return float(response)
+
+# --- WLAN Fetch Results ---
+
+def fetch_wlan_metrics(self, metrics: list) -> list:
+    """
+    Fetches WLAN demodulation metrics.
+    metrics: list of metric indices.
+    Returns: list of metric values in the order requested.
+    """
+    metrics_str = ",".join(str(m) for m in metrics)
+    response = self.instrument.query(f":FETC:WLAN {metrics_str}")
+    return [val.strip() for val in response.split(',') if val.strip()]
+
+# --- LTE Measurement Controls ---
+
+def set_lte_center_frequency(self, frequency_hz: float):
+    """
+    Sets the center frequency for LTE measurement.
+    """
+    self.instrument.write(f":SENS:LTE:FREQ:CENT {frequency_hz}")
+
+def get_lte_center_frequency(self) -> float:
+    """
+    Queries the center frequency for LTE measurement.
+    """
+    response = self.instrument.query(":SENS:LTE:FREQ:CENT?")
+    return float(response)
+
+def set_lte_center_frequency_step(self, step_hz: float):
+    """
+    Sets the center frequency step for LTE measurement.
+    """
+    self.instrument.write(f":SENS:LTE:FREQ:CENT:STEP {step_hz}")
+
+def get_lte_center_frequency_step(self) -> float:
+    """
+    Queries the center frequency step for LTE measurement.
+    """
+    response = self.instrument.query(":SENS:LTE:FREQ:CENT:STEP?")
+    return float(response)
+
+def set_lte_correlation_threshold(self, threshold: float):
+    """
+    Sets the cell search correlation threshold (0-1).
+    """
+    if not (0 <= threshold <= 1):
+        raise ValueError("Threshold must be between 0 and 1.")
+    self.instrument.write(f":SENS:LTE:CORR:THR {threshold}")
+
+def get_lte_correlation_threshold(self) -> float:
+    """
+    Queries the cell search correlation threshold.
+    """
+    response = self.instrument.query(":SENS:LTE:CORR:THR?")
+    return float(response)
+
+def set_lte_power_reference_level(self, ref_level_dbm: float):
+    """
+    Sets the reference level for LTE measurement.
+    """
+    self.instrument.write(f":SENS:LTE:POW:RF:RLEV {ref_level_dbm}")
+
+def get_lte_power_reference_level(self) -> float:
+    """
+    Queries the reference level for LTE measurement.
+    """
+    response = self.instrument.query(":SENS:LTE:POW:RF:RLEV?")
+    return float(response)
+
+def enable_lte_measurement_include(self, enable: bool):
+    """
+    Enables/disables inclusion of single frequency measurements in cell search results.
+    """
+    self.instrument.write(f":SENS:LTE:MEAS:INCL {1 if enable else 0}")
+
+def is_lte_measurement_include_enabled(self) -> bool:
+    """
+    Queries if inclusion of single frequency measurements in cell search results is enabled.
+    """
+    response = self.instrument.query(":SENS:LTE:MEAS:INCL?")
+    return int(response) == 1
+
+def set_lte_scan_type(self, scan_type: str):
+    """
+    Sets the LTE scan type. Allowed values: 'SINGLE', 'CONTINUOUS'
+    """
+    valid_types = {"SINGLE", "CONTINUOUS"}
+    scan_type_upper = scan_type.upper()
+    if scan_type_upper not in valid_types:
+        raise ValueError(f"Invalid scan type: '{scan_type}'. Must be 'SINGLE' or 'CONTINUOUS'.")
+    self.instrument.write(f":SENS:LTE:SCAN:TYPE {scan_type_upper}")
+
+def get_lte_scan_type(self) -> str:
+    """
+    Queries the LTE scan type.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:TYPE?")
+    return response.strip().upper()
+
+def set_lte_scan_results_sort(self, sort_type: str):
+    """
+    Sets how cell search result entries are sorted. Allowed values: 'RSSI', 'FREQUENCY', 'TIME'
+    """
+    valid_types = {"RSSI", "FREQUENCY", "TIME"}
+    sort_type_upper = sort_type.upper()
+    if sort_type_upper not in valid_types:
+        raise ValueError(f"Invalid sort type: '{sort_type}'. Must be 'RSSI', 'FREQUENCY', or 'TIME'.")
+    self.instrument.write(f":SENS:LTE:SCAN:RES:SORT {sort_type_upper}")
+
+def get_lte_scan_results_sort(self) -> str:
+    """
+    Queries how cell search result entries are sorted.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:RES:SORT?")
+    return response.strip().upper()
+
+def set_lte_scan_results_keep(self, keep_type: str):
+    """
+    Sets which measurement is displayed for grouped results. Allowed values: 'LAST', 'PEAK'
+    """
+    valid_types = {"LAST", "PEAK"}
+    keep_type_upper = keep_type.upper()
+    if keep_type_upper not in valid_types:
+        raise ValueError(f"Invalid keep type: '{keep_type}'. Must be 'LAST' or 'PEAK'.")
+    self.instrument.write(f":SENS:LTE:SCAN:RES:KEEP {keep_type_upper}")
+
+def get_lte_scan_results_keep(self) -> str:
+    """
+    Queries which measurement is displayed for grouped results.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:RES:KEEP?")
+    return response.strip().upper()
+
+def enable_lte_scan_results_group(self, enable: bool):
+    """
+    Enables/disables cell search result grouping.
+    """
+    self.instrument.write(f":SENS:LTE:SCAN:RES:GROUP {1 if enable else 0}")
+
+def is_lte_scan_results_group_enabled(self) -> bool:
+    """
+    Queries if cell search result grouping is enabled.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:RES:GROUP?")
+    return int(response) == 1
+
+def set_lte_scan_results_max(self, max_entries: int):
+    """
+    Sets the maximum number of entries visible in the cell search results window.
+    """
+    self.instrument.write(f":SENS:LTE:SCAN:RES:MAX {max_entries}")
+
+def get_lte_scan_results_max(self) -> int:
+    """
+    Queries the maximum number of entries visible in the cell search results window.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:RES:MAX?")
+    return int(response)
+
+def start_lte_scan(self) -> bool:
+    """
+    Starts the LTE scan. Returns True once started.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:STAR?")
+    return int(response) == 1
+
+def is_lte_scan_active(self) -> bool:
+    """
+    Returns True if the LTE scan is active.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:ACT?")
+    return int(response) == 1
+
+def stop_lte_scan(self) -> bool:
+    """
+    Stops the LTE scan. Returns True when complete.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:STOP?")
+    return int(response) == 1
+
+def get_lte_scan_results_count(self) -> int:
+    """
+    Returns the number of rows in the cell scan results table.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:RES:COUN?")
+    return int(response)
+
+def set_lte_scan_results_index(self, index: int):
+    """
+    Sets the index into the cell scan results table to be used with the FETCH command.
+    """
+    self.instrument.write(f":SENS:LTE:SCAN:RES:INDEX {index}")
+
+def get_lte_scan_results_index(self) -> int:
+    """
+    Queries the index into the cell scan results table.
+    """
+    response = self.instrument.query(":SENS:LTE:SCAN:RES:INDEX?")
+    return int(response)
+
+def clear_lte_scan_results(self):
+    """
+    Clears the cell search results table.
+    """
+    self.instrument.write(":SENS:LTE:SCAN:RES:CLE")
+
+# --- LTE Fetch Results ---
+
+def fetch_lte_metrics(self, metrics: list) -> list:
+    """
+    Fetches LTE measurement values.
+    metrics: list of metric indices.
+    Returns: list of metric values in the order requested.
+    """
+    metrics_str = ",".join(str(m) for m in metrics)
+    response = self.instrument.query(f":FETC:LTE? {metrics_str}")
+    return [val.strip() for val in response.split(',') if val.strip()]
+
+# --- VCO Characterization Controls ---
+
+def get_vco_sweep_source(self) -> str:
+    """
+    Queries the sweep source for VCO characterization.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:SOUR?")
+    return response.strip().upper()
+
+def set_vco_sweep_start(self, voltage: float):
+    """
+    Sets the starting voltage for the sweep.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:STAR {voltage}")
+
+def get_vco_sweep_start(self) -> float:
+    """
+    Queries the starting voltage for the sweep.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:STAR?")
+    return float(response)
+
+def set_vco_sweep_stop(self, voltage: float):
+    """
+    Sets the stopping voltage for the sweep.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:STOP {voltage}")
+
+def get_vco_sweep_stop(self) -> float:
+    """
+    Queries the stopping voltage for the sweep.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:STOP?")
+    return float(response)
+
+def set_vco_sweep_points(self, points: int):
+    """
+    Sets the number of points to measure in the sweep.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:POIN {points}")
+
+def get_vco_sweep_points(self) -> int:
+    """
+    Queries the number of points to measure in the sweep.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:POIN?")
+    return int(response)
+
+def set_vco_sweep_power_reference_level(self, ref_level_dbm: float):
+    """
+    Sets the reference level for VCO sweep.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:RF:RLEV {ref_level_dbm}")
+
+def get_vco_sweep_power_reference_level(self) -> float:
+    """
+    Queries the reference level for VCO sweep.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:RF:RLEV?")
+    return float(response)
+
+def enable_vco_sweep_band_auto(self, enable: bool):
+    """
+    Enables/disables automatic frequency band search range.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:FREQ:BAND:AUTO {1 if enable else 0}")
+
+def is_vco_sweep_band_auto_enabled(self) -> bool:
+    """
+    Queries if automatic frequency band search range is enabled.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:FREQ:BAND:AUTO?")
+    return int(response) == 1
+
+def set_vco_sweep_band_start(self, frequency_hz: float):
+    """
+    Sets the start frequency of the search range.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:FREQ:BAND:STAR {frequency_hz}")
+
+def get_vco_sweep_band_start(self) -> float:
+    """
+    Queries the start frequency of the search range.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:FREQ:BAND:STAR?")
+    return float(response)
+
+def set_vco_sweep_band_stop(self, frequency_hz: float):
+    """
+    Sets the stop frequency of the search range.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:FREQ:BAND:STOP {frequency_hz}")
+
+def get_vco_sweep_band_stop(self) -> float:
+    """
+    Queries the stop frequency of the search range.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:FREQ:BAND:STOP?")
+    return float(response)
+
+def set_vco_sweep_fcounter_resolution(self, resolution_hz: float):
+    """
+    Sets the frequency counter resolution for VCO sweep.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:FCO:RES {resolution_hz}")
+
+def get_vco_sweep_fcounter_resolution(self) -> float:
+    """
+    Queries the frequency counter resolution for VCO sweep.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:FCO:RES?")
+    return float(response)
+
+def set_vco_sweep_chpower_width(self, width_hz: float):
+    """
+    Sets the channel power width for VCO sweep.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:CHP:WID {width_hz}")
+
+def get_vco_sweep_chpower_width(self) -> float:
+    """
+    Queries the channel power width for VCO sweep.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:CHP:WID?")
+    return float(response)
+
+def set_vco_sweep_delay(self, delay_s: float):
+    """
+    Sets the dwell time for each measurement.
+    """
+    self.instrument.write(f":SENS:VCO:SWE:DEL {delay_s}")
+
+def get_vco_sweep_delay(self) -> float:
+    """
+    Queries the dwell time for each measurement.
+    """
+    response = self.instrument.query(":SENS:VCO:SWE:DEL?")
+    return float(response)
+
+# --- VCO DC Source Controls ---
+
+def enable_vco_dc_power(self, enable: bool):
+    """
+    Enables/disables overall DC power.
+    """
+    self.instrument.write(f":SENS:VCO:SOUR:VOLT:STAT {1 if enable else 0}")
+
+def is_vco_dc_power_enabled(self) -> bool:
+    """
+    Queries if overall DC power is enabled.
+    """
+    response = self.instrument.query(":SENS:VCO:SOUR:VOLT:STAT?")
+    return int(response) == 1
+
+def set_vco_dc_fixed_level(self, voltage: float):
+    """
+    Sets the output level of the fixed power source in volts.
+    """
+    self.instrument.write(f":SENS:VCO:SOUR:VOLT:FIX {voltage}")
+
+def get_vco_dc_fixed_level(self) -> float:
+    """
+    Queries the output level of the fixed power source in volts.
+    """
+    response = self.instrument.query(":SENS:VCO:SOUR:VOLT:FIX?")
+    return float(response)
+
+def set_vco_dc_vtune_limit_low(self, voltage: float):
+    """
+    Sets the minimum output level of the V Tune port in volts.
+    """
+    self.instrument.write(f":SENS:VCO:SOUR:VOLT:VTUN:LIM:LOW {voltage}")
+
+def get_vco_dc_vtune_limit_low(self) -> float:
+    """
+    Queries the minimum output level of the V Tune port in volts.
+    """
+    response = self.instrument.query(":SENS:VCO:SOUR:VOLT:VTUN:LIM:LOW?")
+    return float(response)
+
+def set_vco_dc_vtune_limit_high(self, voltage: float):
+    """
+    Sets the maximum output level of the V Tune port in volts.
+    """
+    self.instrument.write(f":SENS:VCO:SOUR:VOLT:VTUN:LIM:HIGH {voltage}")
+
+def get_vco_dc_vtune_limit_high(self) -> float:
+    """
+    Queries the maximum output level of the V Tune port in volts.
+    """
+    response = self.instrument.query(":SENS:VCO:SOUR:VOLT:VTUN:LIM:HIGH?")
+    return float(response)
+
+def set_vco_dc_vsupply_limit_low(self, voltage: float):
+    """
+    Sets the minimum output level of the V Supply port in volts.
+    """
+    self.instrument.write(f":SENS:VCO:SOUR:VOLT:VSUP:LIM:LOW {voltage}")
+
+def get_vco_dc_vsupply_limit_low(self) -> float:
+    """
+    Queries the minimum output level of the V Supply port in volts.
+    """
+    response = self.instrument.query(":SENS:VCO:SOUR:VOLT:VSUP:LIM:LOW?")
+    return float(response)
+
+def set_vco_dc_vsupply_limit_high(self, voltage: float):
+    """
+    Sets the maximum output level of the V Supply port in volts.
+    """
+    self.instrument.write(f":SENS:VCO:SOUR:VOLT:VSUP:LIM:HIGH {voltage}")
+
+def get_vco_dc_vsupply_limit_high(self) -> float:
+    """
+    Queries the maximum output level of the V Supply port in volts.
+    """
+    response = self.instrument.query(":SENS:VCO:SOUR:VOLT:VSUP:LIM:HIGH?")
+    return float(response)
+
+# --- VCO Fetch Results ---
+
+def fetch_vco_frequency(self) -> list:
+    """
+    Fetches the frequency vs. voltage measurement data.
+    """
+    response = self.instrument.query(":FETC:VCO:FREQ?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+def fetch_vco_sensitivity(self) -> list:
+    """
+    Fetches the frequency delta vs. voltage delta measurement data.
+    """
+    response = self.instrument.query(":FETC:VCO:SENS?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+def fetch_vco_power(self) -> list:
+    """
+    Fetches the amplitude vs. voltage measurement data.
+    """
+    response = self.instrument.query(":FETC:VCO:POW?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+def fetch_vco_current(self) -> list:
+    """
+    Fetches the current vs. voltage measurement data.
+    """
+    response = self.instrument.query(":FETC:VCO:CURR?")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+def fetch_vco_harmonics(self, harmonic_index: int) -> list:
+    """
+    Fetches the harmonic amplitude vs. voltage measurement data.
+    harmonic_index: 1-6
+    """
+    response = self.instrument.query(f":FETC:VCO:HARM? {harmonic_index}")
+    return [float(x) for x in response.split(',') if x.strip()]
+
+# --- Audio Player Controls ---
+
+def start_audio_player(self):
+    """
+    Opens the audio player.
+    """
+    self.instrument.write(":SENS:AUD:STAR")
+
+def stop_audio_player(self):
+    """
+    Closes the audio player.
+    """
+    self.instrument.write(":SENS:AUD:STOP")
+
+def set_audio_player_center_frequency(self, frequency_hz: float):
+    """
+    Sets the center frequency of the audio player.
+    """
+    self.instrument.write(f":SENS:AUD:FREQ:CENT {frequency_hz}")
+
+def get_audio_player_center_frequency(self) -> float:
+    """
+    Queries the center frequency of the audio player.
+    """
+    response = self.instrument.query(":SENS:AUD:FREQ:CENT?")
+    return float(response)
+
+def set_audio_player_modulation(self, modulation: str):
+    """
+    Sets the audio demodulation type. Allowed values: 'AM', 'FM', 'LSB', 'USB', 'CW'
+    """
+    valid_mods = {"AM", "FM", "LSB", "USB", "CW"}
+    modulation_upper = modulation.upper()
+    if modulation_upper not in valid_mods:
+        raise ValueError(f"Invalid modulation: '{modulation}'. Must be one of {valid_mods}.")
+    self.instrument.write(f":SENS:AUD:MOD {modulation_upper}")
+
+def get_audio_player_modulation(self) -> str:
+    """
+    Queries the audio demodulation type.
+    """
+    response = self.instrument.query(":SENS:AUD:MOD?")
+    return response.strip().upper()
+
+def set_audio_player_if_bandwidth(self, bandwidth_hz: float):
+    """
+    Sets the IF bandwidth of the audio player.
+    """
+    self.instrument.write(f":SENS:AUD:BAND:IF {bandwidth_hz}")
+
+def get_audio_player_if_bandwidth(self) -> float:
+    """
+    Queries the IF bandwidth of the audio player.
+    """
+    response = self.instrument.query(":SENS:AUD:BAND:IF?")
+    return float(response)
+
+def set_audio_player_low_pass(self, cutoff_hz: float):
+    """
+    Sets the audio low pass filter.
+    """
+    self.instrument.write(f":SENS:AUD:BAND:LOW {cutoff_hz}")
+
+def get_audio_player_low_pass(self) -> float:
+    """
+    Queries the audio low pass filter.
+    """
+    response = self.instrument.query(":SENS:AUD:BAND:LOW?")
+    return float(response)
+
+def set_audio_player_high_pass(self, cutoff_hz: float):
+    """
+    Sets the audio high pass filter.
+    """
+    self.instrument.write(f":SENS:AUD:BAND:HIGH {cutoff_hz}")
+
+def get_audio_player_high_pass(self) -> float:
+    """
+    Queries the audio high pass filter.
+    """
+    response = self.instrument.query(":SENS:AUD:BAND:HIGH?")
+    return float(response)
+
+def set_audio_player_fm_deemphasis(self, deemphasis_us: float):
+    """
+    Sets the FM deemphasis in microseconds.
+    """
+    self.instrument.write(f":SENS:AUD:FM:DEEM {deemphasis_us}")
+
+def get_audio_player_fm_deemphasis(self) -> float:
+    """
+    Queries the IF bandwidth of the audio player.
+    """
+    response = self.instrument.query(":SENS:AUD:BAND:IF?")
+    return float(response)
+
+def set_audio_player_low_pass(self, cutoff_hz: float):
+    """
+    Sets the audio low pass filter.
+    """
+    self.instrument.write(f":SENS:AUD:BAND:LOW {cutoff_hz}")
+
+def get_audio_player_low_pass(self) -> float:
+    """
+    Queries the audio low pass filter.
+    """
+    response = self.instrument.query(":SENS:AUD:BAND:LOW?")
+    return float(response)
+
+def set_audio_player_high_pass(self, cutoff_hz: float):
+    """
+    Sets the audio high pass filter.
+    """
+    self.instrument.write(f":SENS:AUD:BAND:HIGH {cutoff_hz}")
+
+def get_audio_player_high_pass(self) -> float:
+    """
+    Queries the audio high pass filter.
+    """
+    response = self.instrument.query(":SENS:AUD:BAND:HIGH?")
+    return float(response)
+
+def set_audio_player_fm_deemphasis(self, deemphasis_us: float):
+    """
+    Sets the FM deemphasis in microseconds.
+    """
+    self.instrument.write(f":SENS:AUD:FM:DEEM {deemphasis_us}")
+
+def get_audio_player_fm_deemphasis(self) -> float:
+    """
+    Queries the FM deemphasis in microseconds.
+    """
+    response = self.instrument.query(":SENS:AUD:FM:DEEM?")
+    return float(response)
