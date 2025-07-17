@@ -5,9 +5,9 @@ from Instruments.SCPICommandTree import mandatory
 import pyvisa
 class Oscilloscope(mandatory.Mandatory):
 
-    def __init__(self, instru):
+    def __init__(self, instru,name = "Oscilloscope"):
         
-        self.name = "Oscilloscope"
+        self.name = name
         self.instrument = instru
         
     #Mandatory Commands
