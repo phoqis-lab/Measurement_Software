@@ -4,7 +4,7 @@ from Instruments.oscilloscope_rigol import Oscilloscope
 from Instruments.spectrum_analyzer_signal_hound import SpectrumAnalyzer
 from EInstrument import EInstrument
 
-class Helper:
+class NetworkManager:
     def __init__(self):
         pass
 
@@ -104,19 +104,3 @@ class Helper:
         #cleans up all instrument objects from memory
         del instruments
             
-    def create_instrument(self, name, instrument):
-        """Creates an instrument object based on the name and instrument type."""
-        if name.lower() == "oscilloscope":
-            
-            return Oscilloscope(instrument)
-        else:
-            raise ValueError(f"Instrument {name} is not recognized.")
-    
-    def turn_off_instruments(self, instrument_list = []):
-       """Turns off all instruments in the list."""
-       for instrument in instrument_list:
-           instrument.turn_off()
-
-    def disconnect_instruments(self, instrument_list = []):
-        """Disconnects and then deletes instruments in list."""
-        pass

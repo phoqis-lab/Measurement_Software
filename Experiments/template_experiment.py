@@ -1,13 +1,14 @@
 """READ ME: All experiments must start with a few sentence readme giving a summation of what the experiment is."""
-from Instruments.helper import Helper
+from Instruments.network_manager import NetworkManager
 from Instruments.oscilloscope_rigol import Oscilloscope
 from Instruments.oscilloscope_helper import OscilloscopeHelper
 from Instruments.spectrum_analyzer_signal_hound import SignalHound
 from Instruments.spectrum_analyzer_helper import SignalHoundHelper
 from EInstrument import EInstrument
+
 def __main__():
-    helper = Helper()
-    instruments = helper.connect_instruments()
+    nm = NetworkManager()
+    instruments = nm.connect_instruments()
     inst_dict = {}
     #Insert your instrument calls here
     for i in instruments:
@@ -16,6 +17,8 @@ def __main__():
     
     inst_dict[EInstrument.OSCILLOSCOPE].set_acquistion_mode("normal")
     inst_dict[EInstrument.OSCILLOSCOPE].set_trigger_sweep_mode("auto")
+    osc = Oscilloscope(inst_dict[EInstrument.OSCILLOSCOPE])
+   
     #....
     
-    helper.disconnect(instruments)
+    nm.disconnect(instruments)

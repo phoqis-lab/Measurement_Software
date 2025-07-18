@@ -10,6 +10,6 @@ insturment_list = [] #types the name of the instruments you want to query
 print(rm.list_resources())
 
 #Add auto connection
-r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
-ro = oscilloscope_rigol.Oscilloscope(r)
+#r = rm.open_resource('USB0::0x1AB1::0x0517::DS1ZE264M00036::INSTR')
+#ro = oscilloscope_rigol.Oscilloscope(r)
 
