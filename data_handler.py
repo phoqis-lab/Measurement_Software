@@ -33,29 +33,42 @@ class DataHandler():
         params: file_path: str - path to file
                 data: list or dict - data to write to file
                 file_type: EFileType - type of file to write to, if None then uses default format
-                headers: list - headers for file, if None then numerical headers are used. Only used in json if data is not a dictionary"""
+                headers: list - headers for file, if None then numerical headers are used. Only used if data is not a dictionary.
+                If file already exists, headers are not written again."""
         
         format = self.format
         if file_type is not None:
             format = file_type
         file_path = file_path + format.value if not file_path.endswith(format.value) else file_path
         file_exists = os.path(file_path).isfile()
+        if file_exists:
+            m = 'a'  
+        else: 
+            m = 'w'
+            if headers is None:
+                headers = range(0, len(data))
 
-        m = 'a' if file_exists else 'w'
-        if headers is None:
-            headers = range(0, len(data))
-            
+        #TODO Check data formatting possibilities
+
         if format == EFileType.CSV:
             with open(file_path, mode=m, newline='') as csvfile:
                 self.writer = csv.writer(csvfile)
+                if not file_exists:
+                    self.writer.writerow(headers)
                 self.writer.writerows(data)
 
         elif format == EFileType.JSON:
+            if file_exists:
+                with open(file_path, 'r') as jsonfile:
+                    already_in_file = json.load(jsonfile)
+
             with open(file_path, 'w') as jsonfile:
                 json.dump(data, jsonfile)
 
         elif format == EFileType.TXT:
             with open(file_path, m) as txtfile:
+                if not file_exists:
+                    self.writer.write(headers)
                 if isinstance(data, list):
                     for item in data:
                         txtfile.write(f"{item}\n")
