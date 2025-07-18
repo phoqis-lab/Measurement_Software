@@ -1,10 +1,11 @@
 from Instruments.SCPICommandTree import mandatory
 import time
-
+from EInstrument import EInstrument
 class SpectrumAnalyzer(mandatory.Mandatory):
     def __init__(self, device):
        #TODO Add in 
        self.instrument = device
+       self.name = EInstrument.SPECTRUM_ANALYZER
        self.valid_booleans = ['ON', 'OFF', 1, 0]
 
     #Helper Functions

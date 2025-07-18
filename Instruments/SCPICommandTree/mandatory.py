@@ -1,6 +1,70 @@
 class Mandatory():
     def __init__(self, instrument):
         self.instrument = instrument
+        self.default_save_path = "~/Measurement_Software/Experiments/Outputs"        
+        self.save_path = self.default_save_path
+        self.auto_save = False
+        self.name = "Mandatory"
+
+    def disconnect(self):
+        """Disconnect from instrument and shut down all data reading and controls."""
+        self.instrument.close()
+        print("Disconnected from "+str(self.name))
+
+    def get_save_path(self):
+        """
+        Get the current folder where data is saved.
+        
+        Returns:
+        str: The current save path.
+        """
+        return self.save_path
+    def is_auto_saving_data_enabled(self):
+        """
+        Check if auto-saving of data is enabled.
+        
+        Returns:
+        bool: True if auto-saving is enabled, False otherwise.
+        """
+        return self.auto_save
+    
+    def enable_auto_saving_data(self, save_path=None):
+        """
+        Enable the automatic saving of data to a specified path.
+        
+        Parameters:
+        save_path (str): The path where data will be saved. If None, auto-saving is disabled.
+        """
+        self.auto_save = True
+        
+        if save_path is not None:
+            self.save_path = save_path
+        else:
+            self.save_path = self.default_save_path
+
+        print(f"Auto-saving enabled. Data will be saved to {self.save_path}")
+            
+    def disable_auto_saving_data(self):
+        """
+        Disable the automatic saving of data to a specified path.
+        
+        Parameters:
+        save_path (str): The path where data will be saved.
+        """
+        self.auto_save = False
+        print("Auto-saving disabled.")
+
+    def save_data(self, data, filename, format ='json'):
+        """
+        Save data to a file in the specified save path.
+        
+        Parameters:
+        data (dict): The data to be saved.
+        filename (str): The name of the file to save the data in.
+        """
+        #TODO: Check data formatting assumptions
+        x = 0
+
     def clear_event_registers(self):
         """
         Clear all the event registers and clear the error queue (*CLS).

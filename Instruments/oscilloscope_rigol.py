@@ -3,11 +3,11 @@ from time import sleep
 from time import sleep
 from Instruments.SCPICommandTree import mandatory
 import pyvisa
+from EInstrument import EInstrument
 class Oscilloscope(mandatory.Mandatory):
 
-    def __init__(self, instru,name = "Oscilloscope"):
-        
-        self.name = name
+    def __init__(self, instru):
+        self.name = EInstrument.OSCILLOSCOPE
         self.instrument = instru
         
     #Mandatory Commands
