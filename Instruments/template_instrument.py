@@ -1,7 +1,7 @@
-from Instruments.SCPICommandTree import mandatory
+from Instruments.SCPICommandTree import Instrument
 import pyvisa
 
-class Instrument(mandatory.Mandatory):
+class Instrument(Instrument.Mandatory):
 
     def __init__(self, instrument):
         
